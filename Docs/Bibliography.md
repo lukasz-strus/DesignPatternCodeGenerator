@@ -9,4 +9,10 @@
 
 
 ## Internet sources
+
+Source generators:
 1. https://docs.microsoft.com/en-us/dotnet/csharp/roslyn-sdk/source-generators-overview
+
+Microsoft.CodeAnalysis:
+1. https://learn.microsoft.com/en-us/dotnet/api/microsoft.codeanalysis.compilation?view=roslyn-dotnet-4.3.0
+2. https://learn.microsoft.com/en-us/dotnet/api/microsoft.codeanalysis.syntaxtree?view=roslyn-dotnet-4.3.0
