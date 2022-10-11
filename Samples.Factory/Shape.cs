@@ -1,4 +1,5 @@
-﻿using DesignPatternCodeGenerator.Factory;
+﻿using DesignPatternCodeGenerator.Base;
+using DesignPatternCodeGenerator.Factory;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +19,7 @@ namespace Samples.Factory
     public class Shape : IShape
     {
         [Factory]
-        public Shape(int x, int y)
+        public Shape([Parameter] int x, [Parameter] int y)
         {
             X = x;
             Y = y;

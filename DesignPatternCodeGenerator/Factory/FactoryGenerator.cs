@@ -47,16 +47,6 @@ $@"
 }}";
         }
 
-        private string GenerateCreateMethodDeclaration(ConstructorDeclarationSyntax syntax)
-        {
-            return $"public I{syntax.Identifier.Text} Create({string.Join(", ", syntax.ParameterList.Parameters.Where(IsNotDependency).Select(CreateParameter))})";
-        }
-
-        private string CreateParameter(ParameterSyntax syntax)
-        {
-            return $"{syntax.Type} {syntax.Type.ToString().Replace("<", "_").Replace(">", "_")}";
-        }
-
         #endregion
 
         #region ClassGenerator
@@ -110,6 +100,16 @@ $"\t\t" + $@"public {group.First().Identifier}Factory({string.Join(", ", paramet
         }
 
         #endregion
+
+        private string GenerateCreateMethodDeclaration(ConstructorDeclarationSyntax syntax)
+        {
+            return $"public I{syntax.Identifier.Text} Create({string.Join(", ", syntax.ParameterList.Parameters.Where(IsNotDependency).Select(CreateParameter))})";
+        }
+        private string CreateParameter(ParameterSyntax syntax)
+        {
+            return $"{syntax.Type} {syntax.Identifier.Text.ToString().Replace("<", "_").Replace(">", "_")}";
+        }
+
 
         private bool IsDependency(ParameterSyntax syntax)
         {

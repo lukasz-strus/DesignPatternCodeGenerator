@@ -9,8 +9,8 @@ var windowView = windowFactory.Create();
 appleView.Display();
 windowView.Display();
 
-var shapeFactory = new ShapeFactory(10, 10);
+var shapeFactory = new ShapeFactory();
 
-var shape = shapeFactory.Create();
+var shape = shapeFactory.Create(10, 10);
 
 shape.Display();
