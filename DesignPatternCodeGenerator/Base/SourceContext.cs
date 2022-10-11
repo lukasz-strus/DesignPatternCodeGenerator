@@ -11,7 +11,7 @@ namespace DesignPatternCodeGenerator.Base
 {
     internal class SourceContext
     {
-        private Type _generatorType;
+        private readonly Type _generatorType;
 
         internal IEnumerable<ConstructorDeclarationSyntax> Constructors { get; }
 
