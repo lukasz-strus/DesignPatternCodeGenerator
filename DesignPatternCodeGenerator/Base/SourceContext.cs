@@ -19,15 +19,15 @@ namespace DesignPatternCodeGenerator.Base
         {
             _generatorType = SetGeneratorType(generatorType);
 
-            Constructors = SetConstructorDeclarations(context.Compilation, context.CancellationToken).Result;
+            Constructors = SetConstructorDeclarations(context).Result;
         }
 
-        private async Task<IEnumerable<ConstructorDeclarationSyntax>> SetConstructorDeclarations(
-            Compilation compilation,
-            CancellationToken token)
+        private async Task<IEnumerable<ConstructorDeclarationSyntax>> SetConstructorDeclarations(GeneratorExecutionContext context)
         {
-            return (await Task.WhenAll(compilation.SyntaxTrees.Select(x => SetConstructorDeclarationSyntax(x, compilation, token))))
-                .SelectMany(x => x);
+            var compilation = context.Compilation;
+            var token = context.CancellationToken;
+
+            return (await Task.WhenAll(compilation.SyntaxTrees.Select(x => SetConstructorDeclarationSyntax(x, compilation, token)))).SelectMany(x => x);
         }
 
         private async Task<IEnumerable<ConstructorDeclarationSyntax>> SetConstructorDeclarationSyntax(
