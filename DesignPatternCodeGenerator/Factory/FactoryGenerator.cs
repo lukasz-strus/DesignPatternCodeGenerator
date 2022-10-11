@@ -1,6 +1,7 @@
 ﻿using DesignPatternCodeGenerator.Base;
 using DesignPatternCodeGenerator.Base.Enums;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
 using System.Collections.Generic;
@@ -76,29 +77,35 @@ $@"
 
         private string GenerateFieldsAndConstructor(IEnumerable<ConstructorDeclarationSyntax> group)
         {
-            var paramterTypes = group.SelectMany(x => x.ParameterList.Parameters)
+            var parameteres = group
+                .SelectMany(x => x.ParameterList.Parameters)
                 .Where(IsDependency)
-                .Select(x => x.Type)
                 .Distinct();
 
-            return $"{string.Join(";\n", paramterTypes.Select(x => $"private readonly {x} _{x};"))}\n" +
-$"\t\t" + $@"public {group.First().Identifier}Factory({string.Join(", ", paramterTypes.Select(x => $"{x} {x.ToString().Replace("<", "_").Replace(">", "_")}"))})
+            return 
+                $"{string.Join("\n\t\t", parameteres.Select(x => $"private readonly {x.Type} _{x.Identifier.Text};"))}\n" 
+                + "\n" +
+$"\t\t" + $@"public {group.First().Identifier}Factory({string.Join(", ", parameteres.Select(x => $"{x.Type} {x.Identifier.Text.Replace("<", "_").Replace(">", "_")}"))})
         {{
-	        {string.Join(";\n", paramterTypes.Select(x => $"_{x.ToString().Replace("<", "_").Replace(">", "_")} = {x.ToString().Replace("<", "_").Replace(">", "_")};"))}
+	        {string.Join(";\n\t\t\t", parameteres.Select(x => $"_{x.Identifier.Text.Replace("<", "_").Replace(">", "_")} = {x.Identifier.Text.Replace("<", "_").Replace(">", "_")};"))}
         }}";
         }
 
         private string GenerateCreateMethod(ConstructorDeclarationSyntax arg)
         {
             return GenerateCreateMethodDeclaration(arg) +
-                $@"=> new {arg.Identifier}({string.Join(
+                $@" => new {arg.Identifier}({string.Join(
                     ", ",
                     arg.ParameterList.Parameters.Select(
                         x =>
                         {
                             if (IsDependency(x))
-                                return $"_{x.Type.ToString().Replace("<", "_").Replace(">", "_")}";
-                            return x.Type.ToString().Replace("<", "_").Replace(">", "_");
+                            {
+                                return $"_{x.Identifier.Text.Replace("<", "_").Replace(">", "_")}";
+                            }
+
+                            return x.Identifier.Text.Replace("<", "_").Replace(">", "_");
+
                         }))});";
         }
 
