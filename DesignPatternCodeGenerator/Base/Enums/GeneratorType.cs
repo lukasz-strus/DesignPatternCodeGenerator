@@ -1,4 +1,4 @@
-﻿namespace DesignPatternCodeGenerator.Base
+﻿namespace DesignPatternCodeGenerator.Base.Enums
 {
     internal enum GeneratorType
     {

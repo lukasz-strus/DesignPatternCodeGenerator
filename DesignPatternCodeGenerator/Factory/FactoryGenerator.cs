@@ -1,4 +1,5 @@
 ﻿using DesignPatternCodeGenerator.Base;
+using DesignPatternCodeGenerator.Base.Enums;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
@@ -21,22 +22,24 @@ namespace DesignPatternCodeGenerator.Factory
 
             foreach (var group in groups)
             {
-                var codeGenerator = new ContentCodeGenerator(group);
+                var codeGenerator = new ContentCodeGenerator(group, GeneratorType.Factory);
 
                 var interfaceContent = GenerateInterface(codeGenerator, group);
-                context.AddSource($"I{group.Key}Factory.g.cs", SourceText.From(interfaceContent, Encoding.UTF8));
+                context.AddSource($"{codeGenerator.InterfaceName}.g.cs", SourceText.From(interfaceContent, Encoding.UTF8));
 
                 var classContent = GenerateClass(codeGenerator, group);
-                context.AddSource($"{group.Key}Factory.g.cs", SourceText.From(classContent, Encoding.UTF8));
+                context.AddSource($"{codeGenerator.ClassName}.g.cs", SourceText.From(classContent, Encoding.UTF8));
             }
         }
 
+        #region InterfaceGenerator
+
         private string GenerateInterface(ContentCodeGenerator codeGenerator, IGrouping<string, ConstructorDeclarationSyntax> group)
         {
-            return codeGenerator.GetUsingsAndNamespace() + 
+            return codeGenerator.GenerateUsingsAndNamespace() + 
 $@"
 {{
-    {codeGenerator.Accessibility} interface I{group.Key}Factory
+    {codeGenerator.GenerateDeclaration(CodeType.Interface)}
     {{
 	    {string.Join("\n", group.Select(GenerateCreateMethodDeclaration).Select(x => x + ";"))}
     }}
@@ -48,12 +51,21 @@ $@"
             return $"public I{syntax.Identifier.Text} Create({string.Join(", ", syntax.ParameterList.Parameters.Where(IsNotDependency).Select(CreateParameter))})";
         }
 
+        private string CreateParameter(ParameterSyntax syntax)
+        {
+            return $"{syntax.Type} {syntax.Type.ToString().Replace("<", "_").Replace(">", "_")}";
+        }
+
+        #endregion
+
+        #region ClassGenerator
+
         private string GenerateClass(ContentCodeGenerator codeGenerator, IGrouping<string, ConstructorDeclarationSyntax> group)
         {
-            return codeGenerator.GetUsingsAndNamespace() + 
+            return codeGenerator.GenerateUsingsAndNamespace() + 
 $@"
 {{
-    {codeGenerator.Accessibility} class {group.Key}Factory : I{group.Key}Factory
+    {codeGenerator.GenerateDeclaration(CodeType.Class)}
     {{
 	    {GenerateFieldsAndConstructor(group)}
 
@@ -90,7 +102,7 @@ $"\t\t" + $@"public {group.First().Identifier}Factory({string.Join(", ", paramte
                         }))});";
         }
 
-
+        #endregion
 
         private bool IsDependency(ParameterSyntax syntax)
         {
@@ -99,10 +111,7 @@ $"\t\t" + $@"public {group.First().Identifier}Factory({string.Join(", ", paramte
 
         private bool IsNotDependency(ParameterSyntax syntax) => !IsDependency(syntax);
 
-        private string CreateParameter(ParameterSyntax syntax)
-        {
-            return $"{syntax.Type} {syntax.Type.ToString().Replace("<", "_").Replace(">", "_")}";
-        }
+        
 
         public void Initialize(GeneratorInitializationContext context)
         {
