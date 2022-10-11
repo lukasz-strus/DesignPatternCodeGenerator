@@ -101,6 +101,7 @@ $"\t\t" + $@"public {group.First().Identifier}Factory({string.Join(", ", paramet
 
         #endregion
 
+        #region CreateMethodGenerator
         private string GenerateCreateMethodDeclaration(ConstructorDeclarationSyntax syntax)
         {
             return $"public I{syntax.Identifier.Text} Create({string.Join(", ", syntax.ParameterList.Parameters.Where(IsNotDependency).Select(CreateParameter))})";
@@ -110,6 +111,7 @@ $"\t\t" + $@"public {group.First().Identifier}Factory({string.Join(", ", paramet
             return $"{syntax.Type} {syntax.Identifier.Text.ToString().Replace("<", "_").Replace(">", "_")}";
         }
 
+        #endregion
 
         private bool IsDependency(ParameterSyntax syntax)
         {
