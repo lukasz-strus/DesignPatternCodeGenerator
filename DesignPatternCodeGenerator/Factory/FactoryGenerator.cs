@@ -12,6 +12,13 @@ using System.Threading.Tasks;
 
 namespace DesignPatternCodeGenerator.Factory
 {
+    /*
+     * todo 1: Parametr [Factory] nakładany na interface
+     * todo 2: Parametr [Paramter} nakładany na props interace
+     * todo 3: Generowanie enum klas
+     * todo 4: Metoda Create tworzy odpowiedni typ w zależności od enum klas
+     */
+
     [Generator]
     public class FactoryGenerator : ISourceGenerator
     {
@@ -115,6 +122,7 @@ $"\t\t" + $@"public {group.First().Identifier}Factory({string.Join(", ", paramet
 
         private bool IsDependency(ParameterSyntax syntax)
         {
+            
             return !syntax.AttributeLists.Any(x => x.Attributes.Any(y => y.Name.GetText().ToString().Contains("Parameter")));
         }
 
