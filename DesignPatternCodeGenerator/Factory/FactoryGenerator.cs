@@ -1,5 +1,7 @@
 ﻿using DesignPatternCodeGenerator.Base;
 using DesignPatternCodeGenerator.Base.Enums;
+using DesignPatternCodeGenerator.Base.Generators;
+using DesignPatternCodeGenerator.Base.Models;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -14,7 +16,7 @@ namespace DesignPatternCodeGenerator.Factory
 {
     /*
      * todo 1: Parametr [Factory] nakładany na interface
-     * todo 2: Parametr [Paramter} nakładany na props interace
+     * todo 2: Parametr [Paramter} nakładany na prop interace
      * todo 3: Generowanie enum klas
      * todo 4: Metoda Create tworzy odpowiedni typ w zależności od enum klas
      */
@@ -26,23 +28,26 @@ namespace DesignPatternCodeGenerator.Factory
         {
             var sourceContext = new SourceContext(context, GeneratorType.Factory);
 
-            var groups = sourceContext.Constructors.GroupBy(x => x.Identifier.Text);
+            var groups = sourceContext.Groups;
 
             foreach (var group in groups)
             {
-                var codeGenerator = new ContentCodeGenerator(group, GeneratorType.Factory);
+                var syntaxTokensGenerator = new SyntaxTokensGenerator(group, GeneratorType.Factory);
+
+                var syntaxTokens = syntaxTokensGenerator.GenerateSyntaxTokens();
+
+                var codeGenerator = new BaseCodeGenerator(syntaxTokens);
 
                 var interfaceContent = GenerateInterface(codeGenerator, group);
-                context.AddSource($"{codeGenerator.InterfaceName}.g.cs", SourceText.From(interfaceContent, Encoding.UTF8));
+                context.AddSource($"{syntaxTokens.InterfaceName}.g.cs", SourceText.From(interfaceContent, Encoding.UTF8));
 
                 var classContent = GenerateClass(codeGenerator, group);
-                context.AddSource($"{codeGenerator.ClassName}.g.cs", SourceText.From(classContent, Encoding.UTF8));
+                context.AddSource($"{syntaxTokens.ClassName}.g.cs", SourceText.From(classContent, Encoding.UTF8));
             }
         }
 
         #region InterfaceGenerator
-
-        private string GenerateInterface(ContentCodeGenerator codeGenerator, IGrouping<string, ConstructorDeclarationSyntax> group)
+        private string GenerateInterface(BaseCodeGenerator codeGenerator, IGrouping<string, ConstructorDeclarationSyntax> group)
         {
             return codeGenerator.GenerateUsingsAndNamespace() + 
 $@"
@@ -53,12 +58,10 @@ $@"
     }}
 }}";
         }
-
         #endregion
 
         #region ClassGenerator
-
-        private string GenerateClass(ContentCodeGenerator codeGenerator, IGrouping<string, ConstructorDeclarationSyntax> group)
+        private string GenerateClass(BaseCodeGenerator codeGenerator, IGrouping<string, ConstructorDeclarationSyntax> group)
         {
             return codeGenerator.GenerateUsingsAndNamespace() + 
 $@"
@@ -113,13 +116,14 @@ $"\t\t" + $@"public {group.First().Identifier}Factory({string.Join(", ", paramet
         {
             return $"public I{syntax.Identifier.Text} Create({string.Join(", ", syntax.ParameterList.Parameters.Where(IsNotDependency).Select(CreateParameter))})";
         }
+
         private string CreateParameter(ParameterSyntax syntax)
         {
             return $"{syntax.Type} {syntax.Identifier.Text.ToString().Replace("<", "_").Replace(">", "_")}";
         }
-
         #endregion
 
+        #region IsParameter
         private bool IsDependency(ParameterSyntax syntax)
         {
             
@@ -127,8 +131,8 @@ $"\t\t" + $@"public {group.First().Identifier}Factory({string.Join(", ", paramet
         }
 
         private bool IsNotDependency(ParameterSyntax syntax) => !IsDependency(syntax);
+        #endregion
 
-        
 
         public void Initialize(GeneratorInitializationContext context)
         {

@@ -15,12 +15,14 @@ namespace DesignPatternCodeGenerator.Base
         private readonly Type _generatorType;
 
         internal IEnumerable<ConstructorDeclarationSyntax> Constructors { get; }
+        internal IEnumerable<IGrouping<string, ConstructorDeclarationSyntax>> Groups { get; }
 
         internal SourceContext(GeneratorExecutionContext context, GeneratorType generatorType)
         {
             _generatorType = SetGeneratorType(generatorType);
 
             Constructors = SetConstructorDeclarations(context).Result;
+            Groups = Constructors.GroupBy(x => x.Identifier.Text);
         }
 
         private async Task<IEnumerable<ConstructorDeclarationSyntax>> SetConstructorDeclarations(GeneratorExecutionContext context)
