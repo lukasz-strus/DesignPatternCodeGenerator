@@ -86,17 +86,17 @@ $@"
         private string GenerateFieldsAndConstructor(IEnumerable<InterfaceDeclarationSyntax> group)
         {
             var properties = group
-                .SelectMany(x => x.Members)
+                .SelectMany(g => g.Members)
                 .OfType<PropertyDeclarationSyntax>()
                 .Where(IsDependency)
                 .Distinct();
 
             return
-                $"{string.Join("\n\t\t", properties.Select(x => $"private readonly {x.Type} _{(x.Identifier.Text).ToLower()};"))}\n"
+                $"{string.Join("\n\t\t", properties.Select(p => $"private readonly {p.Type} _{(p.Identifier.Text).ToLower()};"))}\n"
                 + "\n" +
-$"\t\t" + $@"public {(group.First().Identifier.Text).Substring(1)}Factory({string.Join(", ", properties.Select(x => $"{x.Type} {x.Identifier.Text.Replace("<", "_").Replace(">", "_")}"))})
+$"\t\t" + $@"public {(group.First().Identifier.Text).Substring(1)}Factory({string.Join(", ", properties.Select(p => $"{p.Type} {p.Identifier.Text.Replace("<", "_").Replace(">", "_")}"))})
         {{
-	        {string.Join(";\n\t\t\t", properties.Select(x => $"_{x.Identifier.Text.Replace("<", "_").Replace(">", "_").ToLower()} = {x.Identifier.Text.Replace("<", "_").Replace(">", "_")};"))}
+	        {string.Join(";\n\t\t\t", properties.Select(p => $"_{p.Identifier.Text.Replace("<", "_").Replace(">", "_").ToLower()} = {p.Identifier.Text.Replace("<", "_").Replace(">", "_")};"))}
         }}";
         }
 
@@ -106,46 +106,46 @@ $"\t\t" + $@"public {(group.First().Identifier.Text).Substring(1)}Factory({strin
 
         #region CreateMethodGenerator
 
-        private string GenerateCreateMethod(InterfaceDeclarationSyntax syntax)
+        private string GenerateCreateMethod(InterfaceDeclarationSyntax interfaceSyntax)
         {
-            var properties = syntax.Members.OfType<PropertyDeclarationSyntax>();
+            var properties = interfaceSyntax.Members.OfType<PropertyDeclarationSyntax>();
 
-            return GenerateCreateMethodDeclaration(syntax) +
-                $@" => new {(syntax.Identifier.Text).Substring(1)}({string.Join(
+            return GenerateCreateMethodDeclaration(interfaceSyntax) +
+                $@" => new {(interfaceSyntax.Identifier.Text).Substring(1)}({string.Join(
                     ", ",
                     properties.Select(
-                        x =>
+                        p =>
                         {
-                            if (IsDependency(x))
+                            if (IsDependency(p))
                             {
-                                return $"_{x.Identifier.Text.Replace("<", "_").Replace(">", "_").ToLower()}";
+                                return $"_{p.Identifier.Text.Replace("<", "_").Replace(">", "_").ToLower()}";
                             }
 
-                            return x.Identifier.Text.Replace("<", "_").Replace(">", "_");
+                            return p.Identifier.Text.Replace("<", "_").Replace(">", "_");
 
                         }))});";
         }
-        private string GenerateCreateMethodDeclaration(InterfaceDeclarationSyntax syntax)
+        private string GenerateCreateMethodDeclaration(InterfaceDeclarationSyntax interfaceSyntax)
         {
-            var properties = syntax.Members.OfType<PropertyDeclarationSyntax>();
+            var properties = interfaceSyntax.Members.OfType<PropertyDeclarationSyntax>();
 
-            return $"public {syntax.Identifier.Text} Create({string.Join(", ", properties.Where(IsNotDependency).Select(CreateParameter))})";
+            return $"public {interfaceSyntax.Identifier.Text} Create({string.Join(", ", properties.Where(IsNotDependency).Select(CreateParameter))})";
         }
 
-        private string CreateParameter(PropertyDeclarationSyntax syntax)
+        private string CreateParameter(PropertyDeclarationSyntax propertySyntax)
         {
-            return $"{syntax.Type} {syntax.Identifier.Text.ToString().Replace("<", "_").Replace(">", "_")}";
+            return $"{propertySyntax.Type} {propertySyntax.Identifier.Text.ToString().Replace("<", "_").Replace(">", "_")}";
         }
         #endregion
 
         #region IsParameter
-        private bool IsDependency(MemberDeclarationSyntax syntax)
+        private bool IsDependency(MemberDeclarationSyntax memberSyntax)
         {
-            return !syntax.AttributeLists.Any(x => x.Attributes.Any(y => y.Name.GetText().ToString().Contains("Property")));
+            return !memberSyntax.AttributeLists.Any(x => x.Attributes.Any(y => y.Name.GetText().ToString().Contains("Property")));
 
         }
 
-        private bool IsNotDependency(MemberDeclarationSyntax syntax) => !IsDependency(syntax);
+        private bool IsNotDependency(MemberDeclarationSyntax memberSyntax) => !IsDependency(memberSyntax);
         #endregion
 
 
