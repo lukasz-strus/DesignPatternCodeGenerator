@@ -8,7 +8,6 @@ public interface IWindowsView : IView
 
 public class WindowsView : IWindowsView
 {
-    [Factory]
     public WindowsView()
     {
 

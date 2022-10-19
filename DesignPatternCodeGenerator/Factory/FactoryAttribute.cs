@@ -2,6 +2,6 @@
 
 namespace DesignPatternCodeGenerator.Factory
 {
-    [AttributeUsage(AttributeTargets.Constructor, AllowMultiple = false)]
+    [AttributeUsage(AttributeTargets.Interface, AllowMultiple = false)]
     public class FactoryAttribute : Attribute { }
 }

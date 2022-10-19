@@ -9,11 +9,11 @@ namespace DesignPatternCodeGenerator.Base.Generators
 {
     internal class SyntaxTokensGenerator
     {
-        private readonly IGrouping<string, ConstructorDeclarationSyntax> _group;
+        private readonly IGrouping<string, TypeDeclarationSyntax> _group;
         private readonly GeneratorType _generatorType;
 
         internal SyntaxTokensGenerator(
-            IGrouping<string, ConstructorDeclarationSyntax> group,
+            IGrouping<string, TypeDeclarationSyntax> group,
             GeneratorType generatorType)
         {
             _group = group;
@@ -29,23 +29,23 @@ namespace DesignPatternCodeGenerator.Base.Generators
             InterfaceName = SetInterfaceName()
         };
 
-        internal string SetAccesibility() =>
+        private string SetAccesibility() =>
             _group.First().FirstAncestorOrSelf<TypeDeclarationSyntax>().Modifiers.First().Text;
 
-        internal string SetNamespace() =>
+        private string SetNamespace() =>
             _group.First().FirstAncestorOrSelf<NamespaceDeclarationSyntax>()?.Name?.ToString() ??
             _group.First().FirstAncestorOrSelf<FileScopedNamespaceDeclarationSyntax>().Name.ToString();
 
-        internal IEnumerable<string> SetUsings() =>
+        private IEnumerable<string> SetUsings() =>
             _group.First()
                  .FirstAncestorOrSelf<CompilationUnitSyntax>()
                  .DescendantNodesAndSelf()
                  .OfType<UsingDirectiveSyntax>()
                  .Select(x => x.Name.ToString());
 
-        internal string SetClassName() => _group.Key + _generatorType.ToString();
+        private string SetClassName() => (_group.Key + _generatorType.ToString()).Substring(1);
 
-        internal string SetInterfaceName() => "I" + _group.Key + _generatorType.ToString();
+        private string SetInterfaceName() => _group.Key + _generatorType.ToString();
 
 
     }

@@ -8,7 +8,6 @@ public interface IAppleView : IView
 
 public class AppleView : IAppleView
 {
-    [Factory]
     public AppleView()
     {
 

@@ -1,4 +1,5 @@
-﻿using DesignPatternCodeGenerator.Base;
+﻿using DesignPatternCodeGenerator.Attributes;
+using DesignPatternCodeGenerator.Base;
 using DesignPatternCodeGenerator.Factory;
 using System;
 using System.Collections.Generic;
@@ -8,8 +9,10 @@ using System.Threading.Tasks;
 
 namespace Samples.Factory
 {
+    [Factory]
     public interface IShape
     {
+        [Property]
         public int X { get; set; }
         public int Y { get; set; }
 
@@ -18,11 +21,13 @@ namespace Samples.Factory
 
     public class Shape : IShape
     {
-        [Factory]
-        public Shape([Parameter] int x, [Parameter] int y)
+        
+        public Shape(int x, int y)
         {
             X = x;
             Y = y;
+
+
         }
 
         public int X { get; set; }

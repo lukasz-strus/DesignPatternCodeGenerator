@@ -1,16 +1,18 @@
 ﻿using Samples.Factory;
 
-var appleFactory = new AppleViewFactory();
-var windowFactory = new WindowsViewFactory();
+Console.WriteLine("test");
 
-var appleView = appleFactory.Create();
-var windowView = windowFactory.Create();
+//var appleFactory = new AppleViewFactory();
+//var windowFactory = new WindowsViewFactory();
 
-appleView.Display();
-windowView.Display();
+//var appleView = appleFactory.Create();
+//var windowView = windowFactory.Create();
 
-var shapeFactory = new ShapeFactory();
+//appleView.Display();
+//windowView.Display();
 
-var shape = shapeFactory.Create(10, 10);
+//var shapeFactory = new ShapeFactory();
 
-shape.Display();
+//var shape = shapeFactory.Create(10, 10);
+
+//shape.Display();

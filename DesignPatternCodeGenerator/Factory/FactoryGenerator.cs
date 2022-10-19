@@ -7,7 +7,10 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
 using System.Collections.Generic;
+using System.Data.Common;
+using System.Diagnostics;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -26,9 +29,14 @@ namespace DesignPatternCodeGenerator.Factory
     {
         public void Execute(GeneratorExecutionContext context)
         {
-            var sourceContext = new SourceContext(context, GeneratorType.Factory);
 
-            var groups = sourceContext.Groups;
+//#if DEBUG
+//            Debugger.Launch();
+//#endif
+
+            var sourceContext = new DeclarationsSyntaxGenerator(context, GeneratorType.Factory);
+
+            var groups = sourceContext.InterfaceGroups;
 
             foreach (var group in groups)
             {
@@ -47,7 +55,7 @@ namespace DesignPatternCodeGenerator.Factory
         }
 
         #region InterfaceGenerator
-        private string GenerateInterface(BaseCodeGenerator codeGenerator, IGrouping<string, ConstructorDeclarationSyntax> group)
+        private string GenerateInterface(BaseCodeGenerator codeGenerator, IGrouping<string, InterfaceDeclarationSyntax> group)
         {
             return codeGenerator.GenerateUsingsAndNamespace() + 
 $@"
@@ -61,7 +69,7 @@ $@"
         #endregion
 
         #region ClassGenerator
-        private string GenerateClass(BaseCodeGenerator codeGenerator, IGrouping<string, ConstructorDeclarationSyntax> group)
+        private string GenerateClass(BaseCodeGenerator codeGenerator, IGrouping<string, InterfaceDeclarationSyntax> group)
         {
             return codeGenerator.GenerateUsingsAndNamespace() + 
 $@"
@@ -75,62 +83,69 @@ $@"
 }}";
         }
 
-        private string GenerateFieldsAndConstructor(IEnumerable<ConstructorDeclarationSyntax> group)
+        private string GenerateFieldsAndConstructor(IEnumerable<InterfaceDeclarationSyntax> group)
         {
-            var parameteres = group
-                .SelectMany(x => x.ParameterList.Parameters)
+            var properties = group
+                .SelectMany(x => x.Members)
+                .OfType<PropertyDeclarationSyntax>()
                 .Where(IsDependency)
                 .Distinct();
 
-            return 
-                $"{string.Join("\n\t\t", parameteres.Select(x => $"private readonly {x.Type} _{x.Identifier.Text};"))}\n" 
+            return
+                $"{string.Join("\n\t\t", properties.Select(x => $"private readonly {x.Type} _{(x.Identifier.Text).ToLower()};"))}\n"
                 + "\n" +
-$"\t\t" + $@"public {group.First().Identifier}Factory({string.Join(", ", parameteres.Select(x => $"{x.Type} {x.Identifier.Text.Replace("<", "_").Replace(">", "_")}"))})
+$"\t\t" + $@"public {(group.First().Identifier.Text).Substring(1)}Factory({string.Join(", ", properties.Select(x => $"{x.Type} {x.Identifier.Text.Replace("<", "_").Replace(">", "_")}"))})
         {{
-	        {string.Join(";\n\t\t\t", parameteres.Select(x => $"_{x.Identifier.Text.Replace("<", "_").Replace(">", "_")} = {x.Identifier.Text.Replace("<", "_").Replace(">", "_")};"))}
+	        {string.Join(";\n\t\t\t", properties.Select(x => $"_{x.Identifier.Text.Replace("<", "_").Replace(">", "_").ToLower()} = {x.Identifier.Text.Replace("<", "_").Replace(">", "_")};"))}
         }}";
         }
 
-        private string GenerateCreateMethod(ConstructorDeclarationSyntax arg)
+
+
+        #endregion
+
+        #region CreateMethodGenerator
+
+        private string GenerateCreateMethod(InterfaceDeclarationSyntax syntax)
         {
-            return GenerateCreateMethodDeclaration(arg) +
-                $@" => new {arg.Identifier}({string.Join(
+            var properties = syntax.Members.OfType<PropertyDeclarationSyntax>();
+
+            return GenerateCreateMethodDeclaration(syntax) +
+                $@" => new {(syntax.Identifier.Text).Substring(1)}({string.Join(
                     ", ",
-                    arg.ParameterList.Parameters.Select(
+                    properties.Select(
                         x =>
                         {
                             if (IsDependency(x))
                             {
-                                return $"_{x.Identifier.Text.Replace("<", "_").Replace(">", "_")}";
+                                return $"_{x.Identifier.Text.Replace("<", "_").Replace(">", "_").ToLower()}";
                             }
 
                             return x.Identifier.Text.Replace("<", "_").Replace(">", "_");
 
                         }))});";
         }
-
-        #endregion
-
-        #region CreateMethodGenerator
-        private string GenerateCreateMethodDeclaration(ConstructorDeclarationSyntax syntax)
+        private string GenerateCreateMethodDeclaration(InterfaceDeclarationSyntax syntax)
         {
-            return $"public I{syntax.Identifier.Text} Create({string.Join(", ", syntax.ParameterList.Parameters.Where(IsNotDependency).Select(CreateParameter))})";
+            var properties = syntax.Members.OfType<PropertyDeclarationSyntax>();
+
+            return $"public {syntax.Identifier.Text} Create({string.Join(", ", properties.Where(IsNotDependency).Select(CreateParameter))})";
         }
 
-        private string CreateParameter(ParameterSyntax syntax)
+        private string CreateParameter(PropertyDeclarationSyntax syntax)
         {
             return $"{syntax.Type} {syntax.Identifier.Text.ToString().Replace("<", "_").Replace(">", "_")}";
         }
         #endregion
 
         #region IsParameter
-        private bool IsDependency(ParameterSyntax syntax)
+        private bool IsDependency(MemberDeclarationSyntax syntax)
         {
-            
-            return !syntax.AttributeLists.Any(x => x.Attributes.Any(y => y.Name.GetText().ToString().Contains("Parameter")));
+            return !syntax.AttributeLists.Any(x => x.Attributes.Any(y => y.Name.GetText().ToString().Contains("Property")));
+
         }
 
-        private bool IsNotDependency(ParameterSyntax syntax) => !IsDependency(syntax);
+        private bool IsNotDependency(MemberDeclarationSyntax syntax) => !IsDependency(syntax);
         #endregion
 
 
