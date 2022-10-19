@@ -1,5 +1,5 @@
-﻿using DesignPatternCodeGenerator.Base.Enums;
-using DesignPatternCodeGenerator.Factory;
+﻿using DesignPatternCodeGenerator.Attributes.Factory;
+using DesignPatternCodeGenerator.Base.Enums;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System;
@@ -12,31 +12,75 @@ namespace DesignPatternCodeGenerator.Base.Generators
 {
     internal class DeclarationsSyntaxGenerator
     {
-        private readonly Type _generatorType;
-
-        internal IEnumerable<InterfaceDeclarationSyntax> Interfaces { get; }
-        internal IEnumerable<IGrouping<string, InterfaceDeclarationSyntax>> InterfaceGroups { get; }
-
-        internal DeclarationsSyntaxGenerator(GeneratorExecutionContext context, GeneratorType generatorType)
+        internal static IEnumerable<IGrouping<string, ClassDeclarationSyntax>> GetClassGroups(
+            GeneratorExecutionContext context,
+            Type attributeType)
         {
-            _generatorType = SetGeneratorType(generatorType);
+            var classes = SetClassDeclarations(context, attributeType).Result;
 
-            Interfaces = SetInterfaceDeclarations(context).Result;
-            InterfaceGroups = Interfaces.GroupBy(x => x.Identifier.Text);
+            return classes.GroupBy(x => x.Identifier.Text);
         }
 
-        private async Task<IEnumerable<InterfaceDeclarationSyntax>> SetInterfaceDeclarations(GeneratorExecutionContext context)
+        private static async Task<IEnumerable<ClassDeclarationSyntax>> SetClassDeclarations(
+            GeneratorExecutionContext context,
+            Type attributeType)
         {
             var compilation = context.Compilation;
             var token = context.CancellationToken;
 
-            return (await Task.WhenAll(compilation.SyntaxTrees.Select(x => SetInterfaceDeclarationSyntax(x, compilation, token)))).SelectMany(x => x);
+            return (await Task.WhenAll(compilation.SyntaxTrees.Select(x => SetClassDeclarationSyntax(
+                                                                                x,
+                                                                                compilation,
+                                                                                token,
+                                                                                attributeType))))
+                                                                                .SelectMany(x => x);
         }
 
-        private async Task<IEnumerable<InterfaceDeclarationSyntax>> SetInterfaceDeclarationSyntax(
+        private static async Task<IEnumerable<ClassDeclarationSyntax>> SetClassDeclarationSyntax(
             SyntaxTree tree,
             Compilation compilation,
-            CancellationToken token)
+            CancellationToken token,
+            Type attributeType)
+        {
+            var semanticModel = compilation.GetSemanticModel(tree);
+
+            var classes = (await tree.GetRootAsync(token))
+                .DescendantNodes()
+                .OfType<ClassDeclarationSyntax>()
+                .Where(x => x.AttributeLists.Any());
+
+            return classes.Where(x => x.AttributeLists.Any(y => y.Attributes.Any(z => semanticModel.GetTypeInfo(z).Type.Name == attributeType.Name)));
+        }
+
+        internal static IEnumerable<IGrouping<string, InterfaceDeclarationSyntax>> GetInterfaceGroups(
+            GeneratorExecutionContext context,
+            Type attributeType)
+        {
+            var interfaces = SetInterfaceDeclarations(context, attributeType).Result;            
+
+            return interfaces.GroupBy(x => x.Identifier.Text);
+        }
+
+        private static async Task<IEnumerable<InterfaceDeclarationSyntax>> SetInterfaceDeclarations(
+            GeneratorExecutionContext context,
+            Type attributeType)
+        {
+            var compilation = context.Compilation;
+            var token = context.CancellationToken;
+
+            return (await Task.WhenAll(compilation.SyntaxTrees.Select(x => SetInterfaceDeclarationSyntax(
+                                                                                x, 
+                                                                                compilation, 
+                                                                                token, 
+                                                                                attributeType))))
+                                                                                .SelectMany(x => x);
+        }
+
+        private static async Task<IEnumerable<InterfaceDeclarationSyntax>> SetInterfaceDeclarationSyntax(
+            SyntaxTree tree,
+            Compilation compilation,
+            CancellationToken token,
+            Type attributeType)
         {
             var semanticModel = compilation.GetSemanticModel(tree);
 
@@ -45,18 +89,7 @@ namespace DesignPatternCodeGenerator.Base.Generators
                 .OfType<InterfaceDeclarationSyntax>()
                 .Where(x => x.AttributeLists.Any());
 
-            return interfaces.Where(x => x.AttributeLists.Any(y => y.Attributes.Any(z => semanticModel.GetTypeInfo(z).Type.Name == _generatorType.Name)));
-        }
-
-        private Type SetGeneratorType(GeneratorType generatorType)
-        {
-            switch (generatorType)
-            {
-                case GeneratorType.Factory:
-                    return typeof(FactoryAttribute);
-                default:
-                    throw new Exception($"Type {generatorType} is not handled");
-            }
+            return interfaces.Where(x => x.AttributeLists.Any(y => y.Attributes.Any(z => semanticModel.GetTypeInfo(z).Type.Name == attributeType.Name)));
         }
     }
 }

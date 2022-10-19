@@ -27,9 +27,23 @@ namespace {_syntaxTokens.Namespace}";
 
         internal string GenerateDeclaration(CodeType codeType)
         {
-            string declaration = codeType == CodeType.Interface
-                ? $@"{_syntaxTokens.Accessibility} interface {_syntaxTokens.InterfaceName}"
-                : $@"{_syntaxTokens.Accessibility} class {_syntaxTokens.ClassName}: {_syntaxTokens.InterfaceName}";
+            string declaration;
+
+            switch (codeType)
+            {
+                case CodeType.Interface:
+                    declaration = $@"{_syntaxTokens.Accessibility} interface {_syntaxTokens.InterfaceName}";
+                    break;
+                case CodeType.Class:
+                    declaration = $@"{_syntaxTokens.Accessibility} class {_syntaxTokens.ClassName}: {_syntaxTokens.InterfaceName}";
+                    break;
+                case CodeType.Enum:
+                    declaration = $@"{_syntaxTokens.Accessibility} enum {_syntaxTokens.ClassName}Type";
+                    break;
+                default:
+                    declaration = "";
+                    break;
+            }
 
             return declaration;
         }

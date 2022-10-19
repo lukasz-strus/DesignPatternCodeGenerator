@@ -22,7 +22,10 @@ $@"
     }}
 }}";
         }
-        internal static string GenerateClass(BaseCodeGenerator codeGenerator, IGrouping<string, InterfaceDeclarationSyntax> group)
+        internal static string GenerateClass
+            (BaseCodeGenerator codeGenerator, 
+            IGrouping<string, InterfaceDeclarationSyntax> group,
+            IEnumerable<IGrouping<string, ClassDeclarationSyntax>> factoryChildGroups)
         {
             return codeGenerator.GenerateUsingsAndNamespace() +
 $@"
@@ -31,7 +34,7 @@ $@"
     {{
 	    {GenerateFieldsAndConstructor(group)}
 
-	    {string.Join("\n", group.Select(GenerateCreateMethod))}
+	    {string.Join("\n", group.Select(g => GenerateCreateMethod(g, factoryChildGroups)))}
     }}
 }}";
         }
@@ -53,14 +56,31 @@ $"\t\t" + $@"public {(group.First().Identifier.Text).Substring(1)}Factory({strin
         }}";
         }
 
-        private static string GenerateCreateMethod(InterfaceDeclarationSyntax interfaceSyntax)
+        private static string GenerateCreateMethod(
+            InterfaceDeclarationSyntax interfaceSyntax,
+            IEnumerable<IGrouping<string, ClassDeclarationSyntax>> factoryChildGroups)
+        {
+            var properties = interfaceSyntax.Members.OfType<PropertyDeclarationSyntax>();
+            var enums = factoryChildGroups.Select(x => x.Key);
+
+            return GenerateCreateMethodDeclaration(interfaceSyntax) +
+$@"
+        {{
+            switch (type)
+            {{
+                {string.Join(";\n\t\t\t", enums.Select(e=>$"case {interfaceSyntax.Identifier.Text.Substring(1)}FactoryType.{e}:\n\t\t\t\t\treturn new {e}({GenerateConstructorParameters(interfaceSyntax)});"))}
+                default:
+                    throw new Exception($""Shape type {{type}} is not handled"");
+            }}    
+        }}
+";
+        }
+
+        private static string GenerateConstructorParameters(InterfaceDeclarationSyntax interfaceSyntax)
         {
             var properties = interfaceSyntax.Members.OfType<PropertyDeclarationSyntax>();
 
-            return GenerateCreateMethodDeclaration(interfaceSyntax) +
-                $@" => new {(interfaceSyntax.Identifier.Text).Substring(1)}({string.Join(
-                    ", ",
-                    properties.Select(
+            return string.Join(", ",properties.Select(
                         p =>
                         {
                             if (IsDependency(p))
@@ -70,13 +90,20 @@ $"\t\t" + $@"public {(group.First().Identifier.Text).Substring(1)}Factory({strin
 
                             return p.Identifier.Text.Replace("<", "_").Replace(">", "_");
 
-                        }))});";
+                        }));
         }
+
         private static string GenerateCreateMethodDeclaration(InterfaceDeclarationSyntax interfaceSyntax)
         {
             var properties = interfaceSyntax.Members.OfType<PropertyDeclarationSyntax>();
 
-            return $"public {interfaceSyntax.Identifier.Text} Create({string.Join(", ", properties.Where(IsNotDependency).Select(CreateParameter))})";
+            var factoryType = $"{interfaceSyntax.Identifier.Text.Substring(1)}FactoryType type";
+            var parameters = $", {string.Join(", ", properties.Where(IsNotDependency).Select(CreateParameter))}";
+
+            if(parameters !="")
+                return $"public {interfaceSyntax.Identifier.Text} Create({factoryType}{parameters})";
+            else
+                return $"public {interfaceSyntax.Identifier.Text} Create({factoryType})";
         }
 
         private static string CreateParameter(PropertyDeclarationSyntax propertySyntax)

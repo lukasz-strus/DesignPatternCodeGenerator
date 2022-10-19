@@ -10,6 +10,7 @@ namespace DesignPatternCodeGenerator.Base.Enums
     {
         Class,
         Struct,
-        Interface
+        Interface,
+        Enum
     }
 }

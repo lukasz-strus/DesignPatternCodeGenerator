@@ -10,11 +10,11 @@ namespace DesignPatternCodeGenerator.Base.Generators
     internal class SyntaxTokensGenerator
     {
         private readonly IGrouping<string, TypeDeclarationSyntax> _group;
-        private readonly GeneratorType _generatorType;
+        private readonly GeneratorAttributeType _generatorType;
 
         internal SyntaxTokensGenerator(
             IGrouping<string, TypeDeclarationSyntax> group,
-            GeneratorType generatorType)
+            GeneratorAttributeType generatorType)
         {
             _group = group;
             _generatorType = generatorType;
