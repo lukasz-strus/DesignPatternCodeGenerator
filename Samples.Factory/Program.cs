@@ -1,6 +1,6 @@
 ﻿using Samples.Factory;
 
-Console.WriteLine("test");
+Console.WriteLine("Test Fabryki");
 
 var shapeFactoryY10 = new ShapeFactory(10, 10);
 
