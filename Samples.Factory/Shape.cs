@@ -12,16 +12,17 @@ namespace Samples.Factory
 {
     [Factory]
     public interface IShape
-    {       
+    {
+        [Parameter]
         public int X { get; set; }
+        [Parameter]
         public int Y { get; set; }
-        [Property]
         public int Radius { get; set; }
 
         public void Display();
     }
 
-    [FactoryChild(typeof(IShape))]
+    [FactoryChild]
     public class Circle : IShape
     {
         
@@ -43,7 +44,7 @@ namespace Samples.Factory
         }
     }
 
-    [FactoryChild(typeof(IShape))]
+    [FactoryChild]
     public class Triangle : IShape
     {
 

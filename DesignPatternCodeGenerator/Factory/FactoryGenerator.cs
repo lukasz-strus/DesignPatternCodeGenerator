@@ -18,23 +18,11 @@ using System.Threading.Tasks;
 
 namespace DesignPatternCodeGenerator.Factory
 {
-    /*
-     * todo 1: Parametr [Factory] nakładany na interface
-     * todo 2: Parametr [Paramter} nakładany na prop interace
-     * todo 3: Generowanie enum klas
-     * todo 4: Metoda Create tworzy odpowiedni typ w zależności od enum klas
-     */
-
     [Generator]
     public class FactoryGenerator : ISourceGenerator
     {
         public void Execute(GeneratorExecutionContext context)
         {
-
-            //#if DEBUG
-            //            Debugger.Launch();
-            //#endif
-
             var factoryAttribute = AttributeTypeGenerator.SetGeneratorAttributeType(GeneratorAttributeType.Factory);
             var factoryChildAttribute = AttributeTypeGenerator.SetGeneratorAttributeType(GeneratorAttributeType.FactoryChild);
 
