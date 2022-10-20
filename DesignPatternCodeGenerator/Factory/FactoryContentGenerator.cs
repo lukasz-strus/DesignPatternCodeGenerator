@@ -112,7 +112,7 @@ $@"
         }
         private static bool IsDependency(MemberDeclarationSyntax memberSyntax)
         {
-            return !memberSyntax.AttributeLists.Any(x => x.Attributes.Any(y => y.Name.GetText().ToString().Contains("Property")));
+            return !memberSyntax.AttributeLists.Any(x => x.Attributes.Any(y => y.Name.GetText().ToString().Contains("Parameter")));
 
         }
         private static bool IsNotDependency(MemberDeclarationSyntax memberSyntax) => !IsDependency(memberSyntax);
