@@ -32,13 +32,11 @@ namespace DesignPatternCodeGenerator.Factory
 
             foreach (var group in interfaceGroups)
             {
-                var syntaxTokensGenerator = new SyntaxTokensGenerator(group, GeneratorAttributeType.Factory);
-
-                var syntaxTokens = syntaxTokensGenerator.GenerateSyntaxTokens();
+                var syntaxTokens = SyntaxTokensGenerator.GenerateSyntaxTokens(group, GeneratorAttributeType.Factory);
 
                 var codeGenerator = new BaseCodeGenerator(syntaxTokens);
 
-                var factoryChildGroups = FactoryChildGenerator.FilterFactoryChild(classGroups, group);
+                var factoryChildGroups = FactoryChildGenerator.FilterFactoryChild(classGroups, syntaxTokens.InterfaceName.Replace("Factory",""));
 
                 var enumChildContent = FactoryChildEnumGenerator.GenerateEnum(codeGenerator, factoryChildGroups);
                 context.AddSource($"{syntaxTokens.ClassName}Type.g.cs", SourceText.From(enumChildContent, Encoding.UTF8));

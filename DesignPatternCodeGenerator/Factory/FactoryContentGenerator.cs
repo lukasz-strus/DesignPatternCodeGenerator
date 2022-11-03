@@ -11,9 +11,10 @@ namespace DesignPatternCodeGenerator.Factory
 {
     internal static class FactoryContentGenerator
     {
-        internal static string GenerateInterface(BaseCodeGenerator codeGenerator, IGrouping<string, InterfaceDeclarationSyntax> group)
-        {
-            return codeGenerator.GenerateUsingsAndNamespace() +
+        internal static string GenerateInterface(
+            BaseCodeGenerator codeGenerator, 
+            IGrouping<string, InterfaceDeclarationSyntax> group) =>        
+            codeGenerator.GenerateUsingsAndNamespace() +
 $@"
 {{
     {codeGenerator.GenerateDeclaration(CodeType.Interface)}
@@ -21,13 +22,12 @@ $@"
 	    {string.Join("\n", group.Select(GenerateCreateMethodDeclaration).Select(x => x + ";"))}
     }}
 }}";
-        }
+        
         internal static string GenerateClass
             (BaseCodeGenerator codeGenerator, 
             IGrouping<string, InterfaceDeclarationSyntax> group,
-            IEnumerable<IGrouping<string, ClassDeclarationSyntax>> factoryChildGroups)
-        {
-            return codeGenerator.GenerateUsingsAndNamespace() +
+            IEnumerable<IGrouping<string, ClassDeclarationSyntax>> factoryChildGroups) =>        
+            codeGenerator.GenerateUsingsAndNamespace() +
 $@"
 {{
     {codeGenerator.GenerateDeclaration(CodeType.Class)}
@@ -37,7 +37,7 @@ $@"
 	    {string.Join("\n", group.Select(g => GenerateCreateMethod(g, factoryChildGroups)))}
     }}
 }}";
-        }
+        
 
         private static string GenerateFieldsAndConstructor(IEnumerable<InterfaceDeclarationSyntax> group)
         {
@@ -52,7 +52,7 @@ $@"
                 + "\n" +
 $"\t\t" + $@"public {(group.First().Identifier.Text).Substring(1)}Factory({string.Join(", ", properties.Select(p => $"{p.Type} {p.Identifier.Text.Replace("<", "_").Replace(">", "_")}"))})
         {{
-	        {string.Join(";\n\t\t\t", properties.Select(p => $"_{p.Identifier.Text.Replace("<", "_").Replace(">", "_").ToLower()} = {p.Identifier.Text.Replace("<", "_").Replace(">", "_")};"))}
+	        {string.Join("\n\t\t\t", properties.Select(p => $"_{p.Identifier.Text.Replace("<", "_").Replace(">", "_").ToLower()} = {p.Identifier.Text.Replace("<", "_").Replace(">", "_")};"))}
         }}";
         }
 
@@ -68,8 +68,8 @@ $@"
         {{
             switch (type)
             {{
-                {string.Join(";\n\t\t\t", enums.Select(e=>$"case {interfaceSyntax.Identifier.Text.Substring(1)}FactoryType.{e}:\n\t\t\t\t\treturn new {e}({GenerateConstructorParameters(interfaceSyntax)});"))}
-                default:
+                {string.Join("\n\t\t\t\t", enums.Select(e=>$"case {interfaceSyntax.Identifier.Text.Substring(1)}FactoryType.{e} :\n\t\t\t\t\treturn new {e}({GenerateConstructorParameters(interfaceSyntax)});"))}
+                default :
                     throw new Exception($""Shape type {{type}} is not handled"");
             }}    
         }}
@@ -98,23 +98,20 @@ $@"
             var properties = interfaceSyntax.Members.OfType<PropertyDeclarationSyntax>();
 
             var factoryType = $"{interfaceSyntax.Identifier.Text.Substring(1)}FactoryType type";
-            var parameters = $", {string.Join(", ", properties.Where(IsNotDependency).Select(CreateParameter))}";
+            var parameters = $"{string.Join(", ", properties.Where(IsNotDependency).Select(CreateParameter))}";
 
             if(parameters !="")
-                return $"public {interfaceSyntax.Identifier.Text} Create({factoryType}{parameters})";
+                return $"public {interfaceSyntax.Identifier.Text} Create({factoryType},{parameters})";
             else
                 return $"public {interfaceSyntax.Identifier.Text} Create({factoryType})";
         }
 
-        private static string CreateParameter(PropertyDeclarationSyntax propertySyntax)
-        {
-            return $"{propertySyntax.Type} {propertySyntax.Identifier.Text.ToString().Replace("<", "_").Replace(">", "_")}";
-        }
-        private static bool IsDependency(MemberDeclarationSyntax memberSyntax)
-        {
-            return !memberSyntax.AttributeLists.Any(x => x.Attributes.Any(y => y.Name.GetText().ToString().Contains("Parameter")));
-
-        }
+        private static string CreateParameter(PropertyDeclarationSyntax propertySyntax) =>        
+            $"{propertySyntax.Type} {propertySyntax.Identifier.Text.ToString().Replace("<", "_").Replace(">", "_")}";
+        
+        private static bool IsDependency(MemberDeclarationSyntax memberSyntax) =>        
+            !memberSyntax.AttributeLists.Any(x => x.Attributes.Any(y => y.Name.GetText().ToString().Contains("Parameter")));
+        
         private static bool IsNotDependency(MemberDeclarationSyntax memberSyntax) => !IsDependency(memberSyntax);
     }
 }

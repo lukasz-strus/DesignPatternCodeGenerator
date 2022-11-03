@@ -1,6 +1,4 @@
-﻿using DesignPatternCodeGenerator.Attributes.Factory;
-using DesignPatternCodeGenerator.Base.Enums;
-using Microsoft.CodeAnalysis;
+﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System;
 using System.Collections.Generic;
@@ -28,12 +26,8 @@ namespace DesignPatternCodeGenerator.Base.Generators
             var compilation = context.Compilation;
             var token = context.CancellationToken;
 
-            return (await Task.WhenAll(compilation.SyntaxTrees.Select(x => SetClassDeclarationSyntax(
-                                                                                x,
-                                                                                compilation,
-                                                                                token,
-                                                                                attributeType))))
-                                                                                .SelectMany(x => x);
+            return (await Task.WhenAll(compilation.SyntaxTrees.Select(x => SetClassDeclarationSyntax(x, compilation, token, attributeType))))
+                .SelectMany(x => x);
         }
 
         private static async Task<IEnumerable<ClassDeclarationSyntax>> SetClassDeclarationSyntax(
@@ -56,7 +50,7 @@ namespace DesignPatternCodeGenerator.Base.Generators
             GeneratorExecutionContext context,
             Type attributeType)
         {
-            var interfaces = SetInterfaceDeclarations(context, attributeType).Result;            
+            var interfaces = SetInterfaceDeclarations(context, attributeType).Result;
 
             return interfaces.GroupBy(x => x.Identifier.Text);
         }
@@ -68,12 +62,8 @@ namespace DesignPatternCodeGenerator.Base.Generators
             var compilation = context.Compilation;
             var token = context.CancellationToken;
 
-            return (await Task.WhenAll(compilation.SyntaxTrees.Select(x => SetInterfaceDeclarationSyntax(
-                                                                                x, 
-                                                                                compilation, 
-                                                                                token, 
-                                                                                attributeType))))
-                                                                                .SelectMany(x => x);
+            return (await Task.WhenAll(compilation.SyntaxTrees.Select(x => SetInterfaceDeclarationSyntax(x, compilation, token, attributeType))))
+                .SelectMany(x => x);
         }
 
         private static async Task<IEnumerable<InterfaceDeclarationSyntax>> SetInterfaceDeclarationSyntax(
