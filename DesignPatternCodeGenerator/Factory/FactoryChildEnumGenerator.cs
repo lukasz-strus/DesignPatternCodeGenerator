@@ -13,21 +13,19 @@ namespace DesignPatternCodeGenerator.Factory
     {
         internal static string GenerateEnum(
             BaseCodeGenerator codeGenerator, 
-            IEnumerable<IGrouping<string, ClassDeclarationSyntax>> factoryChildGroups)
-        {
-            return codeGenerator.GenerateUsingsAndNamespace() +
+            IEnumerable<IGrouping<string, ClassDeclarationSyntax>> factoryChildGroups) =>        
+            codeGenerator.GenerateUsingsAndNamespace() +
 $@"
 {{
     {codeGenerator.GenerateDeclaration(CodeType.Enum)}
     {{
 	    {GenerateEnumElements(factoryChildGroups)}
     }}
-}}"; ;
-        }
+}}"; 
+        
 
-        private static string GenerateEnumElements(IEnumerable<IGrouping<string, ClassDeclarationSyntax>> factoryChildGroups)
-        {
-            return $"{string.Join("\n\t\t", factoryChildGroups.Select(p => $"{p.Key},"))}\n";
-        }
+        private static string GenerateEnumElements(IEnumerable<IGrouping<string, ClassDeclarationSyntax>> factoryChildGroups) =>
+            $"{string.Join("\n\t\t", factoryChildGroups.Select(p => $"{p.Key},"))}\n";
+        
     }
 }

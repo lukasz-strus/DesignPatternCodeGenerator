@@ -7,45 +7,43 @@ using System.Linq;
 
 namespace DesignPatternCodeGenerator.Base.Generators
 {
-    internal class SyntaxTokensGenerator
+    internal static class SyntaxTokensGenerator
     {
-        private readonly IGrouping<string, TypeDeclarationSyntax> _group;
-        private readonly GeneratorAttributeType _generatorType;
-
-        internal SyntaxTokensGenerator(
+        internal static SyntaxTokens GenerateSyntaxTokens(
             IGrouping<string, TypeDeclarationSyntax> group,
-            GeneratorAttributeType generatorType)
+            GeneratorAttributeType generatorType) => 
+            new SyntaxTokens()
         {
-            _group = group;
-            _generatorType = generatorType;
-        }
-
-        internal SyntaxTokens GenerateSyntaxTokens() => new SyntaxTokens()
-        {
-            Accessibility = SetAccesibility(),
-            Namespace = SetNamespace(),
-            Usings = SetUsings(),
-            ClassName = SetClassName(),
-            InterfaceName = SetInterfaceName()
+            Accessibility = SetAccesibility(group),
+            Namespace = SetNamespace(group),
+            Usings = SetUsings(group),
+            ClassName = SetClassName(group, generatorType),
+            InterfaceName = SetInterfaceName(group, generatorType)
         };
 
-        private string SetAccesibility() =>
-            _group.First().FirstAncestorOrSelf<TypeDeclarationSyntax>().Modifiers.First().Text;
+        private static string SetAccesibility(IGrouping<string, TypeDeclarationSyntax> group) =>
+            group.First().FirstAncestorOrSelf<TypeDeclarationSyntax>().Modifiers.First().Text;
 
-        private string SetNamespace() =>
-            _group.First().FirstAncestorOrSelf<NamespaceDeclarationSyntax>()?.Name?.ToString() ??
-            _group.First().FirstAncestorOrSelf<FileScopedNamespaceDeclarationSyntax>().Name.ToString();
+        private static string SetNamespace(IGrouping<string, TypeDeclarationSyntax> group) =>
+            group.First().FirstAncestorOrSelf<NamespaceDeclarationSyntax>()?.Name?.ToString() ??
+            group.First().FirstAncestorOrSelf<FileScopedNamespaceDeclarationSyntax>().Name.ToString();
 
-        private IEnumerable<string> SetUsings() =>
-            _group.First()
+        private static IEnumerable<string> SetUsings(IGrouping<string, TypeDeclarationSyntax> group) =>
+            group.First()
                  .FirstAncestorOrSelf<CompilationUnitSyntax>()
                  .DescendantNodesAndSelf()
                  .OfType<UsingDirectiveSyntax>()
                  .Select(x => x.Name.ToString());
 
-        private string SetClassName() => (_group.Key + _generatorType.ToString()).Substring(1);
+        private static string SetClassName(
+            IGrouping<string, TypeDeclarationSyntax> group,
+            GeneratorAttributeType generatorType) => 
+            (group.Key + generatorType.ToString()).Substring(1);
 
-        private string SetInterfaceName() => _group.Key + _generatorType.ToString();
+        private static string SetInterfaceName(
+            IGrouping<string, TypeDeclarationSyntax> group,
+            GeneratorAttributeType generatorType) =>
+            group.Key + generatorType.ToString();
 
 
     }
