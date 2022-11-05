@@ -2,7 +2,6 @@
 using DesignPatternCodeGenerator.Base.Generators;
 using DesignPatternCodeGenerator.Base.Models;
 using FluentAssertions;
-using Microsoft.CodeAnalysis;
 using Xunit;
 
 namespace DesignPatternCodeGenerator.Tests.Base.Generators
