@@ -2,42 +2,36 @@
 using DesignPatternCodeGenerator.Attributes.Factory;
 using DesignPatternCodeGenerator.Base.Enums;
 using FluentAssertions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 
-namespace DesignPatternCodeGenerator.Tests.Attributes
+namespace DesignPatternCodeGenerator.Tests.Attributes;
+
+public class AttributeTypeGeneratorTests
 {
-    public class AttributeTypeGeneratorTests
+    [Theory]
+    [InlineData(GeneratorAttributeType.Factory, typeof(FactoryAttribute))]
+    [InlineData(GeneratorAttributeType.FactoryChild, typeof(FactoryChildAttribute))]
+    internal void SetGeneratorAttributeType_ForValidInputs_ReturnsType(GeneratorAttributeType generatorType, Type attributeType)
     {
-        [Theory]
-        [InlineData(GeneratorAttributeType.Factory, typeof(FactoryAttribute))]
-        [InlineData(GeneratorAttributeType.FactoryChild, typeof(FactoryChildAttribute))]
-        internal void SetGeneratorAttributeType_ForValidInputs_ReturnsType(GeneratorAttributeType generatorType, Type attributeType)
-        {
-            //act
+        //act
 
-            var result = AttributeTypeGenerator.SetGeneratorAttributeType(generatorType);
+        var result = AttributeTypeGenerator.SetGeneratorAttributeType(generatorType);
 
-            //assert
+        //assert
 
-            result.Should().Be(attributeType);
-        }
+        result.Should().Be(attributeType);
+    }
 
-        [Theory]
-        [InlineData(GeneratorAttributeType.Builder)]
-        internal void SetGeneratorAttributeType_ForInvalidInputs_ReturnsType(GeneratorAttributeType generatorType)
-        {
-            //act
+    [Theory]
+    [InlineData(GeneratorAttributeType.Builder)]
+    internal void SetGeneratorAttributeType_ForInvalidInputs_ReturnsType(GeneratorAttributeType generatorType)
+    {
+        //act
 
-            Action act = () => AttributeTypeGenerator.SetGeneratorAttributeType(generatorType);
+        Action act = () => AttributeTypeGenerator.SetGeneratorAttributeType(generatorType);
 
-            //assert
+        //assert
 
-            act.Should().Throw<Exception>().WithMessage($"Type {generatorType} is not handled");
-        }
+        act.Should().Throw<Exception>().WithMessage($"Type {generatorType} is not handled");
     }
 }
