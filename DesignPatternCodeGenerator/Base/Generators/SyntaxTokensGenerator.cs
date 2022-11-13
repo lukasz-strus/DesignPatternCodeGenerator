@@ -21,15 +21,15 @@ namespace DesignPatternCodeGenerator.Base.Generators
             InterfaceName = SetInterfaceName(group, generatorType)
         };
 
-        private static string SetAccesibility(IGrouping<string, TypeDeclarationSyntax> group) =>
-            group.First().FirstAncestorOrSelf<TypeDeclarationSyntax>().Modifiers.First().Text;
+        private static string SetAccesibility(IGrouping<string, TypeDeclarationSyntax> group)
+            => group.First().FirstAncestorOrSelf<TypeDeclarationSyntax>().Modifiers.First().Text;
 
-        private static string SetNamespace(IGrouping<string, TypeDeclarationSyntax> group) =>
-            group.First().FirstAncestorOrSelf<NamespaceDeclarationSyntax>()?.Name?.ToString() ??
-            group.First().FirstAncestorOrSelf<FileScopedNamespaceDeclarationSyntax>().Name.ToString();
+        private static string SetNamespace(IGrouping<string, TypeDeclarationSyntax> group)
+            => group.First().FirstAncestorOrSelf<NamespaceDeclarationSyntax>()?.Name?.ToString() ??
+               group.First().FirstAncestorOrSelf<FileScopedNamespaceDeclarationSyntax>().Name.ToString();
 
-        private static IEnumerable<string> SetUsings(IGrouping<string, TypeDeclarationSyntax> group) =>
-            group.First()
+        private static IEnumerable<string> SetUsings(IGrouping<string, TypeDeclarationSyntax> group)
+            => group.First()
                  .FirstAncestorOrSelf<CompilationUnitSyntax>()
                  .DescendantNodesAndSelf()
                  .OfType<UsingDirectiveSyntax>()
@@ -37,13 +37,13 @@ namespace DesignPatternCodeGenerator.Base.Generators
 
         private static string SetClassName(
             IGrouping<string, TypeDeclarationSyntax> group,
-            GeneratorAttributeType generatorType) => 
-            (group.Key + generatorType.ToString()).Substring(1);
+            GeneratorAttributeType generatorType)
+            => (group.Key + generatorType.ToString()).Substring(1);
 
         private static string SetInterfaceName(
             IGrouping<string, TypeDeclarationSyntax> group,
-            GeneratorAttributeType generatorType) =>
-            group.Key + generatorType.ToString();
+            GeneratorAttributeType generatorType)
+            => group.Key + generatorType.ToString();
 
 
     }

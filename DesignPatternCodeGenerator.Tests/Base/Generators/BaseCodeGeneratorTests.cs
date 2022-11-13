@@ -26,15 +26,9 @@ public class BaseCodeGeneratorTests
     [InlineData(USINGS_AND_NAMESPACES)]
     public void GenerateUsingsAndNamespace_ForValidInputs_ReturnsCorrectString(string expected)
     {
-        //arrange
-
         var codeGenerator = new BaseCodeGenerator(_syntaxTokens);
 
-        //act
-
         var result = codeGenerator.GenerateUsingsAndNamespace();
-
-        //assert
 
         result.Should().Be(expected);
     }
@@ -45,15 +39,9 @@ public class BaseCodeGeneratorTests
     [InlineData(CodeType.Enum, ENUM_DECLARATION)]
     public void GenerateDeclaration_ForValidInputs_ReturnsCorrectString(CodeType codeType, string expected)
     {
-        //arrange
-
         var codeGenerator = new BaseCodeGenerator(_syntaxTokens);
 
-        //act
-
         var result = codeGenerator.GenerateDeclaration(codeType);
-
-        //assert
 
         result.Should().Be(expected);
     }

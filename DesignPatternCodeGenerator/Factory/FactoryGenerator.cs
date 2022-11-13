@@ -23,8 +23,15 @@ namespace DesignPatternCodeGenerator.Factory
             var factoryAttribute = AttributeTypeGenerator.SetGeneratorAttributeType(GeneratorAttributeType.Factory);
             var factoryChildAttribute = AttributeTypeGenerator.SetGeneratorAttributeType(GeneratorAttributeType.FactoryChild);
 
-            var interfaceGroups = DeclarationsSyntaxGenerator.GetInterfaceGroups(context, factoryAttribute);
-            var classGroups = DeclarationsSyntaxGenerator.GetClassGroups(context, factoryChildAttribute);
+            var interfaceGroups = DeclarationsSyntaxGenerator.GetInterfaceGroups(
+                context.Compilation, 
+                context.CancellationToken, 
+                factoryAttribute);
+
+            var classGroups = DeclarationsSyntaxGenerator.GetClassGroups(
+                context.Compilation, 
+                context.CancellationToken, 
+                factoryChildAttribute);
 
 
             foreach (var group in interfaceGroups)
