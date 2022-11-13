@@ -1,6 +1,7 @@
 ﻿using DesignPatternCodeGenerator.Base.Enums;
 using DesignPatternCodeGenerator.Base.Generators;
 using DesignPatternCodeGenerator.Base.Models;
+using DesignPatternCodeGenerator.Tests.Helpers;
 using FluentAssertions;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -27,7 +28,7 @@ public class SyntaxTokensGeneratorTests
     [InlineData(GeneratorAttributeType.Builder)]
     internal void GenerateSyntaxTokens_ForValidInputs_ReturnsCorrectClassName(GeneratorAttributeType generatorAttributeType)
     {
-        var group = GetInterfaceGroup();
+        var group = GeneratorTestsHelper.GetInterfaceGroup(TEST_INTERFACE);
 
         var result = SyntaxTokensGenerator.GenerateSyntaxTokens(group, generatorAttributeType);
 
@@ -39,7 +40,7 @@ public class SyntaxTokensGeneratorTests
     [InlineData(GeneratorAttributeType.Builder)]
     internal void GenerateSyntaxTokens_ForValidInputs_ReturnsCorrectInterfaceName(GeneratorAttributeType generatorAttributeType)
     {
-        var group = GetInterfaceGroup();
+        var group = GeneratorTestsHelper.GetInterfaceGroup(TEST_INTERFACE);
 
         var result = SyntaxTokensGenerator.GenerateSyntaxTokens(group, generatorAttributeType);
 
@@ -51,7 +52,7 @@ public class SyntaxTokensGeneratorTests
     [InlineData(GeneratorAttributeType.Builder)]
     internal void GenerateSyntaxTokens_ForValidInputs_ReturnsCorrectNamespace(GeneratorAttributeType generatorAttributeType)
     {
-        var group = GetInterfaceGroup();
+        var group = GeneratorTestsHelper.GetInterfaceGroup(TEST_INTERFACE);
 
         var result = SyntaxTokensGenerator.GenerateSyntaxTokens(group, generatorAttributeType);
 
@@ -63,7 +64,7 @@ public class SyntaxTokensGeneratorTests
     [InlineData(GeneratorAttributeType.Builder)]
     internal void GenerateSyntaxTokens_ForValidInputs_ReturnsCorrectAccessibility(GeneratorAttributeType generatorAttributeType)
     {
-        var group = GetInterfaceGroup();
+        var group = GeneratorTestsHelper.GetInterfaceGroup(TEST_INTERFACE);
 
         var result = SyntaxTokensGenerator.GenerateSyntaxTokens(group, generatorAttributeType);
 
@@ -75,24 +76,10 @@ public class SyntaxTokensGeneratorTests
     [InlineData(GeneratorAttributeType.Builder)]
     internal void GenerateSyntaxTokens_ForValidInputs_ReturnsCorrectUsings(GeneratorAttributeType generatorAttributeType)
     {
-        var group = GetInterfaceGroup();
+        var group = GeneratorTestsHelper.GetInterfaceGroup(TEST_INTERFACE);
 
         var result = SyntaxTokensGenerator.GenerateSyntaxTokens(group, generatorAttributeType);
 
         result.Usings.First().Should().Be(_syntaxTokens.Usings.First());
-    }
-
-    private IGrouping<string, InterfaceDeclarationSyntax> GetInterfaceGroup()
-    {
-        var interfaceDeclarationSyntax = CSharpSyntaxTree
-            .ParseText(TEST_INTERFACE)
-            .GetRoot()
-            .DescendantNodes()
-            .OfType<InterfaceDeclarationSyntax>()
-            .First();
-
-        return new List<InterfaceDeclarationSyntax> { interfaceDeclarationSyntax }
-            .GroupBy(x => x.Identifier.Text)
-            .First();
     }
 }

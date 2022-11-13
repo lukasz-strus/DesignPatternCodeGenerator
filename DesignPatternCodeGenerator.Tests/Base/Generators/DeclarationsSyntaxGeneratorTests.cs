@@ -1,8 +1,8 @@
 ﻿using DesignPatternCodeGenerator.Attributes.Factory;
 using DesignPatternCodeGenerator.Base.Generators;
+using DesignPatternCodeGenerator.Tests.Helpers;
 using FluentAssertions;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 using Xunit;
 
 namespace DesignPatternCodeGenerator.Tests.Base.Generators;
@@ -33,7 +33,7 @@ namespace DesignPatternCodeGenerator.Tests.Data
     [Fact]
     internal void GetInterfaceGroups_ForValidInputs_ReturnsCorrectKeyValue()
     {
-        var compilation = CreateCompilation(FACTORY_COMPILATION_SOURCE);
+        var compilation = GeneratorTestsHelper.CreateCompilation(FACTORY_COMPILATION_SOURCE);
         var source = new CancellationTokenSource();
         var token = source.Token;
 
@@ -45,31 +45,13 @@ namespace DesignPatternCodeGenerator.Tests.Data
     [Fact]
     internal void GetClassGroups_ForValidInputs_ReturnsCorrectKeyValue()
     {
-        var compilation = CreateCompilation(FACTORY_COMPILATION_SOURCE);
+        var compilation = GeneratorTestsHelper.CreateCompilation(FACTORY_COMPILATION_SOURCE);
         var source = new CancellationTokenSource();
         var token = source.Token;
 
         var result = DeclarationsSyntaxGenerator.GetClassGroups(compilation, token, typeof(FactoryChildAttribute));
 
         result.Select(x => x.Key).First().Should().Be("Test");
-    }
-
-    private static Compilation CreateCompilation(string sourceCode)
-    {
-        var syntaxTree = CSharpSyntaxTree.ParseText(sourceCode);
-        var references = AppDomain.CurrentDomain.GetAssemblies()
-                                  .Where(assembly => !assembly.IsDynamic)
-                                  .Select(assembly => MetadataReference
-                                                      .CreateFromFile(assembly.Location))
-                                  .Cast<MetadataReference>();
-
-        var compilation = CSharpCompilation.Create("SourceGeneratorTests",
-                      new[] { syntaxTree },
-                      references,
-                      new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
-
-
-        return compilation;
     }
 
 }
