@@ -11,21 +11,20 @@ namespace DesignPatternCodeGenerator.Base.Generators
     internal class DeclarationsSyntaxGenerator
     {
         internal static IEnumerable<IGrouping<string, ClassDeclarationSyntax>> GetClassGroups(
-            GeneratorExecutionContext context,
+            Compilation compilation,
+            CancellationToken token,
             Type attributeType)
         {
-            var classes = SetClassDeclarations(context, attributeType).Result;
+            var classes = SetClassDeclarations(compilation, token, attributeType).Result;
 
             return classes.GroupBy(x => x.Identifier.Text);
         }
 
         private static async Task<IEnumerable<ClassDeclarationSyntax>> SetClassDeclarations(
-            GeneratorExecutionContext context,
+            Compilation compilation, 
+            CancellationToken token,
             Type attributeType)
         {
-            var compilation = context.Compilation;
-            var token = context.CancellationToken;
-
             return (await Task.WhenAll(compilation.SyntaxTrees.Select(x => SetClassDeclarationSyntax(x, compilation, token, attributeType))))
                 .SelectMany(x => x);
         }
@@ -47,21 +46,20 @@ namespace DesignPatternCodeGenerator.Base.Generators
         }
 
         internal static IEnumerable<IGrouping<string, InterfaceDeclarationSyntax>> GetInterfaceGroups(
-            GeneratorExecutionContext context,
+            Compilation compilation,
+            CancellationToken token,
             Type attributeType)
         {
-            var interfaces = SetInterfaceDeclarations(context, attributeType).Result;
+            var interfaces = SetInterfaceDeclarations(compilation, token, attributeType).Result;
 
             return interfaces.GroupBy(x => x.Identifier.Text);
         }
 
         private static async Task<IEnumerable<InterfaceDeclarationSyntax>> SetInterfaceDeclarations(
-            GeneratorExecutionContext context,
+            Compilation compilation,
+            CancellationToken token,
             Type attributeType)
         {
-            var compilation = context.Compilation;
-            var token = context.CancellationToken;
-
             return (await Task.WhenAll(compilation.SyntaxTrees.Select(x => SetInterfaceDeclarationSyntax(x, compilation, token, attributeType))))
                 .SelectMany(x => x);
         }
