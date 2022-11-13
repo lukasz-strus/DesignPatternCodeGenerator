@@ -13,8 +13,8 @@ namespace DesignPatternCodeGenerator.Factory
     {
         internal static string GenerateInterface(
             BaseCodeGenerator codeGenerator, 
-            IGrouping<string, InterfaceDeclarationSyntax> group) =>        
-            codeGenerator.GenerateUsingsAndNamespace() +
+            IGrouping<string, InterfaceDeclarationSyntax> group)
+            => codeGenerator.GenerateUsingsAndNamespace() +
 $@"
 {{
     {codeGenerator.GenerateDeclaration(CodeType.Interface)}
@@ -26,8 +26,8 @@ $@"
         internal static string GenerateClass
             (BaseCodeGenerator codeGenerator, 
             IGrouping<string, InterfaceDeclarationSyntax> group,
-            IEnumerable<IGrouping<string, ClassDeclarationSyntax>> factoryChildGroups) =>        
-            codeGenerator.GenerateUsingsAndNamespace() +
+            IEnumerable<IGrouping<string, ClassDeclarationSyntax>> factoryChildGroups)
+            =>  codeGenerator.GenerateUsingsAndNamespace() +
 $@"
 {{
     {codeGenerator.GenerateDeclaration(CodeType.Class)}
@@ -106,12 +106,13 @@ $@"
                 return $"public {interfaceSyntax.Identifier.Text} Create({factoryType})";
         }
 
-        private static string CreateParameter(PropertyDeclarationSyntax propertySyntax) =>        
-            $"{propertySyntax.Type} {propertySyntax.Identifier.Text.ToString().Replace("<", "_").Replace(">", "_")}";
+        private static string CreateParameter(PropertyDeclarationSyntax propertySyntax)
+            => $"{propertySyntax.Type} {propertySyntax.Identifier.Text.ToString().Replace("<", "_").Replace(">", "_")}";
         
-        private static bool IsDependency(MemberDeclarationSyntax memberSyntax) =>        
-            !memberSyntax.AttributeLists.Any(x => x.Attributes.Any(y => y.Name.GetText().ToString().Contains("Parameter")));
+        private static bool IsDependency(MemberDeclarationSyntax memberSyntax)
+            => !memberSyntax.AttributeLists.Any(x => x.Attributes.Any(y => y.Name.GetText().ToString().Contains("Parameter")));
         
-        private static bool IsNotDependency(MemberDeclarationSyntax memberSyntax) => !IsDependency(memberSyntax);
+        private static bool IsNotDependency(MemberDeclarationSyntax memberSyntax) 
+            => !IsDependency(memberSyntax);
     }
 }
