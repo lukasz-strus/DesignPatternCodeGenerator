@@ -24,18 +24,11 @@ using System;
 
 namespace DesignPatternCodeGenerator.Tests.Data
 {
-
     [Factory]
-    public interface ITest
-    {
-
-    }
+    public interface ITest { }
 
     [FactoryChild]
-    public class Test : ITest
-    {
-
-    }
+    public class Test : ITest { }
 }";
 
     private const string FACTORY_ENUM_SOURCE =
