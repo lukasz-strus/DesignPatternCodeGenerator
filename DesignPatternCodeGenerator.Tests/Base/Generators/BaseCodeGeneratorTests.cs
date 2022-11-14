@@ -12,7 +12,7 @@ public class BaseCodeGeneratorTests
     [InlineData(USINGS_AND_NAMESPACES)]
     public void GenerateUsingsAndNamespace_ForValidInputs_ReturnsCorrectString(string expected)
     {
-        var codeGenerator = new BaseCodeGenerator(_syntaxTokens);
+        var codeGenerator = new BaseCodeGenerator(_syntaxTokens, _configuration);
 
         var result = codeGenerator.GenerateUsingsAndNamespace();
 
@@ -25,12 +25,18 @@ public class BaseCodeGeneratorTests
     [InlineData(CodeType.Enum, ENUM_DECLARATION)]
     public void GenerateDeclaration_ForValidInputs_ReturnsCorrectString(CodeType codeType, string expected)
     {
-        var codeGenerator = new BaseCodeGenerator(_syntaxTokens);
+        var codeGenerator = new BaseCodeGenerator(_syntaxTokens, _configuration);
 
         var result = codeGenerator.GenerateDeclaration(codeType);
 
         result.Should().Be(expected);
     }
+
+    private readonly SyntaxTokensConfigurations _configuration = new()
+    {
+        IsMainAttributeOnInterface = true,
+        IsDesignPatternPostfix = true,
+    };
 
     private readonly SyntaxTokens _syntaxTokens = new()
     {

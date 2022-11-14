@@ -1,6 +1,7 @@
 ﻿using DesignPatternCodeGenerator.Attributes;
 using DesignPatternCodeGenerator.Base.Enums;
 using DesignPatternCodeGenerator.Base.Generators;
+using DesignPatternCodeGenerator.Base.Models;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Text;
 using System.Text;
@@ -12,13 +13,6 @@ namespace DesignPatternCodeGenerator.Factory
     {
         public void Execute(GeneratorExecutionContext context)
         {
-            //#if DEBUG
-            //            if (!Debugger.IsAttached)
-            //            {
-            //                Debugger.Launch();
-            //            }
-            //#endif
-
             var factoryAttribute = AttributeTypeGenerator.SetGeneratorAttributeType(GeneratorAttributeType.Factory);
             var factoryChildAttribute = AttributeTypeGenerator.SetGeneratorAttributeType(GeneratorAttributeType.FactoryChild);
 
@@ -32,12 +26,18 @@ namespace DesignPatternCodeGenerator.Factory
                 context.CancellationToken,
                 factoryChildAttribute);
 
+            var configuration = new SyntaxTokensConfigurations()
+            {
+                IsDesignPatternPostfix = true,
+                IsMainAttributeOnInterface = true
+            };
+
 
             foreach (var group in interfaceGroups)
             {
-                var syntaxTokens = SyntaxTokensGenerator.GenerateSyntaxTokens(group, GeneratorAttributeType.Factory);
+                var syntaxTokens = SyntaxTokensGenerator.GenerateSyntaxTokens(group, GeneratorAttributeType.Factory, configuration);
 
-                var codeGenerator = new BaseCodeGenerator(syntaxTokens);
+                var codeGenerator = new BaseCodeGenerator(syntaxTokens, configuration);
 
                 var factoryChildGroups = FactoryChild.FilterFactoryChild(classGroups, syntaxTokens.InterfaceName.Replace("Factory", ""));
 

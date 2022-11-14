@@ -1,11 +1,12 @@
 ﻿using DesignPatternCodeGenerator.Analyzers;
+using DesignPatternCodeGenerator.Attributes.Factory;
 using Xunit;
 using Verifier = DesignPatternCodeGenerator.Tests.Verifiers.AnalyzerVerifier<
-   DesignPatternCodeGenerator.Analyzers.DesignPatternAnalyzer>;
+   DesignPatternCodeGenerator.Analyzers.FactoryAnalyzer>;
 
 namespace DesignPatternCodeGenerator.Tests.Verifiers;
 
-public class DesignPatternAnalyzerTests
+public class FactoryAnalyzerTests
 {
     [Fact]
     public async Task Analyzer_ForFactoryChildClassWithoutInterface_ShouldThrowError()
@@ -27,6 +28,6 @@ namespace DesignPatternCodeGenerator.Tests.Data
                                     .WithLocation(0)
                                     .WithArguments("Test1");
 
-        await Verifier.VerifyAnalyzerAsync(input, expectedError);
+        await Verifier.VerifyAnalyzerAsync(input, typeof(FactoryChildAttribute), expectedError);
     }
 }

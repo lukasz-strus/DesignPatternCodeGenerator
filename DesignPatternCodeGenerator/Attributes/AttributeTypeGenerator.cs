@@ -1,10 +1,7 @@
 ﻿using DesignPatternCodeGenerator.Attributes.Factory;
+using DesignPatternCodeGenerator.Attributes.Singleton;
 using DesignPatternCodeGenerator.Base.Enums;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DesignPatternCodeGenerator.Attributes
 {
@@ -18,6 +15,8 @@ namespace DesignPatternCodeGenerator.Attributes
                     return typeof(FactoryAttribute);
                 case GeneratorAttributeType.FactoryChild:
                     return typeof(FactoryChildAttribute);
+                case GeneratorAttributeType.Singleton:
+                    return typeof(SingletonAttribute);
                 default:
                     throw new Exception($"Type {generatorType} is not handled");
             }

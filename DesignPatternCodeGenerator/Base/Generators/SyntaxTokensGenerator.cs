@@ -11,17 +11,20 @@ namespace DesignPatternCodeGenerator.Base.Generators
     {
         internal static SyntaxTokens GenerateSyntaxTokens(
             IGrouping<string, TypeDeclarationSyntax> group,
-            GeneratorAttributeType generatorType) => 
+            GeneratorAttributeType generatorType,
+            SyntaxTokensConfigurations configurations) => 
             new SyntaxTokens()
         {
             Accessibility = SetAccesibility(group),
             Namespace = SetNamespace(group),
             Usings = SetUsings(group),
-            ClassName = SetClassName(group, generatorType),
-            InterfaceName = SetInterfaceName(group, generatorType)
-        };
+            ClassName = SetClassName(group, generatorType, configurations),
+            InterfaceName = SetInterfaceName(group, generatorType, configurations),
+            AdditionalClassToken = SetAdditionalClassToken(configurations)
+            };
 
-        private static string SetAccesibility(IGrouping<string, TypeDeclarationSyntax> group)
+        private static string SetAccesibility(
+            IGrouping<string, TypeDeclarationSyntax> group)
             => group.First().FirstAncestorOrSelf<TypeDeclarationSyntax>().Modifiers.First().Text;
 
         private static string SetNamespace(IGrouping<string, TypeDeclarationSyntax> group)
@@ -37,13 +40,27 @@ namespace DesignPatternCodeGenerator.Base.Generators
 
         private static string SetClassName(
             IGrouping<string, TypeDeclarationSyntax> group,
-            GeneratorAttributeType generatorType)
-            => (group.Key + generatorType.ToString()).Substring(1);
+            GeneratorAttributeType generatorType,
+            SyntaxTokensConfigurations configurations)
+        {
+            string className = configurations.IsDesignPatternPostfix ? group.Key + generatorType.ToString() : group.Key;
+
+            if (configurations.IsMainAttributeOnInterface)
+                className = className.Substring(1);
+
+            return className;
+        }
 
         private static string SetInterfaceName(
             IGrouping<string, TypeDeclarationSyntax> group,
-            GeneratorAttributeType generatorType)
-            => group.Key + generatorType.ToString();
+            GeneratorAttributeType generatorType,
+            SyntaxTokensConfigurations configurations)
+                => configurations.IsDesignPatternPostfix
+                ? group.Key + generatorType.ToString()
+                : group.Key;
+
+        private static string SetAdditionalClassToken(SyntaxTokensConfigurations configurations)
+                => configurations.IsPartialClass ? " partial" : "";
 
 
     }
