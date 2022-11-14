@@ -11,6 +11,12 @@ namespace DesignPatternCodeGenerator.Tests.Base.Generators;
 
 public class SyntaxTokensGeneratorTests
 {
+    private readonly SyntaxTokensConfigurations _configurations = new()
+    {
+        IsDesignPatternPostfix = true,
+        IsMainAttributeOnInterface = true
+    };
+
     [Theory]
     [InlineData(GeneratorAttributeType.Factory)]
     [InlineData(GeneratorAttributeType.Builder)]
@@ -18,7 +24,7 @@ public class SyntaxTokensGeneratorTests
     {
         var group = GeneratorTestsHelper.GetInterfaceGroup(TEST_INTERFACE);
 
-        var result = SyntaxTokensGenerator.GenerateSyntaxTokens(group, generatorAttributeType);
+        var result = SyntaxTokensGenerator.GenerateSyntaxTokens(group, generatorAttributeType, _configurations);
 
         result.ClassName
             .Should()
@@ -32,7 +38,7 @@ public class SyntaxTokensGeneratorTests
     {
         var group = GeneratorTestsHelper.GetInterfaceGroup(TEST_INTERFACE);
 
-        var result = SyntaxTokensGenerator.GenerateSyntaxTokens(group, generatorAttributeType);
+        var result = SyntaxTokensGenerator.GenerateSyntaxTokens(group, generatorAttributeType, _configurations);
 
         result.InterfaceName
             .Should()
@@ -46,7 +52,7 @@ public class SyntaxTokensGeneratorTests
     {
         var group = GeneratorTestsHelper.GetInterfaceGroup(TEST_INTERFACE);
 
-        var result = SyntaxTokensGenerator.GenerateSyntaxTokens(group, generatorAttributeType);
+        var result = SyntaxTokensGenerator.GenerateSyntaxTokens(group, generatorAttributeType, _configurations);
 
         result.Namespace
             .Should()
@@ -60,7 +66,7 @@ public class SyntaxTokensGeneratorTests
     {
         var group = GeneratorTestsHelper.GetInterfaceGroup(TEST_INTERFACE);
 
-        var result = SyntaxTokensGenerator.GenerateSyntaxTokens(group, generatorAttributeType);
+        var result = SyntaxTokensGenerator.GenerateSyntaxTokens(group, generatorAttributeType, _configurations);
 
         result.Accessibility
             .Should()
@@ -74,7 +80,7 @@ public class SyntaxTokensGeneratorTests
     {
         var group = GeneratorTestsHelper.GetInterfaceGroup(TEST_INTERFACE);
 
-        var result = SyntaxTokensGenerator.GenerateSyntaxTokens(group, generatorAttributeType);
+        var result = SyntaxTokensGenerator.GenerateSyntaxTokens(group, generatorAttributeType, _configurations);
 
         result.Usings
             .First()

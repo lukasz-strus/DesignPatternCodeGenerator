@@ -13,7 +13,7 @@ public class FactoryChildGeneratorTests
     [InlineData(FACTORY_COMPILATION_SOURCE, FACTORY_ENUM_SOURCE)]
     internal void GenerateEnum_ForValidInput_ReturnCorrectEnum(string source, string expected)
     {
-        var codeGenerator = new BaseCodeGenerator(_syntaxTokens);
+        var codeGenerator = new BaseCodeGenerator(_syntaxTokens, _configuration);
         var factoryChildGroups = GeneratorTestsHelper.GetClassGroups(source);
 
         var result = FactoryChildGenerator.GenerateEnum(codeGenerator, factoryChildGroups);
@@ -22,6 +22,12 @@ public class FactoryChildGeneratorTests
             .Should()
             .Be(expected.RemoveWhitespace());
     }
+
+    private readonly SyntaxTokensConfigurations _configuration = new()
+    {
+        IsMainAttributeOnInterface = true,
+        IsDesignPatternPostfix = true,
+    };
 
     private readonly SyntaxTokens _syntaxTokens = new()
     {

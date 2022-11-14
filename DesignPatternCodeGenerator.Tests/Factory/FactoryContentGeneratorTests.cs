@@ -13,7 +13,7 @@ public class FactoryContentGeneratorTests
     [InlineData(FACTORY_COMPILATION_SOURCE, INTERFACE_FACTORY_SOURCE)]
     internal void GenerateInterface_ForValidInputs_ReturnInterface(string inputSource, string interfaceSource)
     {
-        var codeGenerator = new BaseCodeGenerator(_syntaxTokens);
+        var codeGenerator = new BaseCodeGenerator(_syntaxTokens, _configuration);
         var interfaceGroup = GeneratorTestsHelper.GetInterfaceGroup(inputSource);
 
         var result = FactoryContentGenerator.GenerateInterface(codeGenerator, interfaceGroup);
@@ -27,7 +27,7 @@ public class FactoryContentGeneratorTests
     [InlineData(FACTORY_COMPILATION_SOURCE, CLASS_FACTORY_SOURCE, FACTORYCHILD_COMPILATION_SOURCE)]
     internal void GenerateClass_ForValidInputs_ReturnInterface(string inputSource, string classSource, string childSource)
     {
-        var codeGenerator = new BaseCodeGenerator(_syntaxTokens);
+        var codeGenerator = new BaseCodeGenerator(_syntaxTokens, _configuration);
         var interfaceGroup = GeneratorTestsHelper.GetInterfaceGroup(inputSource);
         var childGroups = GeneratorTestsHelper.GetClassGroups(childSource);
 
@@ -37,6 +37,12 @@ public class FactoryContentGeneratorTests
             .Should()
             .Be(classSource.RemoveWhitespace());
     }
+
+    private readonly SyntaxTokensConfigurations _configuration = new()
+    {
+        IsMainAttributeOnInterface = true,
+        IsDesignPatternPostfix = true,
+    };
 
     private readonly SyntaxTokens _syntaxTokens = new()
     {

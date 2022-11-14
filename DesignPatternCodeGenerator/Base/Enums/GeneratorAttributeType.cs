@@ -4,6 +4,12 @@
     {
         Factory,
         FactoryChild,
-        Builder
+        Builder,
+        Singleton,
+        AbstractFactory,
+        Prototype,
+        Facade,
+        EmptyObject,
+        IOC
     }
 }

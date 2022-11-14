@@ -9,6 +9,7 @@ namespace DesignPatternCodeGenerator.Base.Models
         internal IEnumerable<string> Usings { get; set; }
         internal string ClassName { get; set; }
         internal string InterfaceName { get; set; }
+        internal string AdditionalClassToken { get; set; }
 
     }
 }

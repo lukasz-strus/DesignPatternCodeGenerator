@@ -9,39 +9,29 @@ using System.Linq;
 namespace DesignPatternCodeGenerator.Analyzers
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public class DesignPatternAnalyzer : DiagnosticAnalyzer
+    public class SingletonAnalyzer : DiagnosticAnalyzer
     {
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get; }
-            = ImmutableArray.Create(DesingPatternDiagnosticsDescriptors.ClassMustImplementFactoryInterface);
+            = ImmutableArray.Create(DesingPatternDiagnosticsDescriptors.SingletonMustBePartial);
 
         public override void Initialize(AnalysisContext context)
         {
-
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
             context.EnableConcurrentExecution();
 
-            context.RegisterSyntaxNodeAction(CheckClassForInterfaces, SyntaxKind.ClassDeclaration);
+            context.RegisterSyntaxNodeAction(AnalyzeNamedType, SyntaxKind.ClassDeclaration);
         }
 
-        private static void CheckClassForInterfaces(SyntaxNodeAnalysisContext context)
+        private static void AnalyzeNamedType(SyntaxNodeAnalysisContext context)
         {
-
-//#if DEBUG
-//            if (!Debugger.IsAttached)
-//            {
-//                Debugger.Launch();
-//            }
-//#endif
-
             var classDeclarationSyntax = (ClassDeclarationSyntax)context.Node;
             var declaredSymbol = context.SemanticModel.GetDeclaredSymbol(classDeclarationSyntax);
-
             var attributeList = classDeclarationSyntax.AttributeLists.ToString();
 
-            if (classDeclarationSyntax.BaseList is null
-                && attributeList.Contains("[FactoryChild]"))
+            if (!IsPartial(classDeclarationSyntax)
+                && attributeList.Contains("[Singleton]"))
             {
-                var error = Diagnostic.Create(DesingPatternDiagnosticsDescriptors.ClassMustImplementFactoryInterface,
+                var error = Diagnostic.Create(DesingPatternDiagnosticsDescriptors.SingletonMustBePartial,
                       classDeclarationSyntax.Identifier.GetLocation(),
                       declaredSymbol.Name);
 
@@ -49,5 +39,8 @@ namespace DesignPatternCodeGenerator.Analyzers
             }
 
         }
+
+        private static bool IsPartial(ClassDeclarationSyntax classDeclarationSyntax)
+            => classDeclarationSyntax.Modifiers.Any(SyntaxKind.PartialKeyword);
     }
 }

@@ -8,10 +8,12 @@ namespace DesignPatternCodeGenerator.Base.Generators
     internal class BaseCodeGenerator
     {
         private readonly SyntaxTokens _syntaxTokens;
+        private readonly SyntaxTokensConfigurations _configurations;
 
-        internal BaseCodeGenerator(SyntaxTokens syntaxTokens)
+        internal BaseCodeGenerator(SyntaxTokens syntaxTokens, SyntaxTokensConfigurations configurations)
         {
             _syntaxTokens = syntaxTokens;
+            _configurations = configurations;
         }
 
         internal string GenerateUsingsAndNamespace() =>
@@ -27,7 +29,12 @@ namespace {_syntaxTokens.Namespace}";
                 case CodeType.Interface:
                     return $@"{_syntaxTokens.Accessibility} interface {_syntaxTokens.InterfaceName}";
                 case CodeType.Class:
-                    return $@"{_syntaxTokens.Accessibility} class {_syntaxTokens.ClassName}: {_syntaxTokens.InterfaceName}";
+                    {
+                        if(_configurations.IsMainAttributeOnInterface)
+                            return $@"{_syntaxTokens.Accessibility}{_syntaxTokens.AdditionalClassToken} class {_syntaxTokens.ClassName}: {_syntaxTokens.InterfaceName}";
+                        else
+                            return $@"{_syntaxTokens.Accessibility}{_syntaxTokens.AdditionalClassToken} class {_syntaxTokens.ClassName}";
+                    }
                 case CodeType.Enum:
                     return $@"{_syntaxTokens.Accessibility} enum {_syntaxTokens.ClassName}Type";
                 default:
