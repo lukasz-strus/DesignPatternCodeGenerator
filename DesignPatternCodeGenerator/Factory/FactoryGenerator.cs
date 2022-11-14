@@ -3,7 +3,6 @@ using DesignPatternCodeGenerator.Base.Enums;
 using DesignPatternCodeGenerator.Base.Generators;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Text;
-using System.Diagnostics;
 using System.Text;
 
 namespace DesignPatternCodeGenerator.Factory
@@ -13,24 +12,24 @@ namespace DesignPatternCodeGenerator.Factory
     {
         public void Execute(GeneratorExecutionContext context)
         {
-//#if DEBUG
-//            if (!Debugger.IsAttached)
-//            {
-//                Debugger.Launch();
-//            }
-//#endif
+            //#if DEBUG
+            //            if (!Debugger.IsAttached)
+            //            {
+            //                Debugger.Launch();
+            //            }
+            //#endif
 
             var factoryAttribute = AttributeTypeGenerator.SetGeneratorAttributeType(GeneratorAttributeType.Factory);
             var factoryChildAttribute = AttributeTypeGenerator.SetGeneratorAttributeType(GeneratorAttributeType.FactoryChild);
 
             var interfaceGroups = DeclarationsSyntaxGenerator.GetInterfaceGroups(
-                context.Compilation, 
-                context.CancellationToken, 
+                context.Compilation,
+                context.CancellationToken,
                 factoryAttribute);
 
             var classGroups = DeclarationsSyntaxGenerator.GetClassGroups(
-                context.Compilation, 
-                context.CancellationToken, 
+                context.Compilation,
+                context.CancellationToken,
                 factoryChildAttribute);
 
 
