@@ -20,7 +20,9 @@ public class SyntaxTokensGeneratorTests
 
         var result = SyntaxTokensGenerator.GenerateSyntaxTokens(group, generatorAttributeType);
 
-        result.ClassName.Should().Be(_syntaxTokens.ClassName + generatorAttributeType.ToString());
+        result.ClassName
+            .Should()
+            .Be(_syntaxTokens.ClassName + generatorAttributeType.ToString());
     }
 
     [Theory]
@@ -32,7 +34,9 @@ public class SyntaxTokensGeneratorTests
 
         var result = SyntaxTokensGenerator.GenerateSyntaxTokens(group, generatorAttributeType);
 
-        result.InterfaceName.Should().Be(_syntaxTokens.InterfaceName + generatorAttributeType.ToString());
+        result.InterfaceName
+            .Should()
+            .Be(_syntaxTokens.InterfaceName + generatorAttributeType.ToString());
     }
 
     [Theory]
@@ -44,7 +48,9 @@ public class SyntaxTokensGeneratorTests
 
         var result = SyntaxTokensGenerator.GenerateSyntaxTokens(group, generatorAttributeType);
 
-        result.Namespace.Should().Be(_syntaxTokens.Namespace);
+        result.Namespace
+            .Should()
+            .Be(_syntaxTokens.Namespace);
     }
 
     [Theory]
@@ -56,7 +62,9 @@ public class SyntaxTokensGeneratorTests
 
         var result = SyntaxTokensGenerator.GenerateSyntaxTokens(group, generatorAttributeType);
 
-        result.Accessibility.Should().Be(_syntaxTokens.Accessibility);
+        result.Accessibility
+            .Should()
+            .Be(_syntaxTokens.Accessibility);
     }
 
     [Theory]
@@ -68,7 +76,10 @@ public class SyntaxTokensGeneratorTests
 
         var result = SyntaxTokensGenerator.GenerateSyntaxTokens(group, generatorAttributeType);
 
-        result.Usings.First().Should().Be(_syntaxTokens.Usings.First());
+        result.Usings
+            .First()
+            .Should()
+            .Be(_syntaxTokens.Usings.First());
     }
 
     private readonly SyntaxTokens _syntaxTokens = new()

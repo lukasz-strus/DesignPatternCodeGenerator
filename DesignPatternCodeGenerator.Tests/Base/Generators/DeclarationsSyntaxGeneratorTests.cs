@@ -18,7 +18,10 @@ public class DeclarationsSyntaxGeneratorTests
 
         var result = DeclarationsSyntaxGenerator.GetInterfaceGroups(compilation, token, typeof(FactoryAttribute));
 
-        result.Select(x => x.Key).First().Should().Be("ITest");
+        result.Select(x => x.Key)
+            .First()
+            .Should()
+            .Be("ITest");
     }
 
     [Fact]
@@ -30,7 +33,10 @@ public class DeclarationsSyntaxGeneratorTests
 
         var result = DeclarationsSyntaxGenerator.GetClassGroups(compilation, token, typeof(FactoryChildAttribute));
 
-        result.Select(x => x.Key).First().Should().Be("Test");
+        result.Select(x => x.Key)
+            .First()
+            .Should()
+            .Be("Test");
     }
 
     private const string FACTORY_COMPILATION_SOURCE =
