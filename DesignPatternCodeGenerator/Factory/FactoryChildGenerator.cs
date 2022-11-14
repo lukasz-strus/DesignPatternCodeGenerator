@@ -1,18 +1,28 @@
-﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
-using System.Linq;
+﻿using DesignPatternCodeGenerator.Base.Enums;
+using DesignPatternCodeGenerator.Base.Generators;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace DesignPatternCodeGenerator.Factory
 {
     internal static class FactoryChildGenerator
     {
-        internal static IEnumerable<IGrouping<string, ClassDeclarationSyntax>> FilterFactoryChild(
-            IEnumerable<IGrouping<string, ClassDeclarationSyntax>> classGroup,
-            string interfaceName)
-            => classGroup
-                .SelectMany(x => x)
-                .Where(y => y.FirstAncestorOrSelf<TypeDeclarationSyntax>().BaseList.Types.ToString().Contains(interfaceName))
-                .GroupBy(z => z.Identifier.Text);
-        
+        internal static string GenerateEnum(
+            BaseCodeGenerator codeGenerator,
+            IEnumerable<IGrouping<string, ClassDeclarationSyntax>> factoryChildGroups)
+            => codeGenerator.GenerateUsingsAndNamespace() +
+$@"
+{{
+    {codeGenerator.GenerateDeclaration(CodeType.Enum)}
+    {{
+	    {GenerateEnumElements(factoryChildGroups)}
+    }}
+}}";
+
+
+        private static string GenerateEnumElements(IEnumerable<IGrouping<string, ClassDeclarationSyntax>> factoryChildGroups)
+            => $"{string.Join("\n\t\t", factoryChildGroups.Select(p => $"{p.Key},"))}\n";
+
     }
 }
