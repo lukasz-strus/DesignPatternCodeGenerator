@@ -1,5 +1,4 @@
-﻿using DesignPatternCodeGenerator.Attributes.Factory;
-using Microsoft.CodeAnalysis.CSharp.Testing;
+﻿using Microsoft.CodeAnalysis.CSharp.Testing;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Testing;
 using Microsoft.CodeAnalysis.Testing.Verifiers;
@@ -16,9 +15,10 @@ public static class AnalyzerVerifier<TAnalyzer>
 
     public static async Task VerifyAnalyzerAsync(
        string source,
+       Type atributeType,
        params DiagnosticResult[] expected)
     {
-        var test = new AnalyzerTest(source, expected);
+        var test = new AnalyzerTest(source, atributeType, expected);
         await test.RunAsync(CancellationToken.None);
     }
 
@@ -26,6 +26,7 @@ public static class AnalyzerVerifier<TAnalyzer>
     {
         public AnalyzerTest(
            string source,
+           Type atributeType,
            params DiagnosticResult[] expected)
         {
             TestCode = source;
@@ -38,8 +39,7 @@ public static class AnalyzerVerifier<TAnalyzer>
 #else
          ReferenceAssemblies = ReferenceAssemblies.Net.Net50;
 #endif
-
-            TestState.AdditionalReferences.Add(typeof(FactoryChildAttribute).Assembly);
+            TestState.AdditionalReferences.Add(atributeType.Assembly);
         }
     }
 }

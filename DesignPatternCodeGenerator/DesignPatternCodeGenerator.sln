@@ -9,7 +9,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{324C
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Samples.Factory", "..\Samples.Factory\Samples.Factory.csproj", "{823CCFAA-EEBB-49F1-A898-3443BEE1F68D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DesignPatternCodeGenerator.Tests", "..\DesignPatternCodeGenerator.Tests\DesignPatternCodeGenerator.Tests.csproj", "{F20C0EFB-A584-4AFE-917C-E14601470465}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DesignPatternCodeGenerator.Tests", "..\DesignPatternCodeGenerator.Tests\DesignPatternCodeGenerator.Tests.csproj", "{F20C0EFB-A584-4AFE-917C-E14601470465}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Samples.Singleton", "..\Samples.Singleton\Samples.Singleton.csproj", "{28FFF3DA-663D-4C0B-8741-444C751E0CE4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,12 +31,17 @@ Global
 		{F20C0EFB-A584-4AFE-917C-E14601470465}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F20C0EFB-A584-4AFE-917C-E14601470465}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F20C0EFB-A584-4AFE-917C-E14601470465}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28FFF3DA-663D-4C0B-8741-444C751E0CE4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28FFF3DA-663D-4C0B-8741-444C751E0CE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28FFF3DA-663D-4C0B-8741-444C751E0CE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28FFF3DA-663D-4C0B-8741-444C751E0CE4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{823CCFAA-EEBB-49F1-A898-3443BEE1F68D} = {324C73BB-9B0E-4C27-8B4A-8C8376BE862E}
+		{28FFF3DA-663D-4C0B-8741-444C751E0CE4} = {324C73BB-9B0E-4C27-8B4A-8C8376BE862E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {160CF731-2603-4E0C-9AD4-FB441C378C8F}
