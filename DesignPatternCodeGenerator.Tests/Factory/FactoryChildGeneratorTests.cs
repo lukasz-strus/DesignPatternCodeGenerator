@@ -7,7 +7,7 @@ using Xunit;
 
 namespace DesignPatternCodeGenerator.Tests.Factory;
 
-public class FactoryChildEnumGeneratorTests
+public class FactoryChildGeneratorTests
 {
     private readonly SyntaxTokens _syntaxTokens = new()
     {
@@ -28,7 +28,13 @@ namespace DesignPatternCodeGenerator.Tests.Data
     public interface ITest { }
 
     [FactoryChild]
-    public class Test : ITest { }
+    public class Test1 : ITest { }
+
+    [FactoryChild]
+    public class Test2 : ITest { }
+
+    [FactoryChild]
+    public class Test3 : ITest { }
 }";
 
     private const string FACTORY_ENUM_SOURCE =
@@ -39,7 +45,9 @@ namespace Test.Test
 {
     public enum TestType
     {
-	    Test,
+	    Test1,
+        Test2,
+        Test3,
 
     }
 }";
@@ -51,7 +59,7 @@ namespace Test.Test
         var codeGenerator = new BaseCodeGenerator(_syntaxTokens);
         var factoryChildGroups = GeneratorTestsHelper.GetClassGroups(source);
 
-        var result = FactoryChildEnumGenerator.GenerateEnum(codeGenerator, factoryChildGroups);
+        var result = FactoryChildGenerator.GenerateEnum(codeGenerator, factoryChildGroups);
 
         result.RemoveWhitespace().Should().Be(expected.RemoveWhitespace());
     }

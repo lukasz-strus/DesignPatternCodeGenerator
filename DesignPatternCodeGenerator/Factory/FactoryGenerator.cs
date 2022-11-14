@@ -40,9 +40,9 @@ namespace DesignPatternCodeGenerator.Factory
 
                 var codeGenerator = new BaseCodeGenerator(syntaxTokens);
 
-                var factoryChildGroups = FactoryChildGenerator.FilterFactoryChild(classGroups, syntaxTokens.InterfaceName.Replace("Factory", ""));
+                var factoryChildGroups = FactoryChild.FilterFactoryChild(classGroups, syntaxTokens.InterfaceName.Replace("Factory", ""));
 
-                var enumChildContent = FactoryChildEnumGenerator.GenerateEnum(codeGenerator, factoryChildGroups);
+                var enumChildContent = FactoryChildGenerator.GenerateEnum(codeGenerator, factoryChildGroups);
                 context.AddSource($"{syntaxTokens.ClassName}Type.g.cs", SourceText.From(enumChildContent, Encoding.UTF8));
 
                 var interfaceContent = FactoryContentGenerator.GenerateInterface(codeGenerator, group);
