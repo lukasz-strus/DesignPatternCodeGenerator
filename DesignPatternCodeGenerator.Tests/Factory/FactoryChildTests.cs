@@ -7,8 +7,25 @@ namespace DesignPatternCodeGenerator.Tests.Factory;
 
 public class FactoryChildTests
 {
+    [Theory]
+    [InlineData(FACTORY_COMPILATION_SOURCE, FACTORYCHILD_COMPILATION_SOURCE, INTERFACE_NAME)]
+    internal void FilterFactoryChild_ForValidInput_ReturnFiltredCollection(
+        string compilationSource,
+        string expectedSource,
+        string interfaceName)
+    {
+        var classGroups = GeneratorTestsHelper.GetClassGroups(compilationSource);
+        var expectedClassGroups = GeneratorTestsHelper.GetClassGroups(expectedSource);
+
+        var result = FactoryChild.FilterFactoryChild(classGroups, interfaceName);
+
+        result.Select(x => x.Key)
+              .Should()
+              .Equal(expectedClassGroups.Select(x => x.Key));
+    }
+
     private const string FACTORY_COMPILATION_SOURCE =
-@"using DesignPatternCodeGenerator.Attributes.Factory;
+    @"using DesignPatternCodeGenerator.Attributes.Factory;
 using System;
 
 namespace DesignPatternCodeGenerator.Tests.Data
@@ -36,7 +53,7 @@ namespace DesignPatternCodeGenerator.Tests.Data
 }";
 
     private const string FACTORYCHILD_COMPILATION_SOURCE =
-@"using DesignPatternCodeGenerator.Attributes.Factory;
+    @"using DesignPatternCodeGenerator.Attributes.Factory;
 using System;
 
 namespace DesignPatternCodeGenerator.Tests.Data
@@ -55,21 +72,4 @@ namespace DesignPatternCodeGenerator.Tests.Data
 }";
 
     private const string INTERFACE_NAME = "ITest";
-
-    [Theory]
-    [InlineData(FACTORY_COMPILATION_SOURCE, FACTORYCHILD_COMPILATION_SOURCE, INTERFACE_NAME)]
-    internal void FilterFactoryChild_ForValidInput_ReturnFiltredCollection(
-        string compilationSource,
-        string expectedSource,
-        string interfaceName)
-    {
-        var classGroups = GeneratorTestsHelper.GetClassGroups(compilationSource);
-        var expectedClassGroups = GeneratorTestsHelper.GetClassGroups(expectedSource);
-
-        var result = FactoryChild.FilterFactoryChild(classGroups, interfaceName);
-
-        result.Select(x => x.Key)
-              .Should()
-              .Equal(expectedClassGroups.Select(x => x.Key));
-    }
 }

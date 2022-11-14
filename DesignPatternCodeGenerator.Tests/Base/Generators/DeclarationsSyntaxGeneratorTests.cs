@@ -9,27 +9,6 @@ namespace DesignPatternCodeGenerator.Tests.Base.Generators;
 
 public class DeclarationsSyntaxGeneratorTests
 {
-    private const string FACTORY_COMPILATION_SOURCE =
-@"using DesignPatternCodeGenerator.Attributes.Factory;
-using System;
-
-namespace DesignPatternCodeGenerator.Tests.Data
-{
-
-    [Factory]
-    public interface ITest
-    {
-
-    }
-
-    [FactoryChild]
-    public class Test : ITest
-    {
-
-    }
-}";
-
-
     [Fact]
     internal void GetInterfaceGroups_ForValidInputs_ReturnsCorrectKeyValue()
     {
@@ -53,5 +32,25 @@ namespace DesignPatternCodeGenerator.Tests.Data
 
         result.Select(x => x.Key).First().Should().Be("Test");
     }
+
+    private const string FACTORY_COMPILATION_SOURCE =
+    @"using DesignPatternCodeGenerator.Attributes.Factory;
+using System;
+
+namespace DesignPatternCodeGenerator.Tests.Data
+{
+
+    [Factory]
+    public interface ITest
+    {
+
+    }
+
+    [FactoryChild]
+    public class Test : ITest
+    {
+
+    }
+}";
 
 }

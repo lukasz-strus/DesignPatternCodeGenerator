@@ -11,18 +11,6 @@ namespace DesignPatternCodeGenerator.Tests.Base.Generators;
 
 public class SyntaxTokensGeneratorTests
 {
-    private const string TEST_INTERFACE =
-        "using System;\r\n\r\nnamespace Test.Test;\r\n\r\npublic interface ITest\r\n{\r\n\r\n}";
-
-    private readonly SyntaxTokens _syntaxTokens = new()
-    {
-        ClassName = "Test",
-        InterfaceName = "ITest",
-        Namespace = "Test.Test",
-        Accessibility = "public",
-        Usings = new List<string>() { "System" }
-    };
-
     [Theory]
     [InlineData(GeneratorAttributeType.Factory)]
     [InlineData(GeneratorAttributeType.Builder)]
@@ -82,4 +70,16 @@ public class SyntaxTokensGeneratorTests
 
         result.Usings.First().Should().Be(_syntaxTokens.Usings.First());
     }
+
+    private readonly SyntaxTokens _syntaxTokens = new()
+    {
+        ClassName = "Test",
+        InterfaceName = "ITest",
+        Namespace = "Test.Test",
+        Accessibility = "public",
+        Usings = new List<string>() { "System" }
+    };
+
+    private const string TEST_INTERFACE =
+            "using System;\r\n\r\nnamespace Test.Test;\r\n\r\npublic interface ITest\r\n{\r\n\r\n}";
 }
