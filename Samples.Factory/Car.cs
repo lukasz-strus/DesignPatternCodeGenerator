@@ -41,4 +41,6 @@ namespace Samples.Factory
             HorsePower = horsePower;
         }
     }
+
+
 }

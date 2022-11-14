@@ -11,18 +11,6 @@ namespace DesignPatternCodeGenerator.Tests.Base.Generators;
 
 public class SyntaxTokensGeneratorTests
 {
-    private const string TEST_INTERFACE =
-        "using System;\r\n\r\nnamespace Test.Test;\r\n\r\npublic interface ITest\r\n{\r\n\r\n}";
-
-    private readonly SyntaxTokens _syntaxTokens = new()
-    {
-        ClassName = "Test",
-        InterfaceName = "ITest",
-        Namespace = "Test.Test",
-        Accessibility = "public",
-        Usings = new List<string>() { "System" }
-    };
-
     [Theory]
     [InlineData(GeneratorAttributeType.Factory)]
     [InlineData(GeneratorAttributeType.Builder)]
@@ -32,7 +20,9 @@ public class SyntaxTokensGeneratorTests
 
         var result = SyntaxTokensGenerator.GenerateSyntaxTokens(group, generatorAttributeType);
 
-        result.ClassName.Should().Be(_syntaxTokens.ClassName + generatorAttributeType.ToString());
+        result.ClassName
+            .Should()
+            .Be(_syntaxTokens.ClassName + generatorAttributeType.ToString());
     }
 
     [Theory]
@@ -44,7 +34,9 @@ public class SyntaxTokensGeneratorTests
 
         var result = SyntaxTokensGenerator.GenerateSyntaxTokens(group, generatorAttributeType);
 
-        result.InterfaceName.Should().Be(_syntaxTokens.InterfaceName + generatorAttributeType.ToString());
+        result.InterfaceName
+            .Should()
+            .Be(_syntaxTokens.InterfaceName + generatorAttributeType.ToString());
     }
 
     [Theory]
@@ -56,7 +48,9 @@ public class SyntaxTokensGeneratorTests
 
         var result = SyntaxTokensGenerator.GenerateSyntaxTokens(group, generatorAttributeType);
 
-        result.Namespace.Should().Be(_syntaxTokens.Namespace);
+        result.Namespace
+            .Should()
+            .Be(_syntaxTokens.Namespace);
     }
 
     [Theory]
@@ -68,7 +62,9 @@ public class SyntaxTokensGeneratorTests
 
         var result = SyntaxTokensGenerator.GenerateSyntaxTokens(group, generatorAttributeType);
 
-        result.Accessibility.Should().Be(_syntaxTokens.Accessibility);
+        result.Accessibility
+            .Should()
+            .Be(_syntaxTokens.Accessibility);
     }
 
     [Theory]
@@ -80,6 +76,21 @@ public class SyntaxTokensGeneratorTests
 
         var result = SyntaxTokensGenerator.GenerateSyntaxTokens(group, generatorAttributeType);
 
-        result.Usings.First().Should().Be(_syntaxTokens.Usings.First());
+        result.Usings
+            .First()
+            .Should()
+            .Be(_syntaxTokens.Usings.First());
     }
+
+    private readonly SyntaxTokens _syntaxTokens = new()
+    {
+        ClassName = "Test",
+        InterfaceName = "ITest",
+        Namespace = "Test.Test",
+        Accessibility = "public",
+        Usings = new List<string>() { "System" }
+    };
+
+    private const string TEST_INTERFACE =
+            "using System;\r\n\r\nnamespace Test.Test;\r\n\r\npublic interface ITest\r\n{\r\n\r\n}";
 }

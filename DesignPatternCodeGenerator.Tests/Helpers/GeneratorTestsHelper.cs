@@ -25,56 +25,41 @@ internal static class GeneratorTestsHelper
     }
 
     internal static IEnumerable<IGrouping<string, ClassDeclarationSyntax>> GetClassGroups(string context)
-    {
-        var classDeclarationSyntax = CSharpSyntaxTree
-            .ParseText(context)
-            .GetRoot()
-            .DescendantNodes()
-            .OfType<ClassDeclarationSyntax>()
-            .First();
-
-        return new List<ClassDeclarationSyntax> { classDeclarationSyntax }
-            .GroupBy(x => x.Identifier.Text);
-    }
+        => CSharpSyntaxTree
+                .ParseText(context)
+                .GetRoot()
+                .DescendantNodes()
+                .OfType<ClassDeclarationSyntax>()
+                .ToList()
+                .GroupBy(x => x.Identifier.Text);
 
     internal static IGrouping<string, ClassDeclarationSyntax> GetClassGroup(string context)
-    {
-        var classDeclarationSyntax = CSharpSyntaxTree
-            .ParseText(context)
-            .GetRoot()
-            .DescendantNodes()
-            .OfType<ClassDeclarationSyntax>()
-            .First();
-
-        return new List<ClassDeclarationSyntax> { classDeclarationSyntax }
-            .GroupBy(x => x.Identifier.Text)
-            .First();
-    }
+        => CSharpSyntaxTree
+                .ParseText(context)
+                .GetRoot()
+                .DescendantNodes()
+                .OfType<ClassDeclarationSyntax>()
+                .ToList()
+                .GroupBy(x => x.Identifier.Text)
+                .First();
+    
 
     internal static IEnumerable<IGrouping<string, InterfaceDeclarationSyntax>> GetInterfaceGroups(string context)
-    {
-        var interfaceDeclarationSyntax = CSharpSyntaxTree
-            .ParseText(context)
-            .GetRoot()
-            .DescendantNodes()
-            .OfType<InterfaceDeclarationSyntax>()
-            .First();
-
-        return new List<InterfaceDeclarationSyntax> { interfaceDeclarationSyntax }
-            .GroupBy(x => x.Identifier.Text);
-    }
+        => CSharpSyntaxTree
+                .ParseText(context)
+                .GetRoot()
+                .DescendantNodes()
+                .OfType<InterfaceDeclarationSyntax>()
+                .ToList()
+                .GroupBy(x => x.Identifier.Text);
 
     internal static IGrouping<string, InterfaceDeclarationSyntax> GetInterfaceGroup(string context)
-    {
-        var interfaceDeclarationSyntax = CSharpSyntaxTree
-            .ParseText(context)
-            .GetRoot()
-            .DescendantNodes()
-            .OfType<InterfaceDeclarationSyntax>()
-            .First();
-
-        return new List<InterfaceDeclarationSyntax> { interfaceDeclarationSyntax }
-            .GroupBy(x => x.Identifier.Text)
-            .First();
-    }
+        => CSharpSyntaxTree
+                .ParseText(context)
+                .GetRoot()
+                .DescendantNodes()
+                .OfType<InterfaceDeclarationSyntax>()
+                .ToList()
+                .GroupBy(x => x.Identifier.Text)
+                .First();
 }
