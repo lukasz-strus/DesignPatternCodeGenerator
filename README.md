@@ -90,7 +90,7 @@ namespace Samples.Factory
                case CarFactoryType.Audi :
                   return new Audi(Name, _horsepower);
                default :
-                  throw new Exception($"Shape type {type} is not handled");
+                  throw new Exception($"Type {type} is not handled");
             }    
         }
     }
