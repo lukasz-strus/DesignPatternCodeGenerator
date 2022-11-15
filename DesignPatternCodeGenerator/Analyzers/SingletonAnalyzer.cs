@@ -3,7 +3,6 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 using System.Collections.Immutable;
-using System.Diagnostics;
 using System.Linq;
 
 namespace DesignPatternCodeGenerator.Analyzers
@@ -24,23 +23,26 @@ namespace DesignPatternCodeGenerator.Analyzers
 
         private static void AnalyzeNamedType(SyntaxNodeAnalysisContext context)
         {
-            var classDeclarationSyntax = (ClassDeclarationSyntax)context.Node;
-            var declaredSymbol = context.SemanticModel.GetDeclaredSymbol(classDeclarationSyntax);
-            var attributeList = classDeclarationSyntax.AttributeLists.ToString();
+            var classDeclaration = (ClassDeclarationSyntax)context.Node;
+            var declaredSymbol = context.SemanticModel.GetDeclaredSymbol(classDeclaration);
+            var attributes = classDeclaration.AttributeLists.ToString();
 
-            if (!IsPartial(classDeclarationSyntax)
-                && attributeList.Contains("[Singleton]"))
+            if (!IsPartial(classDeclaration) && IsSingleton(attributes))
             {
-                var error = Diagnostic.Create(DesingPatternDiagnosticsDescriptors.SingletonMustBePartial,
-                      classDeclarationSyntax.Identifier.GetLocation(),
-                      declaredSymbol.Name);
+                var error = GetError(classDeclaration, declaredSymbol);
 
                 context.ReportDiagnostic(error);
             }
-
         }
 
         private static bool IsPartial(ClassDeclarationSyntax classDeclarationSyntax)
             => classDeclarationSyntax.Modifiers.Any(SyntaxKind.PartialKeyword);
+
+        private static bool IsSingleton(string attributes) => attributes.Contains("[Singleton]");
+
+        private static Diagnostic GetError(ClassDeclarationSyntax classDeclaration, INamedTypeSymbol symbol)
+            => Diagnostic.Create(DesingPatternDiagnosticsDescriptors.SingletonMustBePartial,
+                      classDeclaration.Identifier.GetLocation(),
+                      symbol.Name);
     }
 }

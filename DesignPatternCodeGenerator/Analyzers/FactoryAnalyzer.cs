@@ -1,10 +1,8 @@
-﻿using DesignPatternCodeGenerator.Singleton;
-using Microsoft.CodeAnalysis;
+﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 using System.Collections.Immutable;
-using System.Diagnostics;
 
 namespace DesignPatternCodeGenerator.Analyzers
 {
@@ -16,7 +14,6 @@ namespace DesignPatternCodeGenerator.Analyzers
 
         public override void Initialize(AnalysisContext context)
         {
-
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
             context.EnableConcurrentExecution();
 
@@ -25,23 +22,26 @@ namespace DesignPatternCodeGenerator.Analyzers
 
         private static void CheckClassForInterfaces(SyntaxNodeAnalysisContext context)
         {
-            var classDeclarationSyntax = (ClassDeclarationSyntax)context.Node;
-            var declaredSymbol = context.SemanticModel.GetDeclaredSymbol(classDeclarationSyntax);
+            var classDeclaration = (ClassDeclarationSyntax)context.Node;
+            var declaredSymbol = context.SemanticModel.GetDeclaredSymbol(classDeclaration);
+            var attributes = classDeclaration.AttributeLists.ToString();
 
-            var attributeList = classDeclarationSyntax.AttributeLists.ToString();
-
-            if (classDeclarationSyntax.BaseList is null
-                && attributeList.Contains("[FactoryChild]"))
+            if (IsNullBaseList(classDeclaration.BaseList) && IsFactoryChild(attributes))
             {
-                var error = Diagnostic.Create(DesingPatternDiagnosticsDescriptors.ClassMustImplementFactoryInterface,
-                      classDeclarationSyntax.Identifier.GetLocation(),
-                      declaredSymbol.Name);
+                var error = GetError(classDeclaration, declaredSymbol);
 
                 context.ReportDiagnostic(error);
             }
-
         }
 
-       
+        private static bool IsFactoryChild(string attributes) => attributes.Contains("[FactoryChild]");
+
+        private static bool IsNullBaseList(BaseListSyntax baseList) => baseList is null;
+
+        private static Diagnostic GetError(ClassDeclarationSyntax classDeclaration, INamedTypeSymbol symbol) 
+            => Diagnostic.Create(
+                    DesingPatternDiagnosticsDescriptors.ClassMustImplementFactoryInterface,
+                    classDeclaration.Identifier.GetLocation(),
+                    symbol.Name);
     }
 }

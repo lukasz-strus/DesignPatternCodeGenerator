@@ -8,9 +8,7 @@ namespace DesignPatternCodeGenerator.Factory
 {
     internal static class FactoryChildGenerator
     {
-        internal static string GenerateEnum(
-            BaseCodeGenerator codeGenerator,
-            IEnumerable<IGrouping<string, ClassDeclarationSyntax>> factoryChildGroups)
+        internal static string GenerateEnum(BaseCodeGenerator codeGenerator, IEnumerable<IGrouping<string, ClassDeclarationSyntax>> factoryChildGroups)
             => codeGenerator.GenerateUsingsAndNamespace() +
 $@"
 {{
@@ -19,8 +17,6 @@ $@"
 	    {GenerateEnumElements(factoryChildGroups)}
     }}
 }}";
-
-
         private static string GenerateEnumElements(IEnumerable<IGrouping<string, ClassDeclarationSyntax>> factoryChildGroups)
             => $"{string.Join("\n\t\t", factoryChildGroups.Select(p => $"{p.Key},"))}\n";
 

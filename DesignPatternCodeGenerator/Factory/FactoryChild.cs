@@ -9,10 +9,10 @@ namespace DesignPatternCodeGenerator.Factory
         internal static IEnumerable<IGrouping<string, ClassDeclarationSyntax>> FilterFactoryChild(
             IEnumerable<IGrouping<string, ClassDeclarationSyntax>> classGroup,
             string interfaceName)
-            => classGroup
-                .SelectMany(x => x)
-                .Where(y => y.FirstAncestorOrSelf<TypeDeclarationSyntax>().BaseList.Types.ToString().Contains(interfaceName))
-                .GroupBy(z => z.Identifier.Text);
+                => classGroup
+                    .SelectMany(x => x)
+                    .Where(y => y.FirstAncestorOrSelf<TypeDeclarationSyntax>().BaseList.Types.ToString().Contains(interfaceName))
+                    .GroupBy(z => z.Identifier.Text);
         
     }
 }
