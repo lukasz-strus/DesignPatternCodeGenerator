@@ -1,4 +1,6 @@
 # DesignPatternCodeGenerator
+The library is used to generate the code of typical design patterns in C #, based on the capabilities of the .NET Compiler Platform SDK (Roslyn APIs).
+More information about Roslyn APIs: https://learn.microsoft.com/en-us/dotnet/csharp/roslyn-sdk/ 
 
 ## How to start using the library?
 Edit your project and add the following, replacing the project path with the one from the .NET Standard project you created above:
