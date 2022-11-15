@@ -14,17 +14,16 @@ namespace DesignPatternCodeGenerator.Base.Generators
             GeneratorAttributeType generatorType,
             SyntaxTokensConfigurations configurations) => 
             new SyntaxTokens()
-        {
-            Accessibility = SetAccesibility(group),
-            Namespace = SetNamespace(group),
-            Usings = SetUsings(group),
-            ClassName = SetClassName(group, generatorType, configurations),
-            InterfaceName = SetInterfaceName(group, generatorType, configurations),
-            AdditionalClassToken = SetAdditionalClassToken(configurations)
+            {
+                Accessibility = SetAccesibility(group),
+                Namespace = SetNamespace(group),
+                Usings = SetUsings(group),
+                ClassName = SetClassName(group, generatorType, configurations),
+                InterfaceName = SetInterfaceName(group, generatorType, configurations),
+                AdditionalClassToken = SetAdditionalClassToken(configurations)
             };
 
-        private static string SetAccesibility(
-            IGrouping<string, TypeDeclarationSyntax> group)
+        private static string SetAccesibility(IGrouping<string, TypeDeclarationSyntax> group)
             => group.First().FirstAncestorOrSelf<TypeDeclarationSyntax>().Modifiers.First().Text;
 
         private static string SetNamespace(IGrouping<string, TypeDeclarationSyntax> group)

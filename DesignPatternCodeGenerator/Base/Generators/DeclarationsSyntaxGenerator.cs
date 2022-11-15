@@ -20,6 +20,16 @@ namespace DesignPatternCodeGenerator.Base.Generators
             return classes.GroupBy(x => x.Identifier.Text);
         }
 
+        internal static IEnumerable<IGrouping<string, InterfaceDeclarationSyntax>> GetInterfaceGroups(
+            Compilation compilation,
+            CancellationToken token,
+            Type attributeType)
+        {
+            var interfaces = SetInterfaceDeclarations(compilation, token, attributeType).Result;
+
+            return interfaces.GroupBy(x => x.Identifier.Text);
+        }
+
         private static async Task<IEnumerable<ClassDeclarationSyntax>> SetClassDeclarations(
             Compilation compilation, 
             CancellationToken token,
@@ -43,16 +53,6 @@ namespace DesignPatternCodeGenerator.Base.Generators
                 .Where(x => x.AttributeLists.Any());
 
             return classes.Where(x => x.AttributeLists.Any(y => y.Attributes.Any(z => semanticModel.GetTypeInfo(z).Type.Name == attributeType.Name)));
-        }
-
-        internal static IEnumerable<IGrouping<string, InterfaceDeclarationSyntax>> GetInterfaceGroups(
-            Compilation compilation,
-            CancellationToken token,
-            Type attributeType)
-        {
-            var interfaces = SetInterfaceDeclarations(compilation, token, attributeType).Result;
-
-            return interfaces.GroupBy(x => x.Identifier.Text);
         }
 
         private static async Task<IEnumerable<InterfaceDeclarationSyntax>> SetInterfaceDeclarations(
