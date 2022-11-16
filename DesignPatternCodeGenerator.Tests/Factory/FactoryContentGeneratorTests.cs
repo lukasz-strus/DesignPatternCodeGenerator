@@ -130,7 +130,7 @@ namespace Test.Test
 				case TestFactoryType.Test3 :
 					return new Test3();
                 default :
-                    throw new Exception($""Shape type { type } is not handled"");
+                    throw new Exception($""Type { type } is not handled"");
             }    
         }
 

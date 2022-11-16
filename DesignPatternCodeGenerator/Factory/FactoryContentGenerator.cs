@@ -16,7 +16,7 @@ $@"
 {{
     {codeGenerator.GenerateDeclaration(CodeType.Interface)}
     {{
-	    {FactoryContentComponentsGenerator.GenerateCreateMethodInterfaceDeclaration(group)}
+	    {FactoryContentComponentsGenerator.GenerateCreateMethodInterface(group)}
     }}
 }}";
 
@@ -29,9 +29,10 @@ $@"
 {{
     {codeGenerator.GenerateDeclaration(CodeType.Class)}
     {{
-	    {FactoryContentComponentsGenerator.GenerateFieldsAndConstructor(group)}
+	    {FactoryContentComponentsGenerator.GenerateFields(group)}
+        {FactoryContentComponentsGenerator.GenerateConstructor(group)}
 
-	    {FactoryContentComponentsGenerator.GenerateCreateMethodImplementation(group, factoryChildGroups)}
+	    {FactoryContentComponentsGenerator.GenerateCreateMethodClass(group, factoryChildGroups)}
     }}
 }}";
 

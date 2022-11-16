@@ -1,12 +1,5 @@
-﻿using DesignPatternCodeGenerator.Attributes.Factory;
-using DesignPatternCodeGenerator.Attributes;
-using DesignPatternCodeGenerator.Base;
-using DesignPatternCodeGenerator.Factory;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using DesignPatternCodeGenerator.Attributes;
+using DesignPatternCodeGenerator.Attributes.Factory;
 
 namespace Samples.Factory
 {
