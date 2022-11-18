@@ -42,7 +42,9 @@ namespace DesignPatternCodeGenerator.Base.Generators
             GeneratorAttributeType generatorType,
             SyntaxTokensConfigurations configurations)
         {
-            string className = configurations.IsDesignPatternPostfix ? group.Key + generatorType.ToString() : group.Key;
+            string className = configurations.IsDesignPatternPostfix 
+                ? group.Key + generatorType.ToString() 
+                : group.Key;
 
             if (configurations.IsMainAttributeOnInterface)
                 className = className.Substring(1);

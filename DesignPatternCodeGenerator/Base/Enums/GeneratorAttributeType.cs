@@ -7,6 +7,7 @@
         Builder,
         Singleton,
         AbstractFactory,
+        AbstractFactoryChild,
         Prototype,
         Facade,
         EmptyObject,
