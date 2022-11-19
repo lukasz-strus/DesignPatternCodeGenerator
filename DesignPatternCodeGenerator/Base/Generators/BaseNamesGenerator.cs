@@ -40,7 +40,11 @@ namespace DesignPatternCodeGenerator.Base.Generators
             IGrouping<string, TypeDeclarationSyntax> group,
             GeneratorAttributeType generatorType,
             bool isDesignPatternPostfix = false)
-                => isDesignPatternPostfix ? group.Key + generatorType.ToString() : group.Key;
+        { 
+            var baseInterfaceName = isDesignPatternPostfix ? group.Key + generatorType.ToString() : group.Key;
+
+            return baseInterfaceName.StartsWith("I") ? baseInterfaceName : baseInterfaceName.Insert(0, "I");
+        }
     }
 
 }
