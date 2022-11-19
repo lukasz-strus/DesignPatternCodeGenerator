@@ -1,14 +1,6 @@
-﻿using DesignPatternCodeGenerator.Base.Generators;
-using DesignPatternCodeGenerator.Base.Models;
-using DesignPatternCodeGenerator.Factory;
-using DesignPatternCodeGenerator.Singleton;
+﻿using DesignPatternCodeGenerator.Singleton;
 using DesignPatternCodeGenerator.Tests.Helpers;
 using FluentAssertions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace DesignPatternCodeGenerator.Tests.Singleton;
