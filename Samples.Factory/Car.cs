@@ -12,7 +12,7 @@ public interface ICar
 
 }
 
-[FactoryChild]
+[FactoryProduct]
 class Bmw : ICar
 {
     public string Name { get; set; }
@@ -25,7 +25,7 @@ class Bmw : ICar
     }
 }
 
-[FactoryChild]
+[FactoryProduct]
 partial class Audi : ICar
 {
     public string Name { get; set; }

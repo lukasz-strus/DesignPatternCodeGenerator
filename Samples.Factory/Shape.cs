@@ -15,7 +15,7 @@ namespace Samples.Factory
         public void Display();
     }
 
-    [FactoryChild]
+    [FactoryProduct]
     public class Circle : IShape
     {
         public Circle(int x, int y, int radius)
@@ -36,7 +36,7 @@ namespace Samples.Factory
         }
     }
 
-    [FactoryChild]
+    [FactoryProduct]
     public class Triangle : IShape
     {
 
@@ -58,7 +58,7 @@ namespace Samples.Factory
     }
 
 
-    [FactoryChild]
+    [FactoryProduct]
     public class Kwadrat : IShape
     {
 

@@ -34,7 +34,7 @@ namespace DesignPatternCodeGenerator.Analyzers
             }
         }
 
-        private static bool IsFactoryChild(string attributes) => attributes.Contains("[FactoryChild]");
+        private static bool IsFactoryChild(string attributes) => attributes.Contains("[FactoryProduct]");
 
         private static bool IsNullBaseList(BaseListSyntax baseList) => baseList is null;
 

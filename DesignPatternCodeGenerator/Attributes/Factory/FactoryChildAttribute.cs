@@ -3,8 +3,8 @@
 namespace DesignPatternCodeGenerator.Attributes.Factory
 {
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
-    public class FactoryChildAttribute : Attribute
+    public class FactoryProductAttribute : Attribute
     {
-        public FactoryChildAttribute(){ }
+        public FactoryProductAttribute(){ }
     }
 }
