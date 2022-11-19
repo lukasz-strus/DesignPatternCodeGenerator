@@ -1,15 +1,12 @@
 ﻿using DesignPatternCodeGenerator.Attributes;
 using DesignPatternCodeGenerator.Base.Enums;
 using DesignPatternCodeGenerator.Base.Generators;
-using DesignPatternCodeGenerator.Base.Models;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DesignPatternCodeGenerator.AbstractFactory
 {
@@ -32,14 +29,6 @@ namespace DesignPatternCodeGenerator.AbstractFactory
                 context.CancellationToken,
                 factoryChildAttribute);
 
-            var configuration = new SyntaxTokensConfigurations()
-            {
-                IsDesignPatternPostfix = true,
-                IsMainAttributeOnInterface = true
-            };
-
-            var syntaxTokensList = new List<SyntaxTokens>();
-
             foreach (var interfaceGroup in interfaceGroups)
             {
                 foreach (var classGroup in classGroups)
@@ -52,13 +41,13 @@ namespace DesignPatternCodeGenerator.AbstractFactory
 #endif
 
 
-                    var syntaxTokens = AbstractFactorySyntaxTokensGenerator.AbstractFactoryGenerateSyntaxTokens(
-                        interfaceGroup,
-                        classGroup,
-                        GeneratorAttributeType.Factory,
-                        configuration);
+                    //var syntaxTokens = AbstractFactorySyntaxTokensGenerator.AbstractFactoryGenerateSyntaxTokens(
+                    //    interfaceGroup,
+                    //    classGroup,
+                    //    GeneratorAttributeType.Factory,
+                    //    configuration);
 
-                    syntaxTokensList.Add(syntaxTokens);
+                    //syntaxTokensList.Add(syntaxTokens);
 
                 }
             }
@@ -79,7 +68,7 @@ namespace DesignPatternCodeGenerator.AbstractFactory
 
         public void Initialize(GeneratorInitializationContext context)
         {
-            
+
         }
     }
 }

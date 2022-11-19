@@ -13,12 +13,11 @@ namespace DesignPatternCodeGenerator.AbstractFactory
     public class AbstractFactoryContentGenerator
     {
         internal static string GenerateMainInterface(
-        BaseCodeGenerator codeGenerator,
         IEnumerable<IGrouping<string, InterfaceDeclarationSyntax>> groups)
-        => codeGenerator.GenerateUsingsAndNamespace() +
+        => BaseCodeGenerator.GenerateUsingsAndNamespace(groups.First()) +
 $@"
 {{
-    {codeGenerator.GenerateDeclaration(CodeType.Interface)}
+    {BaseCodeGenerator.GenerateDeclaration(groups.First(), CodeType.Interface)}
     {{
 	    {GenerateCreateMethodInterface(groups)}
     }}

@@ -1,7 +1,6 @@
 ﻿using DesignPatternCodeGenerator.Attributes;
 using DesignPatternCodeGenerator.Base.Enums;
 using DesignPatternCodeGenerator.Base.Generators;
-using DesignPatternCodeGenerator.Base.Models;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Text;
 using System.Text;
@@ -25,7 +24,7 @@ namespace DesignPatternCodeGenerator.Singleton
                 var classContent = SingletonContentGenerator.GenerateClass(group);
 
                 context.AddSource(
-                    $"{BaseNamesGenerator.GetClassName(group, GeneratorAttributeType.Singleton).Replace("Singleton", "")}.g.cs", 
+                    $"{BaseNamesGenerator.GetClassName(group, GeneratorAttributeType.Singleton).Replace("Singleton", "")}.g.cs",
                     SourceText.From(classContent, Encoding.UTF8));
             }
         }

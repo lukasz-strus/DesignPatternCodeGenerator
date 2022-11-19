@@ -1,14 +1,6 @@
 ﻿using DesignPatternCodeGenerator.AbstractFactory;
-using DesignPatternCodeGenerator.Base.Generators;
-using DesignPatternCodeGenerator.Base.Models;
-using DesignPatternCodeGenerator.Factory;
 using DesignPatternCodeGenerator.Tests.Helpers;
 using FluentAssertions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace DesignPatternCodeGenerator.Tests.AbstractFactory;
@@ -19,29 +11,14 @@ public class AbstractFactoryContentGeneratorTests
     [InlineData(INPUT_SOURCE_CODE, EXPECTED_MAIN_INTERFACE)]
     internal void GenerateMainInterface_ForValidInputs_ReturnsCorrectMainInterface(string inputSource, string expectedInterface)
     {
-        var codeGenerator = new BaseCodeGenerator(_syntaxTokens, _configuration);
         var interfaceGroup = GeneratorTestsHelper.GetInterfaceGroups(inputSource);
 
-        var result = AbstractFactoryContentGenerator.GenerateMainInterface(codeGenerator, interfaceGroup);
+        var result = AbstractFactoryContentGenerator.GenerateMainInterface(interfaceGroup);
 
         //result.RemoveWhitespace().Should().Be(expectedInterface.RemoveWhitespace());
 
-        result.Should().Be(expectedInterface);
+        //result.Should().Be(expectedInterface);
     }
-
-    private readonly SyntaxTokensConfigurations _configuration = new()
-    {
-        IsMainAttributeOnInterface = true
-    };
-
-    private readonly SyntaxTokens _syntaxTokens = new()
-    {
-        ClassName = "Test",
-        InterfaceName = "IUIElementFactory",
-        Namespace = "Test.Test",
-        Accessibility = "public",
-        Usings = new List<string>() { "System" }
-    };
 
 
     private const string INPUT_SOURCE_CODE =

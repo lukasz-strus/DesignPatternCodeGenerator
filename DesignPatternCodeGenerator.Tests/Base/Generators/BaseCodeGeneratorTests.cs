@@ -1,6 +1,5 @@
 ﻿using DesignPatternCodeGenerator.Base.Enums;
 using DesignPatternCodeGenerator.Base.Generators;
-using DesignPatternCodeGenerator.Base.Models;
 using DesignPatternCodeGenerator.Tests.Helpers;
 using FluentAssertions;
 using Xunit;

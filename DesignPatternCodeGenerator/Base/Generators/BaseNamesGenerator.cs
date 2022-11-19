@@ -1,5 +1,4 @@
 ﻿using DesignPatternCodeGenerator.Base.Enums;
-using DesignPatternCodeGenerator.Base.Models;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Collections.Generic;

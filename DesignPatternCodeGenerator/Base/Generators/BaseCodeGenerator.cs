@@ -1,5 +1,4 @@
 ﻿using DesignPatternCodeGenerator.Base.Enums;
-using DesignPatternCodeGenerator.Base.Models;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Linq;
@@ -32,7 +31,7 @@ namespace DesignPatternCodeGenerator.Base.Generators
             }
         }
 
-        private static string GenerateUsings(IGrouping<string, TypeDeclarationSyntax> group) 
+        private static string GenerateUsings(IGrouping<string, TypeDeclarationSyntax> group)
             => $@"{string.Join("\n", BaseNamesGenerator.GetUsings(group).Select(x => $"using {x};"))}";
 
         private static string GenerateInterfaceDeclaration(
@@ -42,11 +41,11 @@ namespace DesignPatternCodeGenerator.Base.Generators
 
         private static string GenerateClassDeclaration(
             IGrouping<string, TypeDeclarationSyntax> group,
-            bool isDesignPatternPostfix = false, 
+            bool isDesignPatternPostfix = false,
             bool isMainAttributeOnInterface = false,
             bool isPartialClass = false)
         {
-            var baseClassDeclaration = 
+            var baseClassDeclaration =
                 $"{BaseNamesGenerator.GetAccesibility(group)}{GeneratePartialKeyword(isPartialClass)} " +
                 $"class {BaseNamesGenerator.GetClassName(group, GeneratorAttributeType.Factory, isDesignPatternPostfix, isMainAttributeOnInterface)}";
 
@@ -61,7 +60,7 @@ namespace DesignPatternCodeGenerator.Base.Generators
         private static string GenerateEnumDeclaration(
             IGrouping<string, TypeDeclarationSyntax> group,
             bool isDesignPatternPostfix = false,
-            bool isMainAttributeOnInterface = false) 
+            bool isMainAttributeOnInterface = false)
             => $"{BaseNamesGenerator.GetAccesibility(group)} enum {BaseNamesGenerator.GetClassName(group, GeneratorAttributeType.Factory, isDesignPatternPostfix, isMainAttributeOnInterface)}Type";
     }
 }
