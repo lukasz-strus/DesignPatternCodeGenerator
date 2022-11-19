@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace DesignPatternCodeGenerator.AbstractFactory
 {
-    public class MainInterfaceAbstractFactoryContentGenerator
+    internal class MainInterfaceAbstractFactoryContentGenerator
     {
         internal static string GenerateMainInterface(
             IGrouping<string, TypeDeclarationSyntax> mainInterfaceGroup,
