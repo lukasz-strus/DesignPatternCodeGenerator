@@ -17,7 +17,7 @@ public class FactoryChildTests
         var classGroups = GeneratorTestsHelper.GetClassGroups(compilationSource);
         var expectedClassGroups = GeneratorTestsHelper.GetClassGroups(expectedSource);
 
-        var result = FactoryChild.FilterFactoryChild(classGroups, interfaceName);
+        var result = FactoryProducts.FilterFactoryChild(classGroups, interfaceName);
 
         result.Select(x => x.Key)
               .Should()

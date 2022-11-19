@@ -3,7 +3,7 @@
     internal enum GeneratorAttributeType
     {
         Factory,
-        FactoryChild,
+        FactoryProduct,
         Builder,
         Singleton,
         AbstractFactory,

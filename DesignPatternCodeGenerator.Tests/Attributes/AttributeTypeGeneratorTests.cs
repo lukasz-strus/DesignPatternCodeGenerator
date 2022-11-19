@@ -10,7 +10,7 @@ public class AttributeTypeGeneratorTests
 {
     [Theory]
     [InlineData(GeneratorAttributeType.Factory, typeof(FactoryAttribute))]
-    [InlineData(GeneratorAttributeType.FactoryChild, typeof(FactoryChildAttribute))]
+    [InlineData(GeneratorAttributeType.FactoryProduct, typeof(FactoryProductAttribute))]
     internal void SetGeneratorAttributeType_ForValidInputs_ReturnsType(GeneratorAttributeType generatorType, Type attributeType)
     {
         var result = AttributeTypeGenerator.SetGeneratorAttributeType(generatorType);

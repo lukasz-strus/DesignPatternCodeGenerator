@@ -26,7 +26,7 @@ namespace Test.Test
                                         .WithLocation(0)
                                         .WithArguments("Test1");
 
-            await Verifier.VerifyAnalyzerAsync(input, typeof(FactoryChildAttribute), expectedError);
+            await Verifier.VerifyAnalyzerAsync(input, typeof(FactoryProductAttribute), expectedError);
         }
     }
 }
