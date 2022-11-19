@@ -15,12 +15,12 @@ public class FactoryAnalyzerTests
 @"using DesignPatternCodeGenerator.Attributes.Factory;
 using System;
 
-namespace DesignPatternCodeGenerator.Tests.Data
+namespace Test.Test
 {
     [Factory]
     public interface ITest { }
 
-    [FactoryChild]
+    [FactoryProduct]
     public class {|#0:Test1|} { }
 }";
 
@@ -28,6 +28,6 @@ namespace DesignPatternCodeGenerator.Tests.Data
                                     .WithLocation(0)
                                     .WithArguments("Test1");
 
-        await Verifier.VerifyAnalyzerAsync(input, typeof(FactoryChildAttribute), expectedError);
+        await Verifier.VerifyAnalyzerAsync(input, typeof(FactoryProductAttribute), expectedError);
     }
 }

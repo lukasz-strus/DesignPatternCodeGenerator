@@ -9,10 +9,11 @@ namespace DesignPatternCodeGenerator.Tests.Base.Generators;
 
 public class DeclarationsSyntaxGeneratorTests
 {
-    [Fact]
-    internal void GetInterfaceGroups_ForValidInputs_ReturnsCorrectKeyValue()
+    [Theory]
+    [InlineData(FACTORY_COMPILATION_SOURCE)]
+    internal void GetInterfaceGroups_ForValidInputs_ReturnsCorrectKeyValue(string inputSource)
     {
-        var compilation = GeneratorTestsHelper.CreateCompilation(FACTORY_COMPILATION_SOURCE);
+        var compilation = GeneratorTestsHelper.CreateCompilation(inputSource);
         var source = new CancellationTokenSource();
         var token = source.Token;
 
@@ -24,14 +25,15 @@ public class DeclarationsSyntaxGeneratorTests
             .Be("ITest");
     }
 
-    [Fact]
-    internal void GetClassGroups_ForValidInputs_ReturnsCorrectKeyValue()
+    [Theory]
+    [InlineData(FACTORY_COMPILATION_SOURCE)]
+    internal void GetClassGroups_ForValidInputs_ReturnsCorrectKeyValue(string inputSource)
     {
-        var compilation = GeneratorTestsHelper.CreateCompilation(FACTORY_COMPILATION_SOURCE);
+        var compilation = GeneratorTestsHelper.CreateCompilation(inputSource);
         var source = new CancellationTokenSource();
         var token = source.Token;
 
-        var result = DeclarationsSyntaxGenerator.GetClassGroups(compilation, token, typeof(FactoryChildAttribute));
+        var result = DeclarationsSyntaxGenerator.GetClassGroups(compilation, token, typeof(FactoryProductAttribute));
 
         result.Select(x => x.Key)
             .First()
@@ -52,7 +54,7 @@ namespace DesignPatternCodeGenerator.Tests.Data
 
     }
 
-    [FactoryChild]
+    [FactoryProduct]
     public class Test : ITest
     {
 

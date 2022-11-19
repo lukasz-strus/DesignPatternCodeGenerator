@@ -7,47 +7,20 @@ namespace DesignPatternCodeGenerator.Singleton
 {
     public class SingletonContentGenerator
     {
-        internal static string GenerateClass
-            (BaseCodeGenerator codeGenerator,
+        internal static string GenerateClass(
             IGrouping<string, ClassDeclarationSyntax> group)
-            => codeGenerator.GenerateUsingsAndNamespace() +
+            => BaseCodeGenerator.GenerateUsingsAndNamespace(group) +
 $@"
 {{
-    {codeGenerator.GenerateDeclaration(CodeType.Class)}
+    {BaseCodeGenerator.GenerateDeclaration(group, CodeType.Class, false, true)}
     {{
-	    {GenerateInstanceField(group)}
-        {GenerateObjectToLock(group)}
+	    {SingletonContentComponentsGenerator.GenerateInstanceField(group)}
+        {SingletonContentComponentsGenerator.GenerateObjectToLock(group)}
 
-        {GenerateConstructor(group)}
+        {SingletonContentComponentsGenerator.GenerateConstructor(group)}
 
-        {GenerateGetInstanceMethod(group)}
+        {SingletonContentComponentsGenerator.GenerateGetInstanceMethod(group)}
     }}
 }}";
-
-        private static string GenerateInstanceField(IGrouping<string, ClassDeclarationSyntax> group)
-            => $"private static {group.Key} _instance = null;";
-
-        private static string GenerateObjectToLock(IGrouping<string, ClassDeclarationSyntax> group)
-            => $"private static object obj = new object();";
-
-        private static string GenerateConstructor(IGrouping<string, ClassDeclarationSyntax> group)
-            => $"private {group.Key}() {{ }}";
-
-        private static string GenerateGetInstanceMethod(IGrouping<string, ClassDeclarationSyntax> group)
-            => $@"
-        public static {group.Key} GetInstance()
-        {{
-            lock(obj)
-            {{
-                if (_instance == null)
-                {{
-                    _instance = new {group.Key}();
-                }}
-            }}
-
-        return _instance;
-        }}
-";
-
     }
 }

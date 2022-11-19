@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace DesignPatternCodeGenerator.Factory
 {
-    internal static class FactoryChild
+    internal static class FactoryProducts
     {
         internal static IEnumerable<IGrouping<string, ClassDeclarationSyntax>> FilterFactoryChild(
             IEnumerable<IGrouping<string, ClassDeclarationSyntax>> classGroup,

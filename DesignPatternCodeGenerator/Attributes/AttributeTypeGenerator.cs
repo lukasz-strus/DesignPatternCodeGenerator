@@ -13,8 +13,8 @@ namespace DesignPatternCodeGenerator.Attributes
             {
                 case GeneratorAttributeType.Factory:
                     return typeof(FactoryAttribute);
-                case GeneratorAttributeType.FactoryChild:
-                    return typeof(FactoryChildAttribute);
+                case GeneratorAttributeType.FactoryProduct:
+                    return typeof(FactoryProductAttribute);
                 case GeneratorAttributeType.Singleton:
                     return typeof(SingletonAttribute);
                 default:

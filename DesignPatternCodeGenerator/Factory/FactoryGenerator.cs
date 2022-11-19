@@ -1,9 +1,9 @@
 ﻿using DesignPatternCodeGenerator.Attributes;
 using DesignPatternCodeGenerator.Base.Enums;
 using DesignPatternCodeGenerator.Base.Generators;
-using DesignPatternCodeGenerator.Base.Models;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Text;
+using System.Diagnostics;
 using System.Text;
 
 namespace DesignPatternCodeGenerator.Factory
@@ -14,7 +14,7 @@ namespace DesignPatternCodeGenerator.Factory
         public void Execute(GeneratorExecutionContext context)
         {
             var factoryAttribute = AttributeTypeGenerator.SetGeneratorAttributeType(GeneratorAttributeType.Factory);
-            var factoryChildAttribute = AttributeTypeGenerator.SetGeneratorAttributeType(GeneratorAttributeType.FactoryChild);
+            var factoryChildAttribute = AttributeTypeGenerator.SetGeneratorAttributeType(GeneratorAttributeType.FactoryProduct);
 
             var interfaceGroups = DeclarationsSyntaxGenerator.GetInterfaceGroups(
                 context.Compilation,
@@ -26,29 +26,33 @@ namespace DesignPatternCodeGenerator.Factory
                 context.CancellationToken,
                 factoryChildAttribute);
 
-            var configuration = new SyntaxTokensConfigurations()
-            {
-                IsDesignPatternPostfix = true,
-                IsMainAttributeOnInterface = true
-            };
-
-
             foreach (var group in interfaceGroups)
             {
-                var syntaxTokens = SyntaxTokensGenerator.GenerateSyntaxTokens(group, GeneratorAttributeType.Factory, configuration);
 
-                var codeGenerator = new BaseCodeGenerator(syntaxTokens, configuration);
+//#if DEBUG
+//                if (!Debugger.IsAttached)
+//                {
+//                    Debugger.Launch();
+//                }
+//#endif 
+                var factoryProductsGroups = FactoryProducts.FilterFactoryChild(
+                    classGroups,
+                    BaseNamesGenerator.GetInterfaceName(group, GeneratorAttributeType.Factory));
 
-                var factoryChildGroups = FactoryChild.FilterFactoryChild(classGroups, syntaxTokens.InterfaceName.Replace("Factory", ""));
+                var enumContent = FactoryEnumGenerator.GenerateEnum(group, factoryProductsGroups);
+                context.AddSource(
+                    $"{BaseNamesGenerator.GetClassName(group, GeneratorAttributeType.Factory, true, true)}Type.g.cs",
+                    SourceText.From(enumContent, Encoding.UTF8));
 
-                var enumChildContent = FactoryChildGenerator.GenerateEnum(codeGenerator, factoryChildGroups);
-                context.AddSource($"{syntaxTokens.ClassName}Type.g.cs", SourceText.From(enumChildContent, Encoding.UTF8));
+                var interfaceContent = FactoryContentGenerator.GenerateInterface(group);
+                context.AddSource(
+                    $"{BaseNamesGenerator.GetInterfaceName(group, GeneratorAttributeType.Factory, true)}.g.cs",
+                    SourceText.From(interfaceContent, Encoding.UTF8));
 
-                var interfaceContent = FactoryContentGenerator.GenerateInterface(codeGenerator, group);
-                context.AddSource($"{syntaxTokens.InterfaceName}.g.cs", SourceText.From(interfaceContent, Encoding.UTF8));
-
-                var classContent = FactoryContentGenerator.GenerateClass(codeGenerator, group, factoryChildGroups);
-                context.AddSource($"{syntaxTokens.ClassName}.g.cs", SourceText.From(classContent, Encoding.UTF8));
+                var classContent = FactoryContentGenerator.GenerateClass(group, factoryProductsGroups);
+                context.AddSource(
+                    $"{BaseNamesGenerator.GetClassName(group, GeneratorAttributeType.Factory, true, true)}.g.cs",
+                    SourceText.From(classContent, Encoding.UTF8));
             }
         }
 

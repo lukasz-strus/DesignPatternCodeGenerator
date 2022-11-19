@@ -9,30 +9,28 @@ namespace DesignPatternCodeGenerator.Factory
     internal static class FactoryContentGenerator
     {
         internal static string GenerateInterface(
-            BaseCodeGenerator codeGenerator,
             IGrouping<string, InterfaceDeclarationSyntax> group)
-            => codeGenerator.GenerateUsingsAndNamespace() +
+            => BaseCodeGenerator.GenerateUsingsAndNamespace(group) +
 $@"
 {{
-    {codeGenerator.GenerateDeclaration(CodeType.Interface)}
+    {BaseCodeGenerator.GenerateDeclaration(group, CodeType.Interface, true, false, true)}
     {{
 	    {FactoryContentComponentsGenerator.GenerateCreateMethodInterface(group)}
     }}
 }}";
 
         internal static string GenerateClass
-            (BaseCodeGenerator codeGenerator,
-            IGrouping<string, InterfaceDeclarationSyntax> group,
-            IEnumerable<IGrouping<string, ClassDeclarationSyntax>> factoryChildGroups)
-            => codeGenerator.GenerateUsingsAndNamespace() +
+            (IGrouping<string, InterfaceDeclarationSyntax> group,
+            IEnumerable<IGrouping<string, ClassDeclarationSyntax>> factoryProductsGroups)
+            => BaseCodeGenerator.GenerateUsingsAndNamespace(group) +
 $@"
 {{
-    {codeGenerator.GenerateDeclaration(CodeType.Class)}
+    {BaseCodeGenerator.GenerateDeclaration(group, CodeType.Class, true, false, true)}
     {{
 	    {FactoryContentComponentsGenerator.GenerateFields(group)}
         {FactoryContentComponentsGenerator.GenerateConstructor(group)}
 
-	    {FactoryContentComponentsGenerator.GenerateCreateMethodClass(group, factoryChildGroups)}
+	    {FactoryContentComponentsGenerator.GenerateCreateMethodClass(group, factoryProductsGroups)}
     }}
 }}";
 
