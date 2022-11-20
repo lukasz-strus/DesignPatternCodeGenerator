@@ -19,6 +19,10 @@ Dependencies -> Analyzers ->
 
 ![image](https://user-images.githubusercontent.com/61932823/202016757-a77d9caa-4e74-4714-8609-faaf1ae899f6.png)
 ##
+
+## AbstractFactory
+The abstract factory pattern is generated based on three attributes:
+
 ## Factory
 The factory pattern is generated based on three attributes:
 - [Factory] - this attribute should be applied to the main interface,
