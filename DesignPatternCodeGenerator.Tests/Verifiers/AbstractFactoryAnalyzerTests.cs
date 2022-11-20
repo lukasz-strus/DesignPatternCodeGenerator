@@ -25,7 +25,7 @@ namespace Test.Test
         void HandleClick();
     }
 
-    [AbstractFactoryChild(""Windows"")]
+    [AbstractFactoryClass(""Windows"")]
     public class {|#0:WindowsButton|}
     {
         public void HandleClick()
@@ -44,6 +44,6 @@ namespace Test.Test
                                     .WithLocation(0)
                                     .WithArguments("WindowsButton");
 
-        await Verifier.VerifyAnalyzerAsync(input, typeof(AbstractFactoryChildAttribute), expectedError);
+        await Verifier.VerifyAnalyzerAsync(input, typeof(AbstractFactoryClassAttribute), expectedError);
     }
 }

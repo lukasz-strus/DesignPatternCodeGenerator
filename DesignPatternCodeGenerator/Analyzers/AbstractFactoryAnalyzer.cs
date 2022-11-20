@@ -34,7 +34,7 @@ namespace DesignPatternCodeGenerator.Analyzers
             }
         }
 
-        private static bool IsAbstractFactoryChild(string attributes) => attributes.Contains("AbstractFactoryChild");
+        private static bool IsAbstractFactoryChild(string attributes) => attributes.Contains("AbstractFactoryClass");
 
         private static bool IsNullBaseList(BaseListSyntax baseList) => baseList is null;
 
