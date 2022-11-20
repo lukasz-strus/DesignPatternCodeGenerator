@@ -34,9 +34,5 @@ namespace DesignPatternCodeGenerator.Base.CollectionHelper
             => classGroup.SelectMany(x => x)
                     .Where(y => y.AttributeLists.First().Attributes.First().ArgumentList.Arguments.First().Expression.GetFirstToken().ValueText.Equals(attributeTextValue))
                     .GroupBy(z => z.Identifier.Text);
-
-
-
-
     }
 }
