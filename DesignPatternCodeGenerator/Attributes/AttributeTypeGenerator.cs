@@ -1,4 +1,5 @@
-﻿using DesignPatternCodeGenerator.Attributes.Factory;
+﻿using DesignPatternCodeGenerator.Attributes.AbstractFactory;
+using DesignPatternCodeGenerator.Attributes.Factory;
 using DesignPatternCodeGenerator.Attributes.Singleton;
 using DesignPatternCodeGenerator.Base.Enums;
 using System;
@@ -13,10 +14,14 @@ namespace DesignPatternCodeGenerator.Attributes
             {
                 case GeneratorAttributeType.Factory:
                     return typeof(FactoryAttribute);
-                case GeneratorAttributeType.FactoryChild:
-                    return typeof(FactoryChildAttribute);
+                case GeneratorAttributeType.FactoryProduct:
+                    return typeof(FactoryProductAttribute);
                 case GeneratorAttributeType.Singleton:
                     return typeof(SingletonAttribute);
+                case GeneratorAttributeType.AbstractFactory:
+                    return typeof(AbstractFactoryAttribute);
+                case GeneratorAttributeType.AbstractFactoryChild:
+                    return typeof(AbstractFactoryChildAttribute);
                 default:
                     throw new Exception($"Type {generatorType} is not handled");
             }

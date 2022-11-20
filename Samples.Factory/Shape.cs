@@ -1,12 +1,5 @@
-﻿using DesignPatternCodeGenerator.Attributes.Factory;
-using DesignPatternCodeGenerator.Attributes;
-using DesignPatternCodeGenerator.Base;
-using DesignPatternCodeGenerator.Factory;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using DesignPatternCodeGenerator.Attributes;
+using DesignPatternCodeGenerator.Attributes.Factory;
 
 namespace Samples.Factory
 {
@@ -22,7 +15,7 @@ namespace Samples.Factory
         public void Display();
     }
 
-    [FactoryChild]
+    [FactoryProduct]
     public class Circle : IShape
     {
         public Circle(int x, int y, int radius)
@@ -43,7 +36,7 @@ namespace Samples.Factory
         }
     }
 
-    [FactoryChild]
+    [FactoryProduct]
     public class Triangle : IShape
     {
 
@@ -65,7 +58,7 @@ namespace Samples.Factory
     }
 
 
-    [FactoryChild]
+    [FactoryProduct]
     public class Kwadrat : IShape
     {
 

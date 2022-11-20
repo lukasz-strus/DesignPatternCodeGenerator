@@ -104,12 +104,12 @@ public class FactoryGeneratorTests
 @"using DesignPatternCodeGenerator.Attributes.Factory;
 using System;
 
-namespace DesignPatternCodeGenerator.Tests.Data
+namespace Test.Test
 {
     [Factory]
     public interface ITest { }
 
-    [FactoryChild]
+    [FactoryProduct]
     public class Test1 : ITest { }
 }";
 }

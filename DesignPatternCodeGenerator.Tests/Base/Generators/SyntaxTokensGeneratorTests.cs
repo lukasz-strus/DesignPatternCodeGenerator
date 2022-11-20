@@ -1,101 +1,74 @@
 ﻿using DesignPatternCodeGenerator.Base.Enums;
 using DesignPatternCodeGenerator.Base.Generators;
-using DesignPatternCodeGenerator.Base.Models;
 using DesignPatternCodeGenerator.Tests.Helpers;
 using FluentAssertions;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Xunit;
 
 namespace DesignPatternCodeGenerator.Tests.Base.Generators;
 
 public class SyntaxTokensGeneratorTests
 {
-    private readonly SyntaxTokensConfigurations _configurations = new()
-    {
-        IsDesignPatternPostfix = true,
-        IsMainAttributeOnInterface = true
-    };
-
     [Theory]
-    [InlineData(GeneratorAttributeType.Factory)]
-    [InlineData(GeneratorAttributeType.Builder)]
-    internal void GenerateSyntaxTokens_ForValidInputs_ReturnsCorrectClassName(GeneratorAttributeType generatorAttributeType)
+    [InlineData(TEST_INTERFACE, GeneratorAttributeType.Factory)]
+    [InlineData(TEST_INTERFACE, GeneratorAttributeType.Builder)]
+    internal void GenerateSyntaxTokens_ForValidInputs_ReturnsCorrectClassName(
+        string inputSource, 
+        GeneratorAttributeType generatorAttributeType)
     {
-        var group = GeneratorTestsHelper.GetInterfaceGroup(TEST_INTERFACE);
+        var group = GeneratorTestsHelper.GetInterfaceGroup(inputSource);
 
-        var result = SyntaxTokensGenerator.GenerateSyntaxTokens(group, generatorAttributeType, _configurations);
+        var result = BaseNamesGenerator.GetClassName(group, generatorAttributeType, true, true);
 
-        result.ClassName
-            .Should()
-            .Be(_syntaxTokens.ClassName + generatorAttributeType.ToString());
+        result.Should().Be("Test" + generatorAttributeType.ToString());
     }
 
     [Theory]
-    [InlineData(GeneratorAttributeType.Factory)]
-    [InlineData(GeneratorAttributeType.Builder)]
-    internal void GenerateSyntaxTokens_ForValidInputs_ReturnsCorrectInterfaceName(GeneratorAttributeType generatorAttributeType)
+    [InlineData(TEST_INTERFACE, GeneratorAttributeType.Factory)]
+    [InlineData(TEST_INTERFACE, GeneratorAttributeType.Builder)]
+    internal void GenerateSyntaxTokens_ForValidInputs_ReturnsCorrectInterfaceName(
+        string inputSource, 
+        GeneratorAttributeType generatorAttributeType)
     {
-        var group = GeneratorTestsHelper.GetInterfaceGroup(TEST_INTERFACE);
+        var group = GeneratorTestsHelper.GetInterfaceGroup(inputSource);
 
-        var result = SyntaxTokensGenerator.GenerateSyntaxTokens(group, generatorAttributeType, _configurations);
+        var result = BaseNamesGenerator.GetInterfaceName(group, generatorAttributeType, true);
 
-        result.InterfaceName
-            .Should()
-            .Be(_syntaxTokens.InterfaceName + generatorAttributeType.ToString());
+        result.Should().Be("ITest" + generatorAttributeType.ToString());
     }
 
     [Theory]
-    [InlineData(GeneratorAttributeType.Factory)]
-    [InlineData(GeneratorAttributeType.Builder)]
-    internal void GenerateSyntaxTokens_ForValidInputs_ReturnsCorrectNamespace(GeneratorAttributeType generatorAttributeType)
+    [InlineData(TEST_INTERFACE)]
+    internal void GenerateSyntaxTokens_ForValidInputs_ReturnsCorrectNamespace(string inputSource)
     {
-        var group = GeneratorTestsHelper.GetInterfaceGroup(TEST_INTERFACE);
+        var group = GeneratorTestsHelper.GetInterfaceGroup(inputSource);
 
-        var result = SyntaxTokensGenerator.GenerateSyntaxTokens(group, generatorAttributeType, _configurations);
+        var result = BaseNamesGenerator.GetNamespace(group);
 
-        result.Namespace
-            .Should()
-            .Be(_syntaxTokens.Namespace);
+        result.Should().Be("Test.Test");
     }
 
     [Theory]
-    [InlineData(GeneratorAttributeType.Factory)]
-    [InlineData(GeneratorAttributeType.Builder)]
-    internal void GenerateSyntaxTokens_ForValidInputs_ReturnsCorrectAccessibility(GeneratorAttributeType generatorAttributeType)
+    [InlineData(TEST_INTERFACE)]
+    internal void GenerateSyntaxTokens_ForValidInputs_ReturnsCorrectAccessibility(string inputSource)
     {
-        var group = GeneratorTestsHelper.GetInterfaceGroup(TEST_INTERFACE);
+        var group = GeneratorTestsHelper.GetInterfaceGroup(inputSource);
 
-        var result = SyntaxTokensGenerator.GenerateSyntaxTokens(group, generatorAttributeType, _configurations);
+        var result = BaseNamesGenerator.GetAccesibility(group);
 
-        result.Accessibility
-            .Should()
-            .Be(_syntaxTokens.Accessibility);
+        result.Should().Be("public");
     }
 
     [Theory]
-    [InlineData(GeneratorAttributeType.Factory)]
-    [InlineData(GeneratorAttributeType.Builder)]
-    internal void GenerateSyntaxTokens_ForValidInputs_ReturnsCorrectUsings(GeneratorAttributeType generatorAttributeType)
+    [InlineData(TEST_INTERFACE)]
+    internal void GenerateSyntaxTokens_ForValidInputs_ReturnsCorrectUsings(string inputSource)
     {
-        var group = GeneratorTestsHelper.GetInterfaceGroup(TEST_INTERFACE);
+        var group = GeneratorTestsHelper.GetInterfaceGroup(inputSource);
+        var expected = new List<string>() { "System" };
 
-        var result = SyntaxTokensGenerator.GenerateSyntaxTokens(group, generatorAttributeType, _configurations);
+        var result = BaseNamesGenerator.GetUsings(group);
 
-        result.Usings
-            .First()
-            .Should()
-            .Be(_syntaxTokens.Usings.First());
+        result.First().Should().Be(expected.First());
     }
-
-    private readonly SyntaxTokens _syntaxTokens = new()
-    {
-        ClassName = "Test",
-        InterfaceName = "ITest",
-        Namespace = "Test.Test",
-        Accessibility = "public",
-        Usings = new List<string>() { "System" }
-    };
 
     private const string TEST_INTERFACE =
             "using System;\r\n\r\nnamespace Test.Test;\r\n\r\npublic interface ITest\r\n{\r\n\r\n}";
