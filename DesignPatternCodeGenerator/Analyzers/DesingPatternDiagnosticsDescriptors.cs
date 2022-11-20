@@ -21,5 +21,13 @@ namespace DesignPatternCodeGenerator.Analyzers
                "DesingPatternAnalyzer",
                DiagnosticSeverity.Error,
                true);
+        public static readonly DiagnosticDescriptor ClassMustImplementAbstractFactoryInterface
+           = new DiagnosticDescriptor(
+                "DES0003",
+                "Class must implement abstract factory interface",
+                "The class '{0}' implement abstract factory interface",
+                "DesingPatternAnalyzer",
+                DiagnosticSeverity.Error,
+                true);
     }
 }

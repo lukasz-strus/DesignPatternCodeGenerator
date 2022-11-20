@@ -1,40 +1,38 @@
 ﻿using DesignPatternCodeGenerator.Base.Enums;
 using DesignPatternCodeGenerator.Base.Generators;
-using DesignPatternCodeGenerator.Factory;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DesignPatternCodeGenerator.AbstractFactory
 {
-    public class AbstractFactoryContentGenerator
+    internal class AbstractFactoryContentGenerator
     {
         internal static string GenerateMainInterface(
-        IEnumerable<IGrouping<string, InterfaceDeclarationSyntax>> groups)
-        => BaseCodeGenerator.GenerateUsingsAndNamespace(groups.First()) +
+            IGrouping<string, TypeDeclarationSyntax> mainInterfaceGroup,
+            IEnumerable<IGrouping<string, TypeDeclarationSyntax>> groups)
+            => BaseCodeGenerator.GenerateUsingsAndNamespace(groups.First()) +
 $@"
 {{
-    {BaseCodeGenerator.GenerateDeclaration(groups.First(), CodeType.Interface)}
+    {BaseCodeGenerator.GenerateDeclaration(mainInterfaceGroup, CodeType.Interface, true, false, true)}
     {{
-	    {GenerateCreateMethodInterface(groups)}
+	    {AbstractFactoryContentComponentGenerator.GenerateCreateMethodInterface(groups)}
     }}
 }}";
 
-        private static string GenerateCreateMethodInterface(IEnumerable<IGrouping<string, InterfaceDeclarationSyntax>> groups)
-        {
-            string ret = "";
+        internal static string GenerateFactoryClass(
+            IGrouping<string, TypeDeclarationSyntax> mainInterfaceGroup,
+            IGrouping<string, TypeDeclarationSyntax> group)
+            => BaseCodeGenerator.GenerateUsingsAndNamespace(mainInterfaceGroup) +
+$@"
+{{
+    {AbstractFactoryContentComponentGenerator.GenerateClassDeclaration(mainInterfaceGroup, group)}
+    {{
+        {AbstractFactoryContentComponentGenerator.GenerateCreateMethods(group)}
+    }}
+}}";
 
-            groups.ToList().ForEach(x => ret += $"{string.Join("\n", x.Select(GenerateCreateMethodDeclaration).Select(y => y + ";"))}\n\t\t");
 
-            return ret;
-        }
-
-        private static string GenerateCreateMethodDeclaration(InterfaceDeclarationSyntax interfaceSyntax)
-            => $"{interfaceSyntax.Identifier.Text} Create{(interfaceSyntax.Identifier.Text).Substring(1)}()";
-        
 
     }
 }

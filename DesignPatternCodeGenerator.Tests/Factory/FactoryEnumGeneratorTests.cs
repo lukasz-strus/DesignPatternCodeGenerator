@@ -5,7 +5,7 @@ using Xunit;
 
 namespace DesignPatternCodeGenerator.Tests.Factory;
 
-public class FactoryChildGeneratorTests
+public class FactoryEnumGeneratorTests
 {
     [Theory]
     [InlineData(FACTORY_COMPILATION_SOURCE, FACTORY_ENUM_SOURCE)]

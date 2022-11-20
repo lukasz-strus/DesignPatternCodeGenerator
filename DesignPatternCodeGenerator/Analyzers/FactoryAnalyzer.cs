@@ -34,11 +34,11 @@ namespace DesignPatternCodeGenerator.Analyzers
             }
         }
 
-        private static bool IsFactoryChild(string attributes) => attributes.Contains("[FactoryProduct]");
+        private static bool IsFactoryChild(string attributes) => attributes.Contains("FactoryProduct");
 
         private static bool IsNullBaseList(BaseListSyntax baseList) => baseList is null;
 
-        private static Diagnostic GetError(ClassDeclarationSyntax classDeclaration, INamedTypeSymbol symbol) 
+        private static Diagnostic GetError(ClassDeclarationSyntax classDeclaration, INamedTypeSymbol symbol)
             => Diagnostic.Create(
                     DesingPatternDiagnosticsDescriptors.ClassMustImplementFactoryInterface,
                     classDeclaration.Identifier.GetLocation(),

@@ -1,4 +1,5 @@
 ﻿using DesignPatternCodeGenerator.Attributes;
+using DesignPatternCodeGenerator.Base.CollectionHelper;
 using DesignPatternCodeGenerator.Base.Enums;
 using DesignPatternCodeGenerator.Base.Generators;
 using Microsoft.CodeAnalysis;
@@ -28,14 +29,7 @@ namespace DesignPatternCodeGenerator.Factory
 
             foreach (var group in interfaceGroups)
             {
-
-//#if DEBUG
-//                if (!Debugger.IsAttached)
-//                {
-//                    Debugger.Launch();
-//                }
-//#endif 
-                var factoryProductsGroups = FactoryProducts.FilterFactoryChild(
+                var factoryProductsGroups = FilterCollectionHelper.FilterClassesByInterface(
                     classGroups,
                     BaseNamesGenerator.GetInterfaceName(group, GeneratorAttributeType.Factory));
 

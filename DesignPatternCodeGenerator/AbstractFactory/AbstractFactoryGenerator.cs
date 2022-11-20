@@ -1,12 +1,11 @@
 ﻿using DesignPatternCodeGenerator.Attributes;
+using DesignPatternCodeGenerator.Base.CollectionHelper;
 using DesignPatternCodeGenerator.Base.Enums;
 using DesignPatternCodeGenerator.Base.Generators;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+using Microsoft.CodeAnalysis.Text;
 using System.Linq;
+using System.Text;
 
 namespace DesignPatternCodeGenerator.AbstractFactory
 {
@@ -19,52 +18,48 @@ namespace DesignPatternCodeGenerator.AbstractFactory
             var factoryAttribute = AttributeTypeGenerator.SetGeneratorAttributeType(GeneratorAttributeType.AbstractFactory);
             var factoryChildAttribute = AttributeTypeGenerator.SetGeneratorAttributeType(GeneratorAttributeType.AbstractFactoryChild);
 
-            var interfaceGroups = DeclarationsSyntaxGenerator.GetInterfaceGroups(
+            var mainInterfaceGroups = DeclarationsSyntaxGenerator.GetInterfaceGroups(
                 context.Compilation,
                 context.CancellationToken,
                 factoryAttribute);
+
+            var groupedMainInterfaceGroups = GroupCollectionHelper.GroupCollectionByAttributeValueText(mainInterfaceGroups);
 
             var classGroups = DeclarationsSyntaxGenerator.GetClassGroups(
                 context.Compilation,
                 context.CancellationToken,
                 factoryChildAttribute);
 
-            foreach (var interfaceGroup in interfaceGroups)
+            foreach (var mainInterfaceGroup in groupedMainInterfaceGroups)
             {
-                foreach (var classGroup in classGroups)
+                var interfaceGroups = GroupCollectionHelper.GroupByIdentifierText(mainInterfaceGroup);
+
+                var mainInterfaceContent = AbstractFactoryContentGenerator.GenerateMainInterface(
+                    mainInterfaceGroup,
+                    interfaceGroups);
+
+                context.AddSource(
+                    $"{BaseNamesGenerator.GetInterfaceName(mainInterfaceGroup, GeneratorAttributeType.Factory, true)}.g.cs",
+                    SourceText.From(mainInterfaceContent, Encoding.UTF8));
+
+                var filtredClassGroups = FilterCollectionHelper.FilterClassesByInterface(
+                    classGroups,
+                    mainInterfaceGroup.Select(x => x.Identifier.Text));
+
+                var groupedClassGroups = GroupCollectionHelper.GroupCollectionByAttributeValueText(filtredClassGroups);
+
+                foreach (var classGroup in groupedClassGroups)
                 {
-#if DEBUG
-                    if (!Debugger.IsAttached)
-                    {
-                        Debugger.Launch();
-                    }
-#endif
+                    var factoryClassContent = AbstractFactoryContentGenerator.GenerateFactoryClass(
+                            mainInterfaceGroup,
+                            classGroup);
 
-
-                    //var syntaxTokens = AbstractFactorySyntaxTokensGenerator.AbstractFactoryGenerateSyntaxTokens(
-                    //    interfaceGroup,
-                    //    classGroup,
-                    //    GeneratorAttributeType.Factory,
-                    //    configuration);
-
-                    //syntaxTokensList.Add(syntaxTokens);
-
+                    context.AddSource(
+                        $"{classGroup.Key}Factory.g.cs",
+                        SourceText.From(factoryClassContent, Encoding.UTF8));
                 }
             }
-
-            Console.WriteLine();
         }
-
-        private bool IsAbstractFactoryClass(
-            IGrouping<string, InterfaceDeclarationSyntax> interfaceGroup,
-            IGrouping<string, ClassDeclarationSyntax> classGroup)
-        {
-            bool ret = false;
-
-            return ret;
-        }
-
-
 
         public void Initialize(GeneratorInitializationContext context)
         {
