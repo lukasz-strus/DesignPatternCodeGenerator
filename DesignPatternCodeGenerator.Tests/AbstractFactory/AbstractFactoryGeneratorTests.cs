@@ -111,7 +111,7 @@ namespace Samples.AbstractFactory
         void Off();
     }
 
-    [AbstractFactoryChild(""Samsung"")]
+    [AbstractFactoryClass(""Samsung"")]
     public class SamsungMonitor : IMonitor
     {
         public void On()
@@ -125,7 +125,7 @@ namespace Samples.AbstractFactory
         }
     }
 
-    [AbstractFactoryChild(""Benq"")]
+    [AbstractFactoryClass(""Benq"")]
     public class BenqMonitor : IMonitor
     {
         public void On()

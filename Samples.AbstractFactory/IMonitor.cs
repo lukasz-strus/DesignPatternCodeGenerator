@@ -9,7 +9,7 @@ namespace Samples.AbstractFactory
         void Off();
     }
 
-    [AbstractFactoryChild("Benq")]
+    [AbstractFactoryClass("Benq")]
     public class BenqMonitor : IMonitor
     {
         public void On()
