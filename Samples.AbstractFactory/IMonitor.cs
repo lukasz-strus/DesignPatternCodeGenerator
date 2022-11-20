@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Samples.AbstractFactory
 {
-    [AbstractFactory("UIGears")]
+    [AbstractFactory("Gears")]
     public interface IMonitor
     {
         void On();

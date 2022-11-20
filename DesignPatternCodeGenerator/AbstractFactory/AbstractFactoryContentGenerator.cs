@@ -41,7 +41,7 @@ $@"
         private static string GenerateDeclaration(
             IGrouping<string, TypeDeclarationSyntax> mainInterfaceGroup,
             IGrouping<string, TypeDeclarationSyntax> filtredClassGroup)
-            => $"public partial class {SyntaxHelper.GetAtributeValueText(filtredClassGroup)}Factory : " +
+            => $"public class {SyntaxHelper.GetAtributeValueText(filtredClassGroup)}Factory : " +
             $"I{SyntaxHelper.GetAtributeValueText(mainInterfaceGroup)}Factory";
 
 

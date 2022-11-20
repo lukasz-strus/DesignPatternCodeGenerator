@@ -1,2 +1,5 @@
-﻿// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Hello, World!");
+﻿using Samples.AbstractFactory;
+
+var uiApplication = new Application(new MacFactory());
+
+uiApplication.RenderUI();

@@ -58,8 +58,9 @@ namespace DesignPatternCodeGenerator.AbstractFactory
 //#endif
 
                 var filtredClassGroups = FilterCollectionHelper.FilterClassesByInterface(classGroups, interfaceNamesList);
+                var groupedClassGroups = GroupCollectionHelper.GroupCollectionByAttributeValueText(filtredClassGroups);
 
-                foreach (var classGroup in filtredClassGroups)
+                foreach (var classGroup in groupedClassGroups)
                 {
                     var factoryClassContent = AbstractFactoryContentGenerator.GenerateFactoryClass(
                             mainInterfaceGroup,
