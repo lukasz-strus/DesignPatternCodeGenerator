@@ -9,7 +9,7 @@ public interface IButton
     void HandleClick();
 }
 
-[AbstractFactoryChild("Windows")]
+[AbstractFactoryClass("Windows")]
 public class WindowsButton : IButton
 {
     public void HandleClick()
@@ -23,7 +23,7 @@ public class WindowsButton : IButton
     }
 }
 
-[AbstractFactoryChild("Mac")]
+[AbstractFactoryClass("Mac")]
 public class MacButton : IButton
 {
     public void HandleClick()

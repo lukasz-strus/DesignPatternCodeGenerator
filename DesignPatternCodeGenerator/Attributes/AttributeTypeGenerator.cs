@@ -20,8 +20,8 @@ namespace DesignPatternCodeGenerator.Attributes
                     return typeof(SingletonAttribute);
                 case GeneratorAttributeType.AbstractFactory:
                     return typeof(AbstractFactoryAttribute);
-                case GeneratorAttributeType.AbstractFactoryChild:
-                    return typeof(AbstractFactoryChildAttribute);
+                case GeneratorAttributeType.AbstractFactoryClass:
+                    return typeof(AbstractFactoryClassAttribute);
                 default:
                     throw new Exception($"Type {generatorType} is not handled");
             }

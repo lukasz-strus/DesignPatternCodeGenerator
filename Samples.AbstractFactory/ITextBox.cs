@@ -9,7 +9,7 @@ public interface ITextBox
     void HandleInput();
 }
 
-[AbstractFactoryChild("Windows")]
+[AbstractFactoryClass("Windows")]
 public class WindowsTextBox : ITextBox
 {
     public void HandleInput()
@@ -23,7 +23,7 @@ public class WindowsTextBox : ITextBox
     }
 }
 
-[AbstractFactoryChild("Mac")]
+[AbstractFactoryClass("Mac")]
 public class MacTextBox : ITextBox
 {
     public void HandleInput()
