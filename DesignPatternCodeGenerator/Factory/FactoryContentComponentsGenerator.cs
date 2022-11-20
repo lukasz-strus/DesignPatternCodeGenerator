@@ -8,21 +8,21 @@ namespace DesignPatternCodeGenerator.Factory
     internal static class FactoryContentComponentsGenerator
     {
         internal static string GenerateCreateMethodClass(
-            IGrouping<string, InterfaceDeclarationSyntax> group,
-            IEnumerable<IGrouping<string, ClassDeclarationSyntax>> factoryChildGroups)
+            IGrouping<string, TypeDeclarationSyntax> group,
+            IEnumerable<IGrouping<string, TypeDeclarationSyntax>> factoryChildGroups)
             => $"{string.Join("\n", group.Select(g => GenerateCreateMethod(g, factoryChildGroups)))}";
 
-        internal static string GenerateCreateMethodInterface(IGrouping<string, InterfaceDeclarationSyntax> group)
+        internal static string GenerateCreateMethodInterface(IGrouping<string, TypeDeclarationSyntax> group)
             => $"{string.Join("\n", group.Select(GenerateCreateMethodDeclaration).Select(x => x + ";"))}";
 
-        internal static string GenerateFields(IEnumerable<InterfaceDeclarationSyntax> group)
+        internal static string GenerateFields(IEnumerable<TypeDeclarationSyntax> group)
         {
             var properties = GetProperties(group);
 
             return $"{string.Join("\n\t\t", properties.Select(p => $"private readonly {p.Type} _{(p.Identifier.Text).ToLower()};"))}\n";
         }
 
-        internal static string GenerateConstructor(IEnumerable<InterfaceDeclarationSyntax> group)
+        internal static string GenerateConstructor(IEnumerable<TypeDeclarationSyntax> group)
         {
             var properties = GetProperties(group);
 
@@ -33,8 +33,8 @@ namespace DesignPatternCodeGenerator.Factory
         }
 
         private static string GenerateCreateMethod(
-            InterfaceDeclarationSyntax interfaceSyntax,
-            IEnumerable<IGrouping<string, ClassDeclarationSyntax>> factoryChildGroups)
+            TypeDeclarationSyntax interfaceSyntax,
+            IEnumerable<IGrouping<string, TypeDeclarationSyntax>> factoryChildGroups)
         {
             var properties = interfaceSyntax.Members.OfType<PropertyDeclarationSyntax>();
             var enums = factoryChildGroups.Select(x => x.Key);
@@ -43,7 +43,7 @@ namespace DesignPatternCodeGenerator.Factory
                 + GenerateCreateMethodImplementation(enums, interfaceSyntax);
         }
 
-        private static string GenerateCreateMethodDeclaration(InterfaceDeclarationSyntax interfaceSyntax)
+        private static string GenerateCreateMethodDeclaration(TypeDeclarationSyntax interfaceSyntax)
         {
             var properties = interfaceSyntax.Members.OfType<PropertyDeclarationSyntax>();
 
@@ -55,7 +55,7 @@ namespace DesignPatternCodeGenerator.Factory
                 : $"public {interfaceSyntax.Identifier.Text} Create({factoryType})";
         }
 
-        private static string GenerateFactoryType(InterfaceDeclarationSyntax interfaceSyntax)
+        private static string GenerateFactoryType(TypeDeclarationSyntax interfaceSyntax)
             => $"{interfaceSyntax.Identifier.Text.Substring(1)}FactoryType type";
 
         private static string GenerateMethodParameters(IEnumerable<PropertyDeclarationSyntax> properties)
@@ -66,7 +66,7 @@ namespace DesignPatternCodeGenerator.Factory
 
         private static string GenerateCreateMethodImplementation(
                     IEnumerable<string> enums,
-            InterfaceDeclarationSyntax interfaceSyntax)
+            TypeDeclarationSyntax interfaceSyntax)
             => $@"
         {{
             switch (type)
@@ -78,10 +78,10 @@ namespace DesignPatternCodeGenerator.Factory
         }}";
         private static string GenerateCases(
                     IEnumerable<string> enums,
-            InterfaceDeclarationSyntax interfaceSyntax)
+            TypeDeclarationSyntax interfaceSyntax)
             => $"{string.Join("\n\t\t\t\t", enums.Select(e => $"case {interfaceSyntax.Identifier.Text.Substring(1)}FactoryType.{e} :\n\t\t\t\t\treturn new {e}({GenerateConstructorParameters(interfaceSyntax)});"))}";
 
-        private static string GenerateConstructorParameters(InterfaceDeclarationSyntax interfaceSyntax)
+        private static string GenerateConstructorParameters(TypeDeclarationSyntax interfaceSyntax)
         {
             var properties = interfaceSyntax.Members.OfType<PropertyDeclarationSyntax>();
 
@@ -93,11 +93,11 @@ namespace DesignPatternCodeGenerator.Factory
                 ? $"_{property.Identifier.Text.Replace("<", "_").Replace(">", "_").ToLower()}"
                 : property.Identifier.Text.Replace("<", "_").Replace(">", "_");
 
-        private static IEnumerable<PropertyDeclarationSyntax> GetProperties(IEnumerable<InterfaceDeclarationSyntax> group)
+        private static IEnumerable<PropertyDeclarationSyntax> GetProperties(IEnumerable<TypeDeclarationSyntax> group)
             => group.SelectMany(g => g.Members).OfType<PropertyDeclarationSyntax>().Where(IsDependency).Distinct();
 
         private static string GenerateConstructorDeclaration(
-            IEnumerable<InterfaceDeclarationSyntax> group,
+            IEnumerable<TypeDeclarationSyntax> group,
             IEnumerable<PropertyDeclarationSyntax> properties)
             => $"public {(group.First().Identifier.Text).Substring(1)}Factory({string.Join(", ", properties.Select(p => $"{p.Type} {p.Identifier.Text.Replace("<", "_").Replace(">", "_")}"))})";
 

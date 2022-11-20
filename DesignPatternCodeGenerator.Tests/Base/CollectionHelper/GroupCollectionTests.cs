@@ -9,13 +9,24 @@ namespace DesignPatternCodeGenerator.Tests.Base.CollectionHelper
     {
         [Theory]
         [InlineData(INPUT_SOURCE)]
-        internal void GroupByAttributeValueText_ForValidInputs_ReturnGroupedCollection(string inputSource)
+        internal void GroupByAttributeValueText_ForValidInputs_ReturnGroupedInterfaceCollection(string inputSource)
         {
             var interfaceGroup = GeneratorTestsHelper.GetInterfaceGroups(inputSource);
 
             var result = GroupCollectionHelper.GroupCollectionByAttributeValueText(interfaceGroup);
 
             result.First().Key.Should().Be("Gear");
+        }
+
+        [Theory]
+        [InlineData(INPUT_SOURCE)]
+        internal void GroupByAttributeValueText_ForValidInputs_ReturnGroupedClassCollection(string inputSource)
+        {
+            var classGroup = GeneratorTestsHelper.GetClassGroups(inputSource);
+
+            var result = GroupCollectionHelper.GroupCollectionByAttributeValueText(classGroup);
+
+            result.First().Key.Should().Be("Samsung");
         }
 
         [Theory]

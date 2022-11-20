@@ -9,8 +9,8 @@ namespace DesignPatternCodeGenerator.Factory
     internal static class FactoryEnumGenerator
     {
         internal static string GenerateEnum(
-            IGrouping<string, InterfaceDeclarationSyntax> interfaceGroup, 
-            IEnumerable<IGrouping<string, ClassDeclarationSyntax>> factoryProductsGroups)
+            IGrouping<string, TypeDeclarationSyntax> interfaceGroup, 
+            IEnumerable<IGrouping<string, TypeDeclarationSyntax>> factoryProductsGroups)
             => BaseCodeGenerator.GenerateUsingsAndNamespace(interfaceGroup) +
 $@"
 {{
@@ -19,7 +19,7 @@ $@"
 	    {GenerateEnumElements(factoryProductsGroups)}
     }}
 }}";
-        private static string GenerateEnumElements(IEnumerable<IGrouping<string, ClassDeclarationSyntax>> factoryProductsGroups)
+        private static string GenerateEnumElements(IEnumerable<IGrouping<string, TypeDeclarationSyntax>> factoryProductsGroups)
             => $"{string.Join("\n\t\t", factoryProductsGroups.Select(p => $"{p.Key},"))}\n";
 
     }

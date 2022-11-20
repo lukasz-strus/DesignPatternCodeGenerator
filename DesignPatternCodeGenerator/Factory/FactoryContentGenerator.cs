@@ -9,7 +9,7 @@ namespace DesignPatternCodeGenerator.Factory
     internal static class FactoryContentGenerator
     {
         internal static string GenerateInterface(
-            IGrouping<string, InterfaceDeclarationSyntax> group)
+            IGrouping<string, TypeDeclarationSyntax> group)
             => BaseCodeGenerator.GenerateUsingsAndNamespace(group) +
 $@"
 {{
@@ -20,8 +20,8 @@ $@"
 }}";
 
         internal static string GenerateClass
-            (IGrouping<string, InterfaceDeclarationSyntax> group,
-            IEnumerable<IGrouping<string, ClassDeclarationSyntax>> factoryProductsGroups)
+            (IGrouping<string, TypeDeclarationSyntax> group,
+            IEnumerable<IGrouping<string, TypeDeclarationSyntax>> factoryProductsGroups)
             => BaseCodeGenerator.GenerateUsingsAndNamespace(group) +
 $@"
 {{
