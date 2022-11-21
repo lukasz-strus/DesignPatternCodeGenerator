@@ -1,38 +1,48 @@
 ﻿using DesignPatternCodeGenerator.Attributes.AbstractFactory;
+using Samples.AbstractFactory;
 
-namespace Samples.AbstractFactory;
-
-[AbstractFactory("UIElement")]
-public interface ITextBox
+namespace Samples.AbstractFactory 
 {
-    void Render();
-    void HandleInput();
-}
-
-[AbstractFactoryClass("Windows")]
-public class WindowsTextBox : ITextBox
-{
-    public void HandleInput()
+    [AbstractFactory("UIElement")]
+    public interface ITextBox
     {
-        Console.WriteLine("Handle windows text input");
-    }
-
-    public void Render()
-    {
-        Console.WriteLine("Render windows textbox");
+        void Render();
+        void HandleInput();
     }
 }
 
-[AbstractFactoryClass("Mac")]
-public class MacTextBox : ITextBox
+namespace Samples.UIWindows
 {
-    public void HandleInput()
+    [AbstractFactoryClass("Windows")]
+    public class WindowsTextBox : ITextBox
     {
-        Console.WriteLine("Handle mac text input");
-    }
+        public void HandleInput()
+        {
+            Console.WriteLine("Handle windows text input");
+        }
 
-    public void Render()
-    {
-        Console.WriteLine("Render mac textbox");
+        public void Render()
+        {
+            Console.WriteLine("Render windows textbox");
+        }
     }
 }
+
+namespace Samples.UIMac
+{
+    [AbstractFactoryClass("Mac")]
+    public class MacTextBox : ITextBox
+    {
+        public void HandleInput()
+        {
+            Console.WriteLine("Handle mac text input");
+        }
+
+        public void Render()
+        {
+            Console.WriteLine("Render mac textbox");
+        }
+    }
+}
+
+
