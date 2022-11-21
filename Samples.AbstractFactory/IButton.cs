@@ -1,38 +1,49 @@
 ﻿using DesignPatternCodeGenerator.Attributes.AbstractFactory;
+using Samples.AbstractFactory;
 
-namespace Samples.AbstractFactory;
-
-[AbstractFactory("UIElement")]
-public interface IButton
+namespace Samples.AbstractFactory
 {
-    void Render();
-    void HandleClick();
-}
 
-[AbstractFactoryClass("Windows")]
-public class WindowsButton : IButton
-{
-    public void HandleClick()
+    [AbstractFactory("UIElement")]
+    public interface IButton
     {
-        Console.WriteLine("Handle windows click event");
-    }
-
-    public void Render()
-    {
-        Console.WriteLine("Render windows button");
+        void Render();
+        void HandleClick();
     }
 }
 
-[AbstractFactoryClass("Mac")]
-public class MacButton : IButton
+namespace Samples.UIWindows
 {
-    public void HandleClick()
-    {
-        Console.WriteLine("Handle mac click event");
-    }
 
-    public void Render()
+    [AbstractFactoryClass("Windows")]
+    public class WindowsButton : IButton
     {
-        Console.WriteLine("Render mac button");
+        public void HandleClick()
+        {
+            Console.WriteLine("Handle windows click event");
+        }
+
+        public void Render()
+        {
+            Console.WriteLine("Render windows button");
+        }
+    }
+}
+
+namespace Samples.UIMac
+{
+
+    [AbstractFactoryClass("Mac")]
+    public class MacButton : IButton
+    {
+        public void HandleClick()
+        {
+            Console.WriteLine("Handle mac click event");
+        }
+
+        public void Render()
+        {
+            Console.WriteLine("Render mac button");
+        }
     }
 }
