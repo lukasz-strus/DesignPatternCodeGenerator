@@ -5,11 +5,11 @@ namespace DesignPatternCodeGenerator.Attributes.AbstractFactory
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
     public class AbstractFactoryClassAttribute : Attribute
     {
-        public string ChildFactoryName { get; }
+        public string FactoryClassName { get; }
 
-        public AbstractFactoryClassAttribute(string childFactoryName)
+        public AbstractFactoryClassAttribute(string factoryClassName)
         {
-            ChildFactoryName = childFactoryName;
+            FactoryClassName = factoryClassName;
         }
     }
 }
