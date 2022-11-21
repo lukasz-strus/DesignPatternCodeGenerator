@@ -23,7 +23,7 @@ $@"
         internal static string GenerateFactoryClass(
             IGrouping<string, TypeDeclarationSyntax> mainInterfaceGroup,
             IGrouping<string, TypeDeclarationSyntax> group)
-            => BaseCodeGenerator.GenerateUsingsAndNamespace(mainInterfaceGroup) +
+            => BaseCodeGenerator.GenerateUsingsAndNamespace(mainInterfaceGroup, group) +
 $@"
 {{
     {AbstractFactoryContentComponentGenerator.GenerateClassDeclaration(mainInterfaceGroup, group)}
@@ -31,8 +31,5 @@ $@"
         {AbstractFactoryContentComponentGenerator.GenerateCreateMethods(group)}
     }}
 }}";
-
-
-
     }
 }
