@@ -4,7 +4,7 @@ More information about Roslyn APIs: https://learn.microsoft.com/en-us/dotnet/csh
 
 ## How to start using the library?
 Edit your project and add the following, replacing the project path with the one from the .NET Standard project you created above:
-```
+```xml
   <ItemGroup>
 	<ProjectReference Include="..\PathTo\DesignPatternCodeGenerator.csproj"
 					  OutputItemType="Analyzer"
