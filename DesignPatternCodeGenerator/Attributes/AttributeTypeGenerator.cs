@@ -1,5 +1,6 @@
 ﻿using DesignPatternCodeGenerator.Attributes.AbstractFactory;
 using DesignPatternCodeGenerator.Attributes.Factory;
+using DesignPatternCodeGenerator.Attributes.Prototype;
 using DesignPatternCodeGenerator.Attributes.Singleton;
 using DesignPatternCodeGenerator.Base.Enums;
 using System;
@@ -22,6 +23,8 @@ namespace DesignPatternCodeGenerator.Attributes
                     return typeof(AbstractFactoryAttribute);
                 case GeneratorAttributeType.AbstractFactoryClass:
                     return typeof(AbstractFactoryClassAttribute);
+                case GeneratorAttributeType.Prototype:
+                    return typeof(PrototypeAttribute);
                 default:
                     throw new Exception($"Type {generatorType} is not handled");
             }

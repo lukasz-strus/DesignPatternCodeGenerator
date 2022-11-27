@@ -1,29 +1,29 @@
 ﻿using DesignPatternCodeGenerator.Analyzers;
-using DesignPatternCodeGenerator.Attributes.Factory;
+using DesignPatternCodeGenerator.Attributes.Prototype;
 using Xunit;
 using Verifier = DesignPatternCodeGenerator.Tests.Verifiers.AnalyzerVerifier<
-   DesignPatternCodeGenerator.Analyzers.SingletonAnalyzer>;
+   DesignPatternCodeGenerator.Analyzers.PrototypeAnalyzer>;
 
 namespace DesignPatternCodeGenerator.Tests.Verifiers;
 
-public class SingletonAnalyzerTests
+public class PrototypeAnalyzerTests
 {
     [Fact]
     public async Task Analyzer_ForFactoryChildClassWithoutInterface_ShouldThrowError()
     {
         var input =
-@"using DesignPatternCodeGenerator.Attributes.Singleton;
+@"using DesignPatternCodeGenerator.Attributes.Prototype;
 
 namespace Test.Test
 {
-    [Singleton]
+    [Prototype]
     public class {|#0:Test1|} { }
 }";
 
-        var expectedError = Verifier.Diagnostic(DesingPatternDiagnosticsDescriptors.SingletonMustBePartial.Id)
+        var expectedError = Verifier.Diagnostic(DesingPatternDiagnosticsDescriptors.PrototypeMustBePartial.Id)
                                     .WithLocation(0)
                                     .WithArguments("Test1");
 
-        await Verifier.VerifyAnalyzerAsync(input, typeof(FactoryProductAttribute), expectedError);
+        await Verifier.VerifyAnalyzerAsync(input, typeof(PrototypeAttribute), expectedError);
     }
 }
