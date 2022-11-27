@@ -23,38 +23,38 @@ namespace DesignPatternCodeGenerator.Prototype
             IGrouping<string, ClassDeclarationSyntax> group,
             IEnumerable<IGrouping<string, ClassDeclarationSyntax>> allClassGroups)
         {
-            var properties = GetProperties(group);
-            var typesName = GetTypesName(allClassGroups);
+            var properties = group.SelectMany(g => g.Members).OfType<PropertyDeclarationSyntax>().Distinct();
+
+            var typesName = allClassGroups.SelectMany(x => x).Select(y => y.Identifier.Text);
+
             var filtredProperties = FilterCollectionHelper.FilterPropertyByTypes(properties, typesName);
 
-            return $"{string.Join("\n", filtredProperties.Select(p => $"clone.{p.Identifier.Text} = {GenerateNewObject(GetPropertyClassDeclaration(allClassGroups, p), p.Identifier.Text)}"))}";
+            return $"{string.Join("\n\n\t\t\t", filtredProperties.Select(p => $"clone.{p.Identifier.Text} = {GenerateNewObject(allClassGroups, p)}"))}";
         }
 
-        private static IEnumerable<string> GetTypesName(
-            IEnumerable<IGrouping<string, ClassDeclarationSyntax>> allClassGroups)
-            => allClassGroups.SelectMany(x => x).Select(y => y.Identifier.Text);
-
-        private static ClassDeclarationSyntax GetPropertyClassDeclaration(
-            IEnumerable<IGrouping<string, ClassDeclarationSyntax>> allClassGroups,
+        private static string GenerateNewObject(
+            IEnumerable<IGrouping<string, ClassDeclarationSyntax>> allClassGroups, 
             PropertyDeclarationSyntax property)
-            => allClassGroups.SelectMany(x => x).Where(y => y.Identifier.Text == property.Type.ToString()).First();
+        {
+            var classDeclaration = allClassGroups.SelectMany(x => x)
+                .Where(y => y.Identifier.Text == property.Type.ToString())
+                .First();
 
-
-        private static string GenerateNewObject(ClassDeclarationSyntax classDeclaration, string objectName)
-            => $@"new {classDeclaration.Identifier.Text}()
+            return $@"new {classDeclaration.Identifier.Text}()
             {{
-                {GenerateAssignFields(classDeclaration, objectName)}
+                {GenerateAssignFields(classDeclaration, property)}
             }};";
+        }
 
-        private static string GenerateAssignFields(ClassDeclarationSyntax classDeclaration, string objectName)
+        private static string GenerateAssignFields(ClassDeclarationSyntax classDeclaration, PropertyDeclarationSyntax propertyObject)
         {
             var properties = classDeclaration.Members.OfType<PropertyDeclarationSyntax>();
 
-            return string.Join(",\n ", properties.Select(p => GenerateAssign(p, objectName)));
+            return string.Join(",\n\t\t\t\t", properties.Select(p => GenerateAssign(p, propertyObject)));
         }
 
-        private static string GenerateAssign(PropertyDeclarationSyntax p, string objectName)
-        => $"{p.Identifier.Text} = {objectName}.{p.Identifier.Text}";
+        private static string GenerateAssign(PropertyDeclarationSyntax propertyToAssign, PropertyDeclarationSyntax propertyObject)
+            => $"{propertyToAssign.Identifier.Text} = {propertyObject.Identifier.Text}.{propertyToAssign.Identifier.Text}";
 
         internal static string GenerateShallowClone(IGrouping<string, ClassDeclarationSyntax> group)
             => $@"{GenerateMethodDeclaration(group, CopyType.Shallow)}
@@ -67,9 +67,5 @@ namespace DesignPatternCodeGenerator.Prototype
 
         private static string GenerateMethodDeclaration(IGrouping<string, ClassDeclarationSyntax> group, CopyType type)
             => $"public {group.Key} {type}Copy()";
-
-        private static IEnumerable<PropertyDeclarationSyntax> GetProperties(
-            IEnumerable<TypeDeclarationSyntax> group)
-            => group.SelectMany(g => g.Members).OfType<PropertyDeclarationSyntax>().Distinct();
     }
 }
