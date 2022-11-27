@@ -41,6 +41,22 @@ public class DeclarationsSyntaxGeneratorTests
             .Be("Test");
     }
 
+    [Theory]
+    [InlineData(CLASS_COMPILATION_SOURCE)]
+    internal void GetAllClassGroups_ForValidInputs_ReturnsCorrectKeyValue(string inputSource)
+    {
+        var compilation = GeneratorTestsHelper.CreateCompilation(inputSource);
+        var source = new CancellationTokenSource();
+        var token = source.Token;
+
+        var result = DeclarationsSyntaxGenerator.GetAllClassGroups(compilation, token);
+
+        result.Select(x => x.Key)
+            .First()
+            .Should()
+            .Be("Test1");
+    }
+
     private const string FACTORY_COMPILATION_SOURCE =
     @"using DesignPatternCodeGenerator.Attributes.Factory;
 using System;
@@ -56,6 +72,27 @@ namespace DesignPatternCodeGenerator.Tests.Data
 
     [FactoryProduct]
     public class Test : ITest
+    {
+
+    }
+}";
+
+    private const string CLASS_COMPILATION_SOURCE =
+@"using System;
+
+namespace DesignPatternCodeGenerator.Tests.Data
+{    
+    public class Test1
+    {
+
+    }
+
+    public class Test2
+    {
+
+    }
+
+    public class Test3
     {
 
     }
