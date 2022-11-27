@@ -21,6 +21,7 @@ namespace DesignPatternCodeGenerator.Analyzers
                "DesingPatternAnalyzer",
                DiagnosticSeverity.Error,
                true);
+
         public static readonly DiagnosticDescriptor ClassMustImplementAbstractFactoryInterface
            = new DiagnosticDescriptor(
                 "DES0003",
@@ -29,5 +30,14 @@ namespace DesignPatternCodeGenerator.Analyzers
                 "DesingPatternAnalyzer",
                 DiagnosticSeverity.Error,
                 true);
+
+        public static readonly DiagnosticDescriptor PrototypeMustBePartial
+           = new DiagnosticDescriptor(
+               "DES0004",
+               "Prototype class must be partial",
+               "The prototype class '{0}' must be partial",
+               "DesingPatternAnalyzer",
+               DiagnosticSeverity.Error,
+               true);
     }
 }

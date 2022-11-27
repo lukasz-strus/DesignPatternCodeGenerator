@@ -7,10 +7,31 @@ namespace DesignPatternCodeGenerator.Base.CollectionHelper
 {
     internal static class FilterCollectionHelper
     {
+        internal static IEnumerable<ClassDeclarationSyntax> FilterClassDeclarationsByTypes(
+            IEnumerable<ClassDeclarationSyntax> classDeclarations,
+            string typeName)
+            => classDeclarations.Where(y => IsClassType(y, typeName));
+
+        private static bool IsClassType(ClassDeclarationSyntax classSyntax, string typeName)
+        {
+            var nullableType = typeName.EndsWith("?") ? typeName.Remove(typeName.Length - 1) : typeName;
+
+            return classSyntax.Identifier.Text.Contains(nullableType);
+        }
+
         internal static IEnumerable<PropertyDeclarationSyntax> FilterPropertyByTypes(
             IEnumerable<PropertyDeclarationSyntax> classGroup,
             string typeName)
-            => classGroup.Where(y => y.Type.ToString() == typeName);
+            => classGroup.Where(y => IsPropertyType(y, typeName));
+
+        private static bool IsPropertyType(PropertyDeclarationSyntax property, string typeName)
+        {
+            var propertyType = property.Type.ToString();
+
+            var nullableType = propertyType.EndsWith("?") ? propertyType.Remove(propertyType.Length - 1) : propertyType;
+
+            return nullableType.Contains(typeName);
+        }
 
         internal static IEnumerable<PropertyDeclarationSyntax> FilterPropertyByTypes(
             IEnumerable<PropertyDeclarationSyntax> classGroup,

@@ -36,9 +36,11 @@ namespace DesignPatternCodeGenerator.Prototype
             IEnumerable<IGrouping<string, ClassDeclarationSyntax>> allClassGroups, 
             PropertyDeclarationSyntax property)
         {
-            var classDeclaration = allClassGroups.SelectMany(x => x)
-                .Where(y => y.Identifier.Text == property.Type.ToString())
-                .First();
+            var typeName = property.Type.ToString();
+            var classDeclaratios = allClassGroups.SelectMany(x => x);
+
+            var classDeclaration = FilterCollectionHelper.FilterClassDeclarationsByTypes(classDeclaratios, typeName)
+                .FirstOrDefault();
 
             return $@"new {classDeclaration.Identifier.Text}()
             {{

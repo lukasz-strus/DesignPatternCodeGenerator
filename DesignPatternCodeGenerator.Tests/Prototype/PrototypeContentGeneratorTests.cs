@@ -29,7 +29,7 @@ namespace Test.Test
     { 
         public string Name {get; set;}
         
-        public Address PersonAddress {get; set;}
+        public Address? PersonAddress {get; set;}
     }
 
     public class Address
