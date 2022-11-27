@@ -12,10 +12,11 @@ public class PrototypeContentGeneratorTests
     internal void GenerateClass_ForValidInputs_ReturnInterface(string inputSource, string expectedSource)
     {
         var classGroup = GeneratorTestsHelper.GetClassGroup(inputSource);
+        var allClassGroup = GeneratorTestsHelper.GetClassGroups(inputSource);
 
-        var result = PrototypeContentGenerator.GenerateClass(classGroup);
+        var result = PrototypeContentGenerator.GenerateClass(classGroup, allClassGroup);
 
-        result.Should().Be(expectedSource);
+        result.RemoveWhitespace().Should().Be(expectedSource.RemoveWhitespace());
     }
 
     private const string PROTOTYPE_COMPILATION_SOURCE =
@@ -28,12 +29,13 @@ namespace Test.Test
     { 
         public string Name {get; set;}
         
-        public Address Address {get; set;}
+        public Address PersonAddress {get; set;}
     }
 
     public class Address
     {
         public string City { get; set; }
+        public string Street { get; set; }
     }
 }";
 
@@ -54,10 +56,11 @@ namespace Test.Test
         {
             Person clone = (Person)this.MemberwiseClone();
             
-            clone.Address = new Address()
+            clone.PersonAddress = new Address()
             {
-                City = Address.City
-            }
+                City = PersonAddress.City,
+                Street = PersonAddress.Street
+            };
 
             return clone;
         }

@@ -7,4 +7,3 @@ public partial class Configuration
 {
     public string SomeProperty { get; set; }
 }
-

@@ -10,6 +10,15 @@ namespace DesignPatternCodeGenerator.Base.Generators
 {
     internal class DeclarationsSyntaxGenerator
     {
+        internal static IEnumerable<IGrouping<string, ClassDeclarationSyntax>> GetAllClassGroups(
+            Compilation compilation,
+            CancellationToken token)
+        {
+            var classes = SetClassDeclarations(compilation, token).Result;
+
+            return classes.GroupBy(x => x.Identifier.Text);
+        }
+
         internal static IEnumerable<IGrouping<string, ClassDeclarationSyntax>> GetClassGroups(
             Compilation compilation,
             CancellationToken token,
@@ -38,6 +47,13 @@ namespace DesignPatternCodeGenerator.Base.Generators
             return (await Task.WhenAll(compilation.SyntaxTrees.Select(x => SetClassDeclarationSyntax(x, compilation, token, attributeType))))
                 .SelectMany(x => x);
         }
+        private static async Task<IEnumerable<ClassDeclarationSyntax>> SetClassDeclarations(
+            Compilation compilation,
+            CancellationToken token)
+        {
+            return (await Task.WhenAll(compilation.SyntaxTrees.Select(x => SetClassDeclarationSyntax(x, token))))
+                .SelectMany(x => x);
+        }
 
         private static async Task<IEnumerable<ClassDeclarationSyntax>> SetClassDeclarationSyntax(
             SyntaxTree tree,
@@ -53,6 +69,15 @@ namespace DesignPatternCodeGenerator.Base.Generators
                 .Where(x => x.AttributeLists.Any());
 
             return classes.Where(x => x.AttributeLists.Any(y => y.Attributes.Any(z => semanticModel.GetTypeInfo(z).Type.Name == attributeType.Name)));
+        }
+
+        private static async Task<IEnumerable<ClassDeclarationSyntax>> SetClassDeclarationSyntax(
+            SyntaxTree tree,
+            CancellationToken token)
+        {
+            return (await tree.GetRootAsync(token))
+                .DescendantNodes()
+                .OfType<ClassDeclarationSyntax>();
         }
 
         private static async Task<IEnumerable<InterfaceDeclarationSyntax>> SetInterfaceDeclarations(

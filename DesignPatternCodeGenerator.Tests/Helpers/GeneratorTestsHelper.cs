@@ -42,7 +42,7 @@ internal static class GeneratorTestsHelper
                 .ToList()
                 .GroupBy(x => x.Identifier.Text)
                 .First();
-    
+
 
     internal static IEnumerable<IGrouping<string, InterfaceDeclarationSyntax>> GetInterfaceGroups(string context)
         => CSharpSyntaxTree

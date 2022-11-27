@@ -15,13 +15,6 @@ namespace DesignPatternCodeGenerator.Prototype
     {
         public void Execute(GeneratorExecutionContext context)
         {
-#if DEBUG
-            if (!Debugger.IsAttached)
-            {
-                Debugger.Launch();
-            }
-#endif 
-
             var prototypeAttribute = AttributeTypeGenerator.SetGeneratorAttributeType(GeneratorAttributeType.Prototype);
 
             var classGroups = DeclarationsSyntaxGenerator.GetClassGroups(
@@ -29,9 +22,13 @@ namespace DesignPatternCodeGenerator.Prototype
                 context.CancellationToken,
                 prototypeAttribute);
 
+            var allClassGroups = DeclarationsSyntaxGenerator.GetAllClassGroups(
+                context.Compilation,
+                context.CancellationToken);
+
             foreach (var group in classGroups)
             {
-                var classContent = PrototypeContentGenerator.GenerateClass(group);
+                var classContent = PrototypeContentGenerator.GenerateClass(group, allClassGroups);
 
                 context.AddSource(
                     $"{BaseNamesGenerator.GetClassName(group, GeneratorAttributeType.Prototype).Replace("Prototype", "")}.g.cs",
