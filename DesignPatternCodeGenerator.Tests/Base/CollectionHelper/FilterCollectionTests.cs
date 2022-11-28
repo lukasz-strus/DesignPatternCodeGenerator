@@ -7,6 +7,7 @@ namespace DesignPatternCodeGenerator.Tests.Base.CollectionHelper
 {
     public class FilterCollectionTests
     {
+        //TODO add tests
 
         [Theory]
         [InlineData(FACTORY_COMPILATION_SOURCE, FACTORYCHILD_COMPILATION_SOURCE, INTERFACE_NAME)]
