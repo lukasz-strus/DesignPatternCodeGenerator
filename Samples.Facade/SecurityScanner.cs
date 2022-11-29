@@ -4,6 +4,7 @@ namespace Samples.Facade;
 
 public class SecurityScanner
 {
+    [FacadeMethod("Scan")]
     public IEnumerable<string> SecurityScan([FacadeMainParameter("githubUrl")] string githubUrl)
     {
         Console.WriteLine("Security scan");

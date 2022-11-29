@@ -9,7 +9,9 @@
         AbstractFactory,
         AbstractFactoryClass,
         Prototype,
-        Facade,
+        FacadeMethod,
+        FacadeParameter,
+        FacadeMainParameter,
         EmptyObject,
         IOC
     }

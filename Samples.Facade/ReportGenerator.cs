@@ -6,9 +6,9 @@ public class ReportGenerator
 {
     [FacadeMethod("Scan")]
     public void GenerateReport(
-        [FacadeParameter("Samples.Facade.QualityScanner.QualityScan")] IEnumerable<string> qualityScanErrors,
-        [FacadeParameter("Samples.Facade.SecurityScanner.SecurityScan")] IEnumerable<string> securityScanErrors,
-        [FacadeParameter("Samples.Facade.DependencyScanner.DependencyScan")] IEnumerable<string> dependencyScanErrors)
+        [FacadeParameter("QualityScanner.QualityScan")] IEnumerable<string> qualityScanErrors,
+        [FacadeParameter("SecurityScanner.SecurityScan")] IEnumerable<string> securityScanErrors,
+        [FacadeParameter("DependencyScanner.DependencyScan")] IEnumerable<string> dependencyScanErrors)
     {
         Console.WriteLine("Quality Scan Errors:");
         Console.WriteLine(string.Join(", ", qualityScanErrors));
