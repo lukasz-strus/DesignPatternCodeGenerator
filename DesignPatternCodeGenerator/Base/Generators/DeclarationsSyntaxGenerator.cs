@@ -39,6 +39,41 @@ namespace DesignPatternCodeGenerator.Base.Generators
             return interfaces.GroupBy(x => x.Identifier.Text);
         }
 
+        internal static IEnumerable<IGrouping<string, MethodDeclarationSyntax>> GetMethodGroups(
+            Compilation compilation, 
+            CancellationToken token, 
+            Type attributeType)
+        {
+            var methods = SetMethodDeclarations(compilation, token, attributeType).Result;
+
+            return methods.GroupBy(x => x.Identifier.Text);
+        }
+
+        private static async Task<IEnumerable<MethodDeclarationSyntax>> SetMethodDeclarations(
+            Compilation compilation, 
+            CancellationToken token, 
+            Type attributeType)
+        {
+            return (await Task.WhenAll(compilation.SyntaxTrees.Select(x => SetMethodDeclarationSyntax(x, compilation, token, attributeType))))
+                .SelectMany(x => x);
+        }
+
+        private static async Task<IEnumerable<MethodDeclarationSyntax>> SetMethodDeclarationSyntax(
+            SyntaxTree tree, 
+            Compilation compilation, 
+            CancellationToken token, 
+            Type attributeType)
+        {
+            var semanticModel = compilation.GetSemanticModel(tree);
+
+            var methods = (await tree.GetRootAsync(token))
+                .DescendantNodes()
+                .OfType<MethodDeclarationSyntax>()
+                .Where(x => x.AttributeLists.Any());
+
+            return methods.Where(x => x.AttributeLists.ToString().Contains(attributeType.Name.Replace("Attribute", "")));
+        }
+
         private static async Task<IEnumerable<ClassDeclarationSyntax>> SetClassDeclarations(
             Compilation compilation, 
             CancellationToken token,

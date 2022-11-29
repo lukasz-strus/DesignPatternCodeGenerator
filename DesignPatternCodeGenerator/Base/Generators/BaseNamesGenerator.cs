@@ -15,7 +15,18 @@ namespace DesignPatternCodeGenerator.Base.Generators
             => group.First().FirstAncestorOrSelf<NamespaceDeclarationSyntax>()?.Name?.ToString() ??
                group.First().FirstAncestorOrSelf<FileScopedNamespaceDeclarationSyntax>().Name.ToString();
 
+        internal static string GetNamespace(IGrouping<string, MethodDeclarationSyntax> group)
+            => group.First().FirstAncestorOrSelf<NamespaceDeclarationSyntax>()?.Name?.ToString() ??
+               group.First().FirstAncestorOrSelf<FileScopedNamespaceDeclarationSyntax>().Name.ToString();
+
         internal static IEnumerable<string> GetUsings(IGrouping<string, TypeDeclarationSyntax> group)
+            => group.First()
+                 .FirstAncestorOrSelf<CompilationUnitSyntax>()
+                 .DescendantNodesAndSelf()
+                 .OfType<UsingDirectiveSyntax>()
+                 .Select(x => x.Name.ToString());
+
+        internal static IEnumerable<string> GetUsings(IGrouping<string, MethodDeclarationSyntax> group)
             => group.First()
                  .FirstAncestorOrSelf<CompilationUnitSyntax>()
                  .DescendantNodesAndSelf()
@@ -45,6 +56,10 @@ namespace DesignPatternCodeGenerator.Base.Generators
 
             return baseInterfaceName.StartsWith("I") ? baseInterfaceName : baseInterfaceName.Insert(0, "I");
         }
+
+
+
+
     }
 
 }
