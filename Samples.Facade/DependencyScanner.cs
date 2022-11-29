@@ -11,4 +11,10 @@ public class DependencyScanner
 
         return new List<string>() { "Dependency Error1" };
     }
+
+    [FacadeMethod("Scan")]
+    public void DependencyScanRaport([FacadeParameter("DependencyScanner.DependencyScan")] IEnumerable<string> dependencyScanErrors)
+    {
+        Console.WriteLine("Dependency Scan");
+    }
 }
