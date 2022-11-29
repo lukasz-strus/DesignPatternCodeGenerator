@@ -43,6 +43,25 @@ internal static class GeneratorTestsHelper
                 .GroupBy(x => x.Identifier.Text)
                 .First();
 
+    internal static IEnumerable<IGrouping<string, MethodDeclarationSyntax>> GetMethodGroups(string context)
+    => CSharpSyntaxTree
+            .ParseText(context)
+            .GetRoot()
+            .DescendantNodes()
+            .OfType<MethodDeclarationSyntax>()
+            .ToList()
+            .GroupBy(x => x.Identifier.Text);
+
+    internal static IGrouping<string, MethodDeclarationSyntax> GetMethodGroup(string context)
+        => CSharpSyntaxTree
+                .ParseText(context)
+                .GetRoot()
+                .DescendantNodes()
+                .OfType<MethodDeclarationSyntax>()
+                .ToList()
+                .GroupBy(x => x.Identifier.Text)
+                .First();
+
 
     internal static IEnumerable<IGrouping<string, InterfaceDeclarationSyntax>> GetInterfaceGroups(string context)
         => CSharpSyntaxTree

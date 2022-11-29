@@ -1,4 +1,5 @@
 ﻿using DesignPatternCodeGenerator.Attributes.AbstractFactory;
+using DesignPatternCodeGenerator.Attributes.Facade;
 using DesignPatternCodeGenerator.Attributes.Factory;
 using DesignPatternCodeGenerator.Attributes.Prototype;
 using DesignPatternCodeGenerator.Attributes.Singleton;
@@ -25,6 +26,12 @@ namespace DesignPatternCodeGenerator.Attributes
                     return typeof(AbstractFactoryClassAttribute);
                 case GeneratorAttributeType.Prototype:
                     return typeof(PrototypeAttribute);
+                case GeneratorAttributeType.FacadeMethod:
+                    return typeof(FacadeMethodAttribute);
+                case GeneratorAttributeType.FacadeParameter:
+                    return typeof(FacadeParameterAttribute);
+                case GeneratorAttributeType.FacadeMainParameter:
+                    return typeof(FacadeMainParameterAttribute);
                 default:
                     throw new Exception($"Type {generatorType} is not handled");
             }
