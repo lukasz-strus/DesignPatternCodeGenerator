@@ -1,4 +1,5 @@
 ﻿using DesignPatternCodeGenerator.AbstractFactory;
+using DesignPatternCodeGenerator.Tests.AbstractFactory.Data;
 using DesignPatternCodeGenerator.Tests.Helpers;
 using FluentAssertions;
 using Microsoft.CodeAnalysis;
@@ -9,30 +10,33 @@ namespace DesignPatternCodeGenerator.Tests.AbstractFactory;
 
 public class AbstractFactoryGeneratorTests
 {
-    [Fact]
-    public void AbstractFactoryGenerator_ForSource_ReturnEmptyDiagnostics()
+    [Theory]
+    [MemberData(nameof(AbstractFactoryCompilationSources.GetSampleDataToGeneratorTests), MemberType = typeof(AbstractFactoryCompilationSources))]
+    public void AbstractFactoryGenerator_ForSource_ReturnEmptyDiagnostics(string inputSource)
     {
-        Compilation inputCompilation = GeneratorTestsHelper.CreateCompilation(ABSTRACT_FACTORY_SOURCE);
+        Compilation inputCompilation = GeneratorTestsHelper.CreateCompilation(inputSource);
         GeneratorDriver driver = CSharpGeneratorDriver.Create(new AbstractFactoryGenerator());
         driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out _, out var diagnostics);
 
         diagnostics.Should().BeEmpty();
     }
 
-    [Fact]
-    public void AbstractFactoryGenerator_ForSource_ReturnOutputCompilationWithFourSyntaxTrees()
+    [Theory]
+    [MemberData(nameof(AbstractFactoryCompilationSources.GetSampleDataToGeneratorTests), MemberType = typeof(AbstractFactoryCompilationSources))]
+    public void AbstractFactoryGenerator_ForSource_ReturnOutputCompilationWithFourSyntaxTrees(string inputSource)
     {
-        Compilation inputCompilation = GeneratorTestsHelper.CreateCompilation(ABSTRACT_FACTORY_SOURCE);
+        Compilation inputCompilation = GeneratorTestsHelper.CreateCompilation(inputSource);
         GeneratorDriver driver = CSharpGeneratorDriver.Create(new AbstractFactoryGenerator());
         driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out _);
 
         outputCompilation.SyntaxTrees.Should().HaveCount(4);
     }
 
-    [Fact]
-    public void AbstractFactoryGenerator_ForSource_ReturnDriverResultWithEmptyDiagnostics()
+    [Theory]
+    [MemberData(nameof(AbstractFactoryCompilationSources.GetSampleDataToGeneratorTests), MemberType = typeof(AbstractFactoryCompilationSources))]
+    public void AbstractFactoryGenerator_ForSource_ReturnDriverResultWithEmptyDiagnostics(string inputSource)
     {
-        Compilation inputCompilation = GeneratorTestsHelper.CreateCompilation(ABSTRACT_FACTORY_SOURCE);
+        Compilation inputCompilation = GeneratorTestsHelper.CreateCompilation(inputSource);
         GeneratorDriver driver = CSharpGeneratorDriver.Create(new AbstractFactoryGenerator());
         driver = driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out _, out _);
         GeneratorDriverRunResult runResult = driver.GetRunResult();
@@ -40,10 +44,11 @@ public class AbstractFactoryGeneratorTests
         runResult.Diagnostics.Should().BeEmpty();
     }
 
-    [Fact]
-    public void AbstractFactoryGenerator_ForSource_ReturnDriverResultWithCorrectGeneratedTreesLenght()
+    [Theory]
+    [MemberData(nameof(AbstractFactoryCompilationSources.GetSampleDataToGeneratorTests), MemberType = typeof(AbstractFactoryCompilationSources))]
+    public void AbstractFactoryGenerator_ForSource_ReturnDriverResultWithCorrectGeneratedTreesLenght(string inputSource)
     {
-        Compilation inputCompilation = GeneratorTestsHelper.CreateCompilation(ABSTRACT_FACTORY_SOURCE);
+        Compilation inputCompilation = GeneratorTestsHelper.CreateCompilation(inputSource);
         GeneratorDriver driver = CSharpGeneratorDriver.Create(new AbstractFactoryGenerator());
         driver = driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out _, out _);
         GeneratorDriverRunResult runResult = driver.GetRunResult();
@@ -51,10 +56,11 @@ public class AbstractFactoryGeneratorTests
         runResult.GeneratedTrees.Length.Should().Be(3);
     }
 
-    [Fact]
-    public void FAbstractFactoryGenerator_ForSource_ReturnResultWithFactoryGeneratory()
+    [Theory]
+    [MemberData(nameof(AbstractFactoryCompilationSources.GetSampleDataToGeneratorTests), MemberType = typeof(AbstractFactoryCompilationSources))]
+    public void FAbstractFactoryGenerator_ForSource_ReturnResultWithFactoryGeneratory(string inputSource)
     {
-        Compilation inputCompilation = GeneratorTestsHelper.CreateCompilation(ABSTRACT_FACTORY_SOURCE);
+        Compilation inputCompilation = GeneratorTestsHelper.CreateCompilation(inputSource);
         var generator = new AbstractFactoryGenerator();
         GeneratorDriver driver = CSharpGeneratorDriver.Create(generator);
         driver = driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out _, out _);
@@ -64,10 +70,11 @@ public class AbstractFactoryGeneratorTests
         generatorResult.Generator.Should().Be(generator);
     }
 
-    [Fact]
-    public void AbstractFactoryGenerator_ForSource_ReturnResultWithEmptyDiagnostics()
+    [Theory]
+    [MemberData(nameof(AbstractFactoryCompilationSources.GetSampleDataToGeneratorTests), MemberType = typeof(AbstractFactoryCompilationSources))]
+    public void AbstractFactoryGenerator_ForSource_ReturnResultWithEmptyDiagnostics(string inputSource)
     {
-        Compilation inputCompilation = GeneratorTestsHelper.CreateCompilation(ABSTRACT_FACTORY_SOURCE);
+        Compilation inputCompilation = GeneratorTestsHelper.CreateCompilation(inputSource);
         GeneratorDriver driver = CSharpGeneratorDriver.Create(new AbstractFactoryGenerator());
         driver = driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out _, out _);
         GeneratorDriverRunResult runResult = driver.GetRunResult();
@@ -76,10 +83,11 @@ public class AbstractFactoryGeneratorTests
         generatorResult.Diagnostics.Should().BeEmpty();
     }
 
-    [Fact]
-    public void AbstractFactoryGenerator_ForSource_ReturnResultWithGeneratedSourcesWithCorrectLenght()
+    [Theory]
+    [MemberData(nameof(AbstractFactoryCompilationSources.GetSampleDataToGeneratorTests), MemberType = typeof(AbstractFactoryCompilationSources))]
+    public void AbstractFactoryGenerator_ForSource_ReturnResultWithGeneratedSourcesWithCorrectLenght(string inputSource)
     {
-        Compilation inputCompilation = GeneratorTestsHelper.CreateCompilation(ABSTRACT_FACTORY_SOURCE);
+        Compilation inputCompilation = GeneratorTestsHelper.CreateCompilation(inputSource);
         GeneratorDriver driver = CSharpGeneratorDriver.Create(new AbstractFactoryGenerator());
         driver = driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out _, out _);
         GeneratorDriverRunResult runResult = driver.GetRunResult();
@@ -88,10 +96,11 @@ public class AbstractFactoryGeneratorTests
         generatorResult.GeneratedSources.Length.Should().Be(3);
     }
 
-    [Fact]
-    public void AbstractFactoryGenerator_ForSource_NotReturnExceptions()
+    [Theory]
+    [MemberData(nameof(AbstractFactoryCompilationSources.GetSampleDataToGeneratorTests), MemberType = typeof(AbstractFactoryCompilationSources))]
+    public void AbstractFactoryGenerator_ForSource_NotReturnExceptions(string inputSource)
     {
-        Compilation inputCompilation = GeneratorTestsHelper.CreateCompilation(ABSTRACT_FACTORY_SOURCE);
+        Compilation inputCompilation = GeneratorTestsHelper.CreateCompilation(inputSource);
         GeneratorDriver driver = CSharpGeneratorDriver.Create(new AbstractFactoryGenerator());
         driver = driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out _, out _);
         GeneratorDriverRunResult runResult = driver.GetRunResult();
@@ -100,43 +109,5 @@ public class AbstractFactoryGeneratorTests
         generatorResult.Exception.Should().BeNull();
     }
 
-    private const string ABSTRACT_FACTORY_SOURCE = @"using DesignPatternCodeGenerator.Attributes.AbstractFactory;
 
-namespace Samples.AbstractFactory
-{
-    [AbstractFactory(""Gears"")]
-    public interface IMonitor
-    {
-        void On();
-        void Off();
-    }
-
-    [AbstractFactoryClass(""Samsung"")]
-    public class SamsungMonitor : IMonitor
-    {
-        public void On()
-        {
-            Console.WriteLine(""Samsung on"");
-        }
-
-        public void Off()
-        {
-            Console.WriteLine(""Samsung off"");
-        }
-    }
-
-    [AbstractFactoryClass(""Benq"")]
-    public class BenqMonitor : IMonitor
-    {
-        public void On()
-        {
-            Console.WriteLine(""Benq on"");
-        }
-
-        public void Off()
-        {
-            Console.WriteLine(""Benq off"");
-        }
-    }
-}";
 }
