@@ -8,6 +8,8 @@ namespace DesignPatternCodeGenerator.Tests.AbstractFactory;
 
 public class AbstractFactoryContentGeneratorTests
 {
+    //TODO refactor
+
     [Theory]
     [InlineData(INPUT_SOURCE_CODE, EXPECTED_MAIN_INTERFACE)]
     internal void GenerateMainInterface_ForValidInputs_ReturnsCorrectMainInterface(string inputSource, string expectedInterface)

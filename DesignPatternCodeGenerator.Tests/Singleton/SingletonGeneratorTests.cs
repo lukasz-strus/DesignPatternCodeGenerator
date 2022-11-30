@@ -9,6 +9,8 @@ namespace DesignPatternCodeGenerator.Tests.Singleton;
 
 public class SingletonGeneratorTests
 {
+    //TODO refactor
+
     [Fact]
     public void FactoryGenerator_ForSource_ReturnEmptyDiagnostics()
     {

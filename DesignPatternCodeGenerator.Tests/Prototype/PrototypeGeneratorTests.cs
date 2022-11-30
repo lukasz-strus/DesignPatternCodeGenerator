@@ -4,35 +4,39 @@ using Microsoft.CodeAnalysis;
 using Xunit;
 using FluentAssertions;
 using DesignPatternCodeGenerator.Prototype;
+using DesignPatternCodeGenerator.Tests.Prototype.Data;
 
 namespace DesignPatternCodeGenerator.Tests.Prototype;
 
 public class PrototypeGeneratorTests
 {
-    [Fact]
-    public void FactoryGenerator_ForSource_ReturnEmptyDiagnostics()
+    [Theory]
+    [MemberData(nameof(PrototypeCompilationSources.GetSampleDataToGeneratorTests), MemberType = typeof(PrototypeCompilationSources))]
+    public void PrototypeGenerator_ForSource_ReturnEmptyDiagnostics(string inputSource)
     {
-        Compilation inputCompilation = GeneratorTestsHelper.CreateCompilation(PROTOTYPE_COMPILATION_SOURCE);
+        Compilation inputCompilation = GeneratorTestsHelper.CreateCompilation(inputSource);
         GeneratorDriver driver = CSharpGeneratorDriver.Create(new PrototypeGenerator());
         driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out _, out var diagnostics);
 
         diagnostics.Should().BeEmpty();
     }
 
-    [Fact]
-    public void FactoryGenerator_ForSource_ReturnOutputCompilationWithFourSyntaxTrees()
+    [Theory]
+    [MemberData(nameof(PrototypeCompilationSources.GetSampleDataToGeneratorTests), MemberType = typeof(PrototypeCompilationSources))]
+    public void PrototypeGenerator_ForSource_ReturnOutputCompilationWithFourSyntaxTrees(string inputSource)
     {
-        Compilation inputCompilation = GeneratorTestsHelper.CreateCompilation(PROTOTYPE_COMPILATION_SOURCE);
+        Compilation inputCompilation = GeneratorTestsHelper.CreateCompilation(inputSource);
         GeneratorDriver driver = CSharpGeneratorDriver.Create(new PrototypeGenerator());
         driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out _);
 
         outputCompilation.SyntaxTrees.Should().HaveCount(2);
     }
 
-    [Fact]
-    public void FactoryGenerator_ForSource_ReturnDriverResultWithEmptyDiagnostics()
+    [Theory]
+    [MemberData(nameof(PrototypeCompilationSources.GetSampleDataToGeneratorTests), MemberType = typeof(PrototypeCompilationSources))]
+    public void PrototypeGenerator_ForSource_ReturnDriverResultWithEmptyDiagnostics(string inputSource)
     {
-        Compilation inputCompilation = GeneratorTestsHelper.CreateCompilation(PROTOTYPE_COMPILATION_SOURCE);
+        Compilation inputCompilation = GeneratorTestsHelper.CreateCompilation(inputSource);
         GeneratorDriver driver = CSharpGeneratorDriver.Create(new PrototypeGenerator());
         driver = driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out _, out _);
         GeneratorDriverRunResult runResult = driver.GetRunResult();
@@ -40,10 +44,11 @@ public class PrototypeGeneratorTests
         runResult.Diagnostics.Should().BeEmpty();
     }
 
-    [Fact]
-    public void FactoryGenerator_ForSource_ReturnDriverResultWithCorrectGeneratedTreesLenght()
+    [Theory]
+    [MemberData(nameof(PrototypeCompilationSources.GetSampleDataToGeneratorTests), MemberType = typeof(PrototypeCompilationSources))]
+    public void PrototypeGenerator_ForSource_ReturnDriverResultWithCorrectGeneratedTreesLenght(string inputSource)
     {
-        Compilation inputCompilation = GeneratorTestsHelper.CreateCompilation(PROTOTYPE_COMPILATION_SOURCE);
+        Compilation inputCompilation = GeneratorTestsHelper.CreateCompilation(inputSource);
         GeneratorDriver driver = CSharpGeneratorDriver.Create(new PrototypeGenerator());
         driver = driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out _, out _);
         GeneratorDriverRunResult runResult = driver.GetRunResult();
@@ -51,10 +56,11 @@ public class PrototypeGeneratorTests
         runResult.GeneratedTrees.Length.Should().Be(1);
     }
 
-    [Fact]
-    public void FactoryGenerator_ForSource_ReturnResultWithFactoryGeneratory()
+    [Theory]
+    [MemberData(nameof(PrototypeCompilationSources.GetSampleDataToGeneratorTests), MemberType = typeof(PrototypeCompilationSources))]
+    public void PrototypeGenerator_ForSource_ReturnResultWithFactoryGeneratory(string inputSource)
     {
-        Compilation inputCompilation = GeneratorTestsHelper.CreateCompilation(PROTOTYPE_COMPILATION_SOURCE);
+        Compilation inputCompilation = GeneratorTestsHelper.CreateCompilation(inputSource);
         var generator = new PrototypeGenerator();
         GeneratorDriver driver = CSharpGeneratorDriver.Create(generator);
         driver = driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out _, out _);
@@ -64,10 +70,11 @@ public class PrototypeGeneratorTests
         generatorResult.Generator.Should().Be(generator);
     }
 
-    [Fact]
-    public void FactoryGenerator_ForSource_ReturnResultWithEmptyDiagnostics()
+    [Theory]
+    [MemberData(nameof(PrototypeCompilationSources.GetSampleDataToGeneratorTests), MemberType = typeof(PrototypeCompilationSources))]
+    public void PrototypeGenerator_ForSource_ReturnResultWithEmptyDiagnostics(string inputSource)
     {
-        Compilation inputCompilation = GeneratorTestsHelper.CreateCompilation(PROTOTYPE_COMPILATION_SOURCE);
+        Compilation inputCompilation = GeneratorTestsHelper.CreateCompilation(inputSource);
         GeneratorDriver driver = CSharpGeneratorDriver.Create(new PrototypeGenerator());
         driver = driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out _, out _);
         GeneratorDriverRunResult runResult = driver.GetRunResult();
@@ -76,10 +83,11 @@ public class PrototypeGeneratorTests
         generatorResult.Diagnostics.Should().BeEmpty();
     }
 
-    [Fact]
-    public void FactoryGenerator_ForSource_ReturnResultWithGeneratedSourcesWithCorrectLenght()
+    [Theory]
+    [MemberData(nameof(PrototypeCompilationSources.GetSampleDataToGeneratorTests), MemberType = typeof(PrototypeCompilationSources))]
+    public void PrototypeGenerator_ForSource_ReturnResultWithGeneratedSourcesWithCorrectLenght(string inputSource)
     {
-        Compilation inputCompilation = GeneratorTestsHelper.CreateCompilation(PROTOTYPE_COMPILATION_SOURCE);
+        Compilation inputCompilation = GeneratorTestsHelper.CreateCompilation(inputSource);
         GeneratorDriver driver = CSharpGeneratorDriver.Create(new PrototypeGenerator());
         driver = driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out _, out _);
         GeneratorDriverRunResult runResult = driver.GetRunResult();
@@ -88,10 +96,11 @@ public class PrototypeGeneratorTests
         generatorResult.GeneratedSources.Length.Should().Be(1);
     }
 
-    [Fact]
-    public void FactoryGenerator_ForSource_NotReturnExceptions()
+    [Theory]
+    [MemberData(nameof(PrototypeCompilationSources.GetSampleDataToGeneratorTests), MemberType = typeof(PrototypeCompilationSources))]
+    public void PrototypeGenerator_ForSource_NotReturnExceptions(string inputSource)
     {
-        Compilation inputCompilation = GeneratorTestsHelper.CreateCompilation(PROTOTYPE_COMPILATION_SOURCE);
+        Compilation inputCompilation = GeneratorTestsHelper.CreateCompilation(inputSource);
         GeneratorDriver driver = CSharpGeneratorDriver.Create(new PrototypeGenerator());
         driver = driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out _, out _);
         GeneratorDriverRunResult runResult = driver.GetRunResult();
@@ -99,23 +108,4 @@ public class PrototypeGeneratorTests
 
         generatorResult.Exception.Should().BeNull();
     }
-
-    private const string PROTOTYPE_COMPILATION_SOURCE =
-@"using DesignPatternCodeGenerator.Attributes.Prototype;
-
-namespace Test.Test
-{
-    [Prototype]
-    public partial class Person 
-    { 
-        public string Name {get; set;}
-        
-        public Address Address {get; set;}
-    }
-
-    public class Address
-    {
-        public string City { get; set; }
-    }
-}";
 }
