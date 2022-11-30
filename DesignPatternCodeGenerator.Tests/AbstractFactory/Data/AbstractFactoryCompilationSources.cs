@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DesignPatternCodeGenerator.Tests.AbstractFactory.Data;
+﻿namespace DesignPatternCodeGenerator.Tests.AbstractFactory.Data;
 
 public static class AbstractFactoryCompilationSources
 {
@@ -206,7 +200,7 @@ namespace Test.Mac
     }
 }";
 
-    private readonly static string _inputSourceWithOneAF = 
+    private readonly static string _inputSourceWithOneAF =
         @"using DesignPatternCodeGenerator.Attributes.AbstractFactory;
 
 namespace Samples.AbstractFactory

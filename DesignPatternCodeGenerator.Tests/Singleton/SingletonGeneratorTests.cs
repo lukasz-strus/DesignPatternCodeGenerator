@@ -1,5 +1,6 @@
 ﻿using DesignPatternCodeGenerator.Singleton;
 using DesignPatternCodeGenerator.Tests.Helpers;
+using DesignPatternCodeGenerator.Tests.Singleton.Data;
 using FluentAssertions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -9,32 +10,33 @@ namespace DesignPatternCodeGenerator.Tests.Singleton;
 
 public class SingletonGeneratorTests
 {
-    //TODO refactor
-
-    [Fact]
-    public void FactoryGenerator_ForSource_ReturnEmptyDiagnostics()
+    [Theory]
+    [MemberData(nameof(SingletonCompilationSources.GetSampleDataToGeneratorTests), MemberType = typeof(SingletonCompilationSources))]
+    public void SingletonGenerator_ForSource_ReturnEmptyDiagnostics(string inputSource)
     {
-        Compilation inputCompilation = GeneratorTestsHelper.CreateCompilation(SINGLETON_COMPILATION_SOURCE);
+        Compilation inputCompilation = GeneratorTestsHelper.CreateCompilation(inputSource);
         GeneratorDriver driver = CSharpGeneratorDriver.Create(new SingletonGenerator());
         driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out _, out var diagnostics);
 
         diagnostics.Should().BeEmpty();
     }
 
-    [Fact]
-    public void FactoryGenerator_ForSource_ReturnOutputCompilationWithFourSyntaxTrees()
+    [Theory]
+    [MemberData(nameof(SingletonCompilationSources.GetSampleDataToGeneratorTests), MemberType = typeof(SingletonCompilationSources))]
+    public void SingletonGenerator_ForSource_ReturnOutputCompilationWithFourSyntaxTrees(string inputSource)
     {
-        Compilation inputCompilation = GeneratorTestsHelper.CreateCompilation(SINGLETON_COMPILATION_SOURCE);
+        Compilation inputCompilation = GeneratorTestsHelper.CreateCompilation(inputSource);
         GeneratorDriver driver = CSharpGeneratorDriver.Create(new SingletonGenerator());
         driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out _);
 
         outputCompilation.SyntaxTrees.Should().HaveCount(2);
     }
 
-    [Fact]
-    public void FactoryGenerator_ForSource_ReturnDriverResultWithEmptyDiagnostics()
+    [Theory]
+    [MemberData(nameof(SingletonCompilationSources.GetSampleDataToGeneratorTests), MemberType = typeof(SingletonCompilationSources))]
+    public void SingletonGenerator_ForSource_ReturnDriverResultWithEmptyDiagnostics(string inputSource)
     {
-        Compilation inputCompilation = GeneratorTestsHelper.CreateCompilation(SINGLETON_COMPILATION_SOURCE);
+        Compilation inputCompilation = GeneratorTestsHelper.CreateCompilation(inputSource);
         GeneratorDriver driver = CSharpGeneratorDriver.Create(new SingletonGenerator());
         driver = driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out _, out _);
         GeneratorDriverRunResult runResult = driver.GetRunResult();
@@ -42,10 +44,11 @@ public class SingletonGeneratorTests
         runResult.Diagnostics.Should().BeEmpty();
     }
 
-    [Fact]
-    public void FactoryGenerator_ForSource_ReturnDriverResultWithCorrectGeneratedTreesLenght()
+    [Theory]
+    [MemberData(nameof(SingletonCompilationSources.GetSampleDataToGeneratorTests), MemberType = typeof(SingletonCompilationSources))]
+    public void SingletonGenerator_ForSource_ReturnDriverResultWithCorrectGeneratedTreesLenght(string inputSource)
     {
-        Compilation inputCompilation = GeneratorTestsHelper.CreateCompilation(SINGLETON_COMPILATION_SOURCE);
+        Compilation inputCompilation = GeneratorTestsHelper.CreateCompilation(inputSource);
         GeneratorDriver driver = CSharpGeneratorDriver.Create(new SingletonGenerator());
         driver = driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out _, out _);
         GeneratorDriverRunResult runResult = driver.GetRunResult();
@@ -53,10 +56,11 @@ public class SingletonGeneratorTests
         runResult.GeneratedTrees.Length.Should().Be(1);
     }
 
-    [Fact]
-    public void FactoryGenerator_ForSource_ReturnResultWithFactoryGeneratory()
+    [Theory]
+    [MemberData(nameof(SingletonCompilationSources.GetSampleDataToGeneratorTests), MemberType = typeof(SingletonCompilationSources))]
+    public void SingletonGenerator_ForSource_ReturnResultWithFactoryGeneratory(string inputSource)
     {
-        Compilation inputCompilation = GeneratorTestsHelper.CreateCompilation(SINGLETON_COMPILATION_SOURCE);
+        Compilation inputCompilation = GeneratorTestsHelper.CreateCompilation(inputSource);
         var generator = new SingletonGenerator();
         GeneratorDriver driver = CSharpGeneratorDriver.Create(generator);
         driver = driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out _, out _);
@@ -66,10 +70,11 @@ public class SingletonGeneratorTests
         generatorResult.Generator.Should().Be(generator);
     }
 
-    [Fact]
-    public void FactoryGenerator_ForSource_ReturnResultWithEmptyDiagnostics()
+    [Theory]
+    [MemberData(nameof(SingletonCompilationSources.GetSampleDataToGeneratorTests), MemberType = typeof(SingletonCompilationSources))]
+    public void SingletonGenerator_ForSource_ReturnResultWithEmptyDiagnostics(string inputSource)
     {
-        Compilation inputCompilation = GeneratorTestsHelper.CreateCompilation(SINGLETON_COMPILATION_SOURCE);
+        Compilation inputCompilation = GeneratorTestsHelper.CreateCompilation(inputSource);
         GeneratorDriver driver = CSharpGeneratorDriver.Create(new SingletonGenerator());
         driver = driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out _, out _);
         GeneratorDriverRunResult runResult = driver.GetRunResult();
@@ -78,10 +83,11 @@ public class SingletonGeneratorTests
         generatorResult.Diagnostics.Should().BeEmpty();
     }
 
-    [Fact]
-    public void FactoryGenerator_ForSource_ReturnResultWithGeneratedSourcesWithCorrectLenght()
+    [Theory]
+    [MemberData(nameof(SingletonCompilationSources.GetSampleDataToGeneratorTests), MemberType = typeof(SingletonCompilationSources))]
+    public void SingletonGenerator_ForSource_ReturnResultWithGeneratedSourcesWithCorrectLenght(string inputSource)
     {
-        Compilation inputCompilation = GeneratorTestsHelper.CreateCompilation(SINGLETON_COMPILATION_SOURCE);
+        Compilation inputCompilation = GeneratorTestsHelper.CreateCompilation(inputSource);
         GeneratorDriver driver = CSharpGeneratorDriver.Create(new SingletonGenerator());
         driver = driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out _, out _);
         GeneratorDriverRunResult runResult = driver.GetRunResult();
@@ -90,10 +96,11 @@ public class SingletonGeneratorTests
         generatorResult.GeneratedSources.Length.Should().Be(1);
     }
 
-    [Fact]
-    public void FactoryGenerator_ForSource_NotReturnExceptions()
+    [Theory]
+    [MemberData(nameof(SingletonCompilationSources.GetSampleDataToGeneratorTests), MemberType = typeof(SingletonCompilationSources))]
+    public void SingletonGenerator_ForSource_NotReturnExceptions(string inputSource)
     {
-        Compilation inputCompilation = GeneratorTestsHelper.CreateCompilation(SINGLETON_COMPILATION_SOURCE);
+        Compilation inputCompilation = GeneratorTestsHelper.CreateCompilation(inputSource);
         GeneratorDriver driver = CSharpGeneratorDriver.Create(new SingletonGenerator());
         driver = driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out _, out _);
         GeneratorDriverRunResult runResult = driver.GetRunResult();
@@ -102,14 +109,5 @@ public class SingletonGeneratorTests
         generatorResult.Exception.Should().BeNull();
     }
 
-    private const string SINGLETON_COMPILATION_SOURCE =
-@"using DesignPatternCodeGenerator.Attributes.Singleton;
-using System;
 
-namespace Test.Test
-{
-    [Singleton]
-    public partial class Test { }
-
-}";
 }
