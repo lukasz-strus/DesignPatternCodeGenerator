@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace DesignPatternCodeGenerator.Tests.Facade
 {
+    //TODO zrobić testy
     public class FacadeGeneratorTests
     {
 

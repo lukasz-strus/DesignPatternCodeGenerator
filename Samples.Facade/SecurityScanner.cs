@@ -9,6 +9,6 @@ public class SecurityScanner
     {
         Console.WriteLine("Security scan");
 
-        return new List<string>() { "security error1" };
+        return new List<string>() { "Security Error1" };
     }
 }

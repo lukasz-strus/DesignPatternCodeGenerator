@@ -1,8 +1,5 @@
 ﻿using DesignPatternCodeGenerator.Base.Generators;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 
 namespace DesignPatternCodeGenerator.Facade
@@ -15,11 +12,10 @@ $@"
 {{
     {FacadeContentComponentGenerator.GenerateClassDeclaration(group)}
     {{
-        {FacadeContentComponentGenerator.GenerateFileds(group)}
+        {FacadeContentFieldsGenerator.GenerateFileds(group)}
 
-        {FacadeContentComponentGenerator.GenerateMethod(group)}
+        {FacadeContentMethodGenerator.GenerateMethod(group)}
     }}
 }}";
-
     }
 }
