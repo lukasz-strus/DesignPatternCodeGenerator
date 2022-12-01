@@ -13,7 +13,7 @@ namespace DesignPatternCodeGenerator.Factory
             => BaseCodeGenerator.GenerateUsingsAndNamespace(group) +
 $@"
 {{
-    {BaseCodeGenerator.GenerateDeclaration(group, CodeType.Interface, true, false, true)}
+    {BaseCodeGenerator.GenerateDeclaration(group, CodeType.Interface, true, false, true, GeneratorAttributeType.Factory)}
     {{
 	    {FactoryContentComponentsGenerator.GenerateCreateMethodInterface(group)}
     }}
@@ -25,7 +25,7 @@ $@"
             => BaseCodeGenerator.GenerateUsingsAndNamespace(group) +
 $@"
 {{
-    {BaseCodeGenerator.GenerateDeclaration(group, CodeType.Class, true, false, true)}
+    {BaseCodeGenerator.GenerateDeclaration(group, CodeType.Class, true, false, true, GeneratorAttributeType.Factory)}
     {{
 	    {FactoryContentComponentsGenerator.GenerateFields(group)}
         {FactoryContentComponentsGenerator.GenerateConstructor(group)}

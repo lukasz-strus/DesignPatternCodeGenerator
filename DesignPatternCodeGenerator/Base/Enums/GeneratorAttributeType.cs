@@ -12,7 +12,8 @@
         FacadeMethod,
         FacadeParameter,
         FacadeMainParameter,
-        EmptyObject,
-        IOC
+        NullObject,
+        IOC,
+        Pattern
     }
 }

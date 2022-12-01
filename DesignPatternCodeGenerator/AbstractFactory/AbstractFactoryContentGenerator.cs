@@ -14,7 +14,7 @@ namespace DesignPatternCodeGenerator.AbstractFactory
             => BaseCodeGenerator.GenerateUsingsAndNamespace(groups.First()) +
 $@"
 {{
-    {BaseCodeGenerator.GenerateDeclaration(mainInterfaceGroup, CodeType.Interface, true, false, true)}
+    {BaseCodeGenerator.GenerateDeclaration(mainInterfaceGroup, CodeType.Interface, true, false, true, GeneratorAttributeType.Factory)}
     {{
 	    {AbstractFactoryContentComponentGenerator.GenerateCreateMethodInterface(groups)}
     }}
