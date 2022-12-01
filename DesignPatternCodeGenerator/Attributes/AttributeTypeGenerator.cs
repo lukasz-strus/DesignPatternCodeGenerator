@@ -1,6 +1,7 @@
 ﻿using DesignPatternCodeGenerator.Attributes.AbstractFactory;
 using DesignPatternCodeGenerator.Attributes.Facade;
 using DesignPatternCodeGenerator.Attributes.Factory;
+using DesignPatternCodeGenerator.Attributes.NullObject;
 using DesignPatternCodeGenerator.Attributes.Prototype;
 using DesignPatternCodeGenerator.Attributes.Singleton;
 using DesignPatternCodeGenerator.Base.Enums;
@@ -32,6 +33,8 @@ namespace DesignPatternCodeGenerator.Attributes
                     return typeof(FacadeParameterAttribute);
                 case GeneratorAttributeType.FacadeMainParameter:
                     return typeof(FacadeMainParameterAttribute);
+                case GeneratorAttributeType.NullObject:
+                    return typeof(NullObjectAttribute);
                 default:
                     throw new Exception($"Type {generatorType} is not handled");
             }

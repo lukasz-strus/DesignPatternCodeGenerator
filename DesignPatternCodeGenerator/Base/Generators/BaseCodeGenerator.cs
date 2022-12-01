@@ -33,16 +33,17 @@ namespace {BaseNamesGenerator.GetNamespace(group)}";
             CodeType codeType,
             bool isMainAttributeOnInterface = false,
             bool isPartialClass = false,
-            bool isDesignPatternPostfix = false)
+            bool isDesignPatternPostfix = false,
+            GeneratorAttributeType attributeType = GeneratorAttributeType.Pattern)
         {
             switch (codeType)
             {
                 case CodeType.Interface:
-                    return GenerateInterfaceDeclaration(group, isDesignPatternPostfix);
+                    return GenerateInterfaceDeclaration(group, isDesignPatternPostfix, attributeType);
                 case CodeType.Class:
-                    return GenerateClassDeclaration(group, isDesignPatternPostfix, isMainAttributeOnInterface, isPartialClass);
+                    return GenerateClassDeclaration(group, isDesignPatternPostfix, isMainAttributeOnInterface, isPartialClass, attributeType);
                 case CodeType.Enum:
-                    return GenerateEnumDeclaration(group, isDesignPatternPostfix, isMainAttributeOnInterface);
+                    return GenerateEnumDeclaration(group, isDesignPatternPostfix, isMainAttributeOnInterface, attributeType);
                 default:
                     return "";
             }
@@ -60,21 +61,23 @@ namespace {BaseNamesGenerator.GetNamespace(group)}";
 
         private static string GenerateInterfaceDeclaration(
             IGrouping<string, TypeDeclarationSyntax> group,
-            bool isDesignPatternPostfix)
-            => $"{BaseNamesGenerator.GetAccesibility(group)} interface {BaseNamesGenerator.GetInterfaceName(group, GeneratorAttributeType.Factory, isDesignPatternPostfix)}";
+            bool isDesignPatternPostfix,
+            GeneratorAttributeType attributeType = GeneratorAttributeType.Pattern)
+            => $"{BaseNamesGenerator.GetAccesibility(group)} interface {BaseNamesGenerator.GetInterfaceName(group, attributeType, isDesignPatternPostfix)}";
 
         private static string GenerateClassDeclaration(
             IGrouping<string, TypeDeclarationSyntax> group,
             bool isDesignPatternPostfix = false,
             bool isMainAttributeOnInterface = false,
-            bool isPartialClass = false)
+            bool isPartialClass = false,
+            GeneratorAttributeType attributeType = GeneratorAttributeType.Pattern)
         {
             var baseClassDeclaration =
                 $"{BaseNamesGenerator.GetAccesibility(group)}{GeneratePartialKeyword(isPartialClass)} " +
-                $"class {BaseNamesGenerator.GetClassName(group, GeneratorAttributeType.Factory, isDesignPatternPostfix, isMainAttributeOnInterface)}";
+                $"class {BaseNamesGenerator.GetClassName(group, attributeType, isDesignPatternPostfix, isMainAttributeOnInterface)}";
 
             return isMainAttributeOnInterface
-            ? $"{baseClassDeclaration}: {BaseNamesGenerator.GetInterfaceName(group, GeneratorAttributeType.Factory, isDesignPatternPostfix)}"
+            ? $"{baseClassDeclaration}: {BaseNamesGenerator.GetInterfaceName(group, attributeType, isDesignPatternPostfix)}"
             : baseClassDeclaration;
 
         }
@@ -84,7 +87,8 @@ namespace {BaseNamesGenerator.GetNamespace(group)}";
         private static string GenerateEnumDeclaration(
             IGrouping<string, TypeDeclarationSyntax> group,
             bool isDesignPatternPostfix = false,
-            bool isMainAttributeOnInterface = false)
-            => $"{BaseNamesGenerator.GetAccesibility(group)} enum {BaseNamesGenerator.GetClassName(group, GeneratorAttributeType.Factory, isDesignPatternPostfix, isMainAttributeOnInterface)}Type";
+            bool isMainAttributeOnInterface = false,
+            GeneratorAttributeType attributeType = GeneratorAttributeType.Pattern)
+            => $"{BaseNamesGenerator.GetAccesibility(group)} enum {BaseNamesGenerator.GetClassName(group, attributeType, isDesignPatternPostfix, isMainAttributeOnInterface)}Type";
     }
 }

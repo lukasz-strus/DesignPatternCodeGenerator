@@ -175,6 +175,7 @@ namespace DesignPatternCodeGenerator.Facade
         private static bool IsVoidMethod(MethodDeclarationSyntax methodDeclarationSyntax)
             => methodDeclarationSyntax.ReturnType.ToString().Contains("void");
 
-        private static bool IsNotVoidMethod(MethodDeclarationSyntax methodDeclarationSyntax) => !IsVoidMethod(methodDeclarationSyntax);
+        private static bool IsNotVoidMethod(MethodDeclarationSyntax methodDeclarationSyntax) 
+            => !IsVoidMethod(methodDeclarationSyntax);
     }
 }
