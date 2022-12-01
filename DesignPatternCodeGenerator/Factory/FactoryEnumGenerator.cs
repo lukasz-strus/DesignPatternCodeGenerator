@@ -14,7 +14,7 @@ namespace DesignPatternCodeGenerator.Factory
             => BaseCodeGenerator.GenerateUsingsAndNamespace(interfaceGroup) +
 $@"
 {{
-    {BaseCodeGenerator.GenerateDeclaration(interfaceGroup, CodeType.Enum, true, false, true)}
+    {BaseCodeGenerator.GenerateDeclaration(interfaceGroup, CodeType.Enum, true, false, true, GeneratorAttributeType.Factory)}
     {{
 	    {GenerateEnumElements(factoryProductsGroups)}
     }}
