@@ -5,6 +5,23 @@ namespace Samples.Prototype;
 [Prototype]
 public partial class Person
 {
+    public Person(string? name, string? lastName, Address? personAddress, Contacts? personContacts)
+    {
+        Name = name;
+        LastName = lastName;
+        PersonAddress = personAddress;
+        PersonContacts = personContacts;
+    }
+
+    public string? Name { get; set; }
+    public string? LastName { get; set; }
+    public Address? PersonAddress { get; set; }
+    public Contacts? PersonContacts { get; set; }
+}
+
+[Prototype]
+public partial class Person2
+{
     public string? Name { get; set; }
     public string? LastName { get; set; }
     public Address? PersonAddress { get; set; }

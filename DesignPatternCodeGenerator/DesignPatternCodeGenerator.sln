@@ -19,7 +19,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Samples.Prototype", "..\Sam
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Samples.Facade", "..\Samples.Facade\Samples.Facade.csproj", "{A9847FE0-157E-41E3-87A9-4F67408D1AE5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Samples.NullObject", "..\Samples.NullObject\Samples.NullObject.csproj", "{E6CEC2DA-3A57-41ED-A005-69C9F5C9F895}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Samples.NullObject", "..\Samples.NullObject\Samples.NullObject.csproj", "{E6CEC2DA-3A57-41ED-A005-69C9F5C9F895}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Samples.ContainerIoC", "..\Samples.ContainerIoC\Samples.ContainerIoC.csproj", "{C68D2A1A-ECD5-466F-8EF6-C226508A4FD1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -59,6 +61,10 @@ Global
 		{E6CEC2DA-3A57-41ED-A005-69C9F5C9F895}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E6CEC2DA-3A57-41ED-A005-69C9F5C9F895}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E6CEC2DA-3A57-41ED-A005-69C9F5C9F895}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C68D2A1A-ECD5-466F-8EF6-C226508A4FD1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C68D2A1A-ECD5-466F-8EF6-C226508A4FD1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C68D2A1A-ECD5-466F-8EF6-C226508A4FD1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C68D2A1A-ECD5-466F-8EF6-C226508A4FD1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -70,6 +76,7 @@ Global
 		{4C38BA0F-4083-418D-913A-C31AD029171A} = {324C73BB-9B0E-4C27-8B4A-8C8376BE862E}
 		{A9847FE0-157E-41E3-87A9-4F67408D1AE5} = {324C73BB-9B0E-4C27-8B4A-8C8376BE862E}
 		{E6CEC2DA-3A57-41ED-A005-69C9F5C9F895} = {324C73BB-9B0E-4C27-8B4A-8C8376BE862E}
+		{C68D2A1A-ECD5-466F-8EF6-C226508A4FD1} = {324C73BB-9B0E-4C27-8B4A-8C8376BE862E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {160CF731-2603-4E0C-9AD4-FB441C378C8F}
