@@ -10,7 +10,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<InternalsVisibleTo Include ="DesignPatternCodeGenerator.Tests"/>
+		<InternalsVisibleTo Include="DesignPatternCodeGenerator.Tests" />
 	</ItemGroup>
 
 </Project>

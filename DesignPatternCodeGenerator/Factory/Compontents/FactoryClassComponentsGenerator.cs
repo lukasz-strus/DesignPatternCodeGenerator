@@ -4,9 +4,9 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace DesignPatternCodeGenerator.Factory
+namespace DesignPatternCodeGenerator.Factory.Compontents
 {
-    public static class FactoryClassContentComponentGenerator
+    internal static class FactoryClassComponentsGenerator
     {
         internal static string GenerateDeclaration(IGrouping<string, InterfaceDeclarationSyntax> group)
             => $"{BaseNamesGenerator.GetAccesibility(group)} class {BaseNamesGenerator.GetClassName(group, GeneratorAttributeType.Factory)}" +
@@ -16,7 +16,7 @@ namespace DesignPatternCodeGenerator.Factory
         {
             var properties = GetProperties(group);
 
-            return $"{string.Join("\n\t\t", properties.Select(p => $"private readonly {p.Type} _{(p.Identifier.Text).ToLower()};"))}\n";
+            return $"{string.Join("\n\t\t", properties.Select(p => $"private readonly {p.Type} _{p.Identifier.Text.ToLower()};"))}\n";
         }
 
         internal static string GenerateConstructor(IEnumerable<InterfaceDeclarationSyntax> group)
@@ -41,7 +41,7 @@ namespace DesignPatternCodeGenerator.Factory
             var properties = interfaceSyntax.Members.OfType<PropertyDeclarationSyntax>();
             var enums = factoryChildGroups.Select(x => x.Key);
 
-            return FactoryContentComponentsGenerator.GenerateCreateMethodDeclaration(interfaceSyntax)
+            return FactoryComponentsGenerator.GenerateCreateMethodDeclaration(interfaceSyntax)
                 + GenerateCreateMethodImplementation(enums, interfaceSyntax);
         }
 
@@ -67,12 +67,12 @@ namespace DesignPatternCodeGenerator.Factory
         }
 
         private static string GenerateParams(PropertyDeclarationSyntax property)
-            => FactoryContentComponentsGenerator.IsDependency(property) ? $"_{property.Identifier.Text.ToLower()}" : property.Identifier.Text.ToLower();
+            => FactoryComponentsGenerator.IsDependency(property) ? $"_{property.Identifier.Text.ToLower()}" : property.Identifier.Text.ToLower();
 
         private static string GenerateConstructorDeclaration(
             IEnumerable<InterfaceDeclarationSyntax> group,
             IEnumerable<PropertyDeclarationSyntax> properties)
-            => $"public {(group.First().Identifier.Text).Substring(1)}" +
+            => $"public {group.First().Identifier.Text.Substring(1)}" +
             $"Factory({string.Join(", ", properties.Select(p => $"{p.Type} {p.Identifier.Text.ToLower()}"))})";
 
         private static string GenerateConstructorImplementation(IEnumerable<PropertyDeclarationSyntax> properties)
@@ -81,7 +81,7 @@ namespace DesignPatternCodeGenerator.Factory
         private static IEnumerable<PropertyDeclarationSyntax> GetProperties(IEnumerable<InterfaceDeclarationSyntax> group)
             => group.SelectMany(g => g.Members)
             .OfType<PropertyDeclarationSyntax>()
-            .Where(FactoryContentComponentsGenerator.IsDependency)
+            .Where(FactoryComponentsGenerator.IsDependency)
             .Distinct();
 
     }

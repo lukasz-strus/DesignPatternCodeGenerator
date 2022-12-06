@@ -1,9 +1,9 @@
 ﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Linq;
 
-namespace DesignPatternCodeGenerator.Factory
+namespace DesignPatternCodeGenerator.Factory.Compontents
 {
-    internal static class FactoryContentComponentsGenerator
+    internal static class FactoryComponentsGenerator
     {
         internal static string GenerateCreateMethodDeclaration(InterfaceDeclarationSyntax interfaceSyntax)
         {

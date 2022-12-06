@@ -17,12 +17,13 @@ namespace DesignPatternCodeGenerator.Factory
         public void Execute(GeneratorExecutionContext context)
         {
             var factoryAttribute = AttributeTypeGenerator.SetGeneratorAttributeType(GeneratorAttributeType.Factory);
-            var factoryChildAttribute = AttributeTypeGenerator.SetGeneratorAttributeType(GeneratorAttributeType.FactoryProduct);
 
             var interfaceGroups = DeclarationsSyntaxGenerator.GetInterfaceGroups(
                 context.Compilation,
                 context.CancellationToken,
                 factoryAttribute);
+
+            var factoryChildAttribute = AttributeTypeGenerator.SetGeneratorAttributeType(GeneratorAttributeType.FactoryProduct);
 
             var classGroups = DeclarationsSyntaxGenerator.GetClassGroups(
                 context.Compilation,
@@ -31,7 +32,7 @@ namespace DesignPatternCodeGenerator.Factory
 
             foreach (var group in interfaceGroups)
             {
-                var interfaceName = BaseNamesGenerator.GetInterfaceName(group, GeneratorAttributeType.Factory);
+                var interfaceName = BaseNamesGenerator.GetInterfaceName(group);
                 var factoryProductsGroups = FilterCollectionHelper.FilterClassesByInterface(classGroups, interfaceName);
 
                 GenerateEnumFactory(context, group, factoryProductsGroups);
@@ -47,22 +48,20 @@ namespace DesignPatternCodeGenerator.Factory
             IGrouping<string, InterfaceDeclarationSyntax> group,
             IEnumerable<IGrouping<string, ClassDeclarationSyntax>> factoryProductsGroups)
         {
-            var enumContent = FactoryEnumGenerator.GenerateEnum(group, factoryProductsGroups);
+            var hintName = $"{BaseNamesGenerator.GetClassName(group, GeneratorAttributeType.Factory)}Type.g.cs";
+            var sourceTxt = FactoryContentGenerator.GenerateEnum(group, factoryProductsGroups);
 
-            context.AddSource(
-                $"{BaseNamesGenerator.GetClassName(group, GeneratorAttributeType.Factory, true, true)}Type.g.cs",
-                SourceText.From(enumContent, Encoding.UTF8));
+            context.AddSource(hintName, SourceText.From(sourceTxt, Encoding.UTF8));
         }
 
         private void GenerateInterfaceFactory(
             GeneratorExecutionContext context,
             IGrouping<string, InterfaceDeclarationSyntax> group)
         {
-            var interfaceContent = FactoryContentGenerator.GenerateInterface(group);
+            var hintName = $"{BaseNamesGenerator.GetInterfaceName(group, GeneratorAttributeType.Factory)}.g.cs";
+            var sourceTxt = FactoryContentGenerator.GenerateInterface(group);
 
-            context.AddSource(
-                $"{BaseNamesGenerator.GetInterfaceName(group, GeneratorAttributeType.Factory)}.g.cs",
-                SourceText.From(interfaceContent, Encoding.UTF8));
+            context.AddSource(hintName, SourceText.From(sourceTxt, Encoding.UTF8));
         }
 
         private void GenerateClassFactory(
@@ -70,10 +69,10 @@ namespace DesignPatternCodeGenerator.Factory
             IGrouping<string, InterfaceDeclarationSyntax> group,
             IEnumerable<IGrouping<string, ClassDeclarationSyntax>> factoryProductsGroups)
         {
-            var classContent = FactoryContentGenerator.GenerateClass(group, factoryProductsGroups);
-            context.AddSource(
-                $"{BaseNamesGenerator.GetClassName(group, GeneratorAttributeType.Factory)}.g.cs",
-                SourceText.From(classContent, Encoding.UTF8));
+            var hintName = $"{BaseNamesGenerator.GetClassName(group, GeneratorAttributeType.Factory)}.g.cs";
+            var sourceTxt = FactoryContentGenerator.GenerateClass(group, factoryProductsGroups);
+
+            context.AddSource(hintName, SourceText.From(sourceTxt, Encoding.UTF8));
         }
 
         public void Initialize(GeneratorInitializationContext context)

@@ -15,7 +15,7 @@ public class FactoryEnumGeneratorTests
         var interfaceGroup = GeneratorTestsHelper.GetInterfaceGroup(source);
         var factoryProductsGroups = GeneratorTestsHelper.GetClassGroups(source);
 
-        var result = FactoryEnumGenerator.GenerateEnum(interfaceGroup, factoryProductsGroups);
+        var result = FactoryContentGenerator.GenerateEnum(interfaceGroup, factoryProductsGroups);
 
         result.RemoveWhitespace().Should().Be(expected.RemoveWhitespace());
     }
