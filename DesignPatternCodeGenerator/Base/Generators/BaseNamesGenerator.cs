@@ -47,15 +47,27 @@ namespace DesignPatternCodeGenerator.Base.Generators
             return className;
         }
 
-        internal static string GetInterfaceName(
-            IGrouping<string, TypeDeclarationSyntax> group,
-            GeneratorAttributeType generatorType,
-            bool isDesignPatternPostfix = false)
+        internal static string GetClassName(IGrouping<string, ClassDeclarationSyntax> group) 
+            => group.Key;
+
+        internal static string GetClassName(IGrouping<string, ClassDeclarationSyntax> group, GeneratorAttributeType generatorType)
+            => group.Key + generatorType.ToString();
+
+        internal static string GetClassName(IGrouping<string, InterfaceDeclarationSyntax> group) 
+            => group.Key.Substring(1);
+
+        internal static string GetClassName(IGrouping<string, InterfaceDeclarationSyntax> group, GeneratorAttributeType generatorType)
+            => group.Key.Substring(1) + generatorType.ToString();
+
+        internal static string GetInterfaceName(IGrouping<string, TypeDeclarationSyntax> group, GeneratorAttributeType generatorType)
         { 
-            var baseInterfaceName = isDesignPatternPostfix ? group.Key + generatorType.ToString() : group.Key;
+            var baseInterfaceName = group.Key + generatorType.ToString();
 
             return baseInterfaceName.StartsWith("I") ? baseInterfaceName : baseInterfaceName.Insert(0, "I");
         }
+
+        internal static string GetInterfaceName(IGrouping<string, TypeDeclarationSyntax> group)
+            => group.Key.StartsWith("I") ? group.Key : group.Key.Insert(0, "I");
 
 
 

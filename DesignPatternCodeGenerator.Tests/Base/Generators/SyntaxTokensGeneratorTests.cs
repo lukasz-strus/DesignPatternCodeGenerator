@@ -31,7 +31,7 @@ public class SyntaxTokensGeneratorTests
     {
         var group = GeneratorTestsHelper.GetInterfaceGroup(inputSource);
 
-        var result = BaseNamesGenerator.GetInterfaceName(group, generatorAttributeType, true);
+        var result = BaseNamesGenerator.GetInterfaceName(group, generatorAttributeType);
 
         result.Should().Be("ITest" + generatorAttributeType.ToString());
     }

@@ -1,5 +1,6 @@
 ﻿using DesignPatternCodeGenerator.Base.Enums;
 using DesignPatternCodeGenerator.Base.Generators;
+using DesignPatternCodeGenerator.Factory.Compontents;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,28 +10,40 @@ namespace DesignPatternCodeGenerator.Factory
     internal static class FactoryContentGenerator
     {
         internal static string GenerateInterface(
-            IGrouping<string, TypeDeclarationSyntax> group)
+            IGrouping<string, InterfaceDeclarationSyntax> group)
             => BaseCodeGenerator.GenerateUsingsAndNamespace(group) +
 $@"
 {{
-    {BaseCodeGenerator.GenerateDeclaration(group, CodeType.Interface, true, false, true, GeneratorAttributeType.Factory)}
+    {FactoryInterfaceComponentsGenerator.GenerateDeclaration(group)}
     {{
-	    {FactoryContentComponentsGenerator.GenerateCreateMethodInterface(group)}
+	    {FactoryInterfaceComponentsGenerator.GenerateCreateMethod(group)}
     }}
 }}";
 
-        internal static string GenerateClass
-            (IGrouping<string, TypeDeclarationSyntax> group,
-            IEnumerable<IGrouping<string, TypeDeclarationSyntax>> factoryProductsGroups)
+        internal static string GenerateClass(
+            IGrouping<string, InterfaceDeclarationSyntax> group,
+            IEnumerable<IGrouping<string, ClassDeclarationSyntax>> factoryProductsGroups)
             => BaseCodeGenerator.GenerateUsingsAndNamespace(group) +
 $@"
 {{
-    {BaseCodeGenerator.GenerateDeclaration(group, CodeType.Class, true, false, true, GeneratorAttributeType.Factory)}
+    {FactoryClassComponentsGenerator.GenerateDeclaration(group)}
     {{
-	    {FactoryContentComponentsGenerator.GenerateFields(group)}
-        {FactoryContentComponentsGenerator.GenerateConstructor(group)}
+	    {FactoryClassComponentsGenerator.GenerateFields(group)}
+        {FactoryClassComponentsGenerator.GenerateConstructor(group)}
 
-	    {FactoryContentComponentsGenerator.GenerateCreateMethodClass(group, factoryProductsGroups)}
+	    {FactoryClassComponentsGenerator.GenerateCreateMethodClass(group, factoryProductsGroups)}
+    }}
+}}";
+
+        internal static string GenerateEnum(
+            IGrouping<string, InterfaceDeclarationSyntax> interfaceGroup,
+            IEnumerable<IGrouping<string, ClassDeclarationSyntax>> factoryProductsGroups)
+            => BaseCodeGenerator.GenerateUsingsAndNamespace(interfaceGroup) +
+$@"
+{{
+    {FactoryEnumComponentsGenerator.GenerateDeclaration(interfaceGroup)}
+    {{
+	    {FactoryEnumComponentsGenerator.GenerateEnumElements(factoryProductsGroups)}
     }}
 }}";
 

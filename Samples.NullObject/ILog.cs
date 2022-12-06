@@ -31,14 +31,3 @@ class ConsoleLog : ILog
         Console.WriteLine($"WARNING: {message}");
     }
 }
-
-class TestNullLog : ILog
-{
-    public int Id { get; set; }
-    public void Info(string message) { }
-    public string Login(string username, string password)
-    {
-        return default;
-    }
-    public void Warn(string message) { }
-}

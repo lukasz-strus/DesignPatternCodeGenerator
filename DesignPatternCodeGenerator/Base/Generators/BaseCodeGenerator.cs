@@ -63,7 +63,8 @@ namespace {BaseNamesGenerator.GetNamespace(group)}";
             IGrouping<string, TypeDeclarationSyntax> group,
             bool isDesignPatternPostfix,
             GeneratorAttributeType attributeType = GeneratorAttributeType.Pattern)
-            => $"{BaseNamesGenerator.GetAccesibility(group)} interface {BaseNamesGenerator.GetInterfaceName(group, attributeType, isDesignPatternPostfix)}";
+            => $"{BaseNamesGenerator.GetAccesibility(group)} interface " +
+            (isDesignPatternPostfix ? $"{BaseNamesGenerator.GetInterfaceName(group, attributeType)}" : $"{BaseNamesGenerator.GetInterfaceName(group)}");
 
         private static string GenerateClassDeclaration(
             IGrouping<string, TypeDeclarationSyntax> group,
@@ -77,7 +78,7 @@ namespace {BaseNamesGenerator.GetNamespace(group)}";
                 $"class {BaseNamesGenerator.GetClassName(group, attributeType, isDesignPatternPostfix, isMainAttributeOnInterface)}";
 
             return isMainAttributeOnInterface
-            ? $"{baseClassDeclaration}: {BaseNamesGenerator.GetInterfaceName(group, attributeType, isDesignPatternPostfix)}"
+            ? $"{baseClassDeclaration}: {BaseNamesGenerator.GetInterfaceName(group)}"
             : baseClassDeclaration;
 
         }
