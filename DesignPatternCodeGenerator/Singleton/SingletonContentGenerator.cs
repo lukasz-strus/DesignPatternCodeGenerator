@@ -1,5 +1,6 @@
 ﻿using DesignPatternCodeGenerator.Base.Enums;
 using DesignPatternCodeGenerator.Base.Generators;
+using DesignPatternCodeGenerator.Singleton.Components;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Linq;
 
@@ -12,14 +13,14 @@ namespace DesignPatternCodeGenerator.Singleton
             => BaseCodeGenerator.GenerateUsingsAndNamespace(group) +
 $@"
 {{
-    {BaseCodeGenerator.GenerateDeclaration(group, CodeType.Class, false, true)}
+    {SingletonComponentsGenerator.GenerateDeclaration(group)}
     {{
-	    {SingletonContentComponentsGenerator.GenerateInstanceField(group)}
-        {SingletonContentComponentsGenerator.GenerateObjectToLock(group)}
+	    {SingletonComponentsGenerator.GenerateInstanceField(group)}
+        {SingletonComponentsGenerator.GenerateObjectToLock(group)}
 
-        {SingletonContentComponentsGenerator.GenerateConstructor(group)}
+        {SingletonComponentsGenerator.GenerateConstructor(group)}
 
-        {SingletonContentComponentsGenerator.GenerateGetInstanceMethod(group)}
+        {SingletonComponentsGenerator.GenerateGetInstanceMethod(group)}
     }}
 }}";
     }
