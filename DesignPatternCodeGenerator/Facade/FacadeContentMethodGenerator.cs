@@ -56,7 +56,11 @@ namespace DesignPatternCodeGenerator.Facade
             {
                 var parameters = GetParameterGroup(method, "FacadeParameter").Select(y => y.Key);
 
-                if (IsFacadeContainsParams(usedMethods, parameters))
+                if (!IsFacadeContainsParams(usedMethods, parameters))
+                {
+                    unusedMethods.Add(method);
+                }
+                else
                 {
                     generatedString += voidMethod == IsVoidMethod ?
                         GenerateVoidMethod(method, "FacadeParameter") :
@@ -66,10 +70,6 @@ namespace DesignPatternCodeGenerator.Facade
 
                     usedMethods.Add(GetNameToRegisterMethod(method));
                     counter++;
-                }
-                else
-                {
-                    unusedMethods.Add(method);
                 }
             }
 

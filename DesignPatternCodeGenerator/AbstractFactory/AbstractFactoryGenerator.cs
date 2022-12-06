@@ -39,7 +39,7 @@ namespace DesignPatternCodeGenerator.AbstractFactory
                     interfaceGroups);
 
                 context.AddSource(
-                    $"{BaseNamesGenerator.GetInterfaceName(mainInterfaceGroup, GeneratorAttributeType.Factory, true)}.g.cs",
+                    $"{BaseNamesGenerator.GetInterfaceName(mainInterfaceGroup, GeneratorAttributeType.Factory)}.g.cs",
                     SourceText.From(mainInterfaceContent, Encoding.UTF8));
 
                 var filtredClassGroups = FilterCollectionHelper.FilterClassesByInterface(

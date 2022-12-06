@@ -9,17 +9,20 @@ namespace DesignPatternCodeGenerator.Factory
     internal static class FactoryEnumGenerator
     {
         internal static string GenerateEnum(
-            IGrouping<string, TypeDeclarationSyntax> interfaceGroup, 
-            IEnumerable<IGrouping<string, TypeDeclarationSyntax>> factoryProductsGroups)
+            IGrouping<string, InterfaceDeclarationSyntax> interfaceGroup, 
+            IEnumerable<IGrouping<string, ClassDeclarationSyntax>> factoryProductsGroups)
             => BaseCodeGenerator.GenerateUsingsAndNamespace(interfaceGroup) +
 $@"
 {{
-    {BaseCodeGenerator.GenerateDeclaration(interfaceGroup, CodeType.Enum, true, false, true, GeneratorAttributeType.Factory)}
+    {GenerateDeclaration(interfaceGroup)}
     {{
 	    {GenerateEnumElements(factoryProductsGroups)}
     }}
 }}";
-        private static string GenerateEnumElements(IEnumerable<IGrouping<string, TypeDeclarationSyntax>> factoryProductsGroups)
+        private static string GenerateDeclaration(IGrouping<string, InterfaceDeclarationSyntax> interfaceGroup)
+            => $"{BaseNamesGenerator.GetAccesibility(interfaceGroup)} enum {BaseNamesGenerator.GetClassName(interfaceGroup)}FactoryType";
+
+        private static string GenerateEnumElements(IEnumerable<IGrouping<string, ClassDeclarationSyntax>> factoryProductsGroups)
             => $"{string.Join("\n\t\t", factoryProductsGroups.Select(p => $"{p.Key},"))}\n";
 
     }

@@ -3,8 +3,10 @@ using DesignPatternCodeGenerator.Base.CollectionHelper;
 using DesignPatternCodeGenerator.Base.Enums;
 using DesignPatternCodeGenerator.Base.Generators;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
-using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace DesignPatternCodeGenerator.Factory
@@ -29,25 +31,49 @@ namespace DesignPatternCodeGenerator.Factory
 
             foreach (var group in interfaceGroups)
             {
-                var factoryProductsGroups = FilterCollectionHelper.FilterClassesByInterface(
-                    classGroups,
-                    BaseNamesGenerator.GetInterfaceName(group, GeneratorAttributeType.Factory));
+                var interfaceName = BaseNamesGenerator.GetInterfaceName(group, GeneratorAttributeType.Factory);
+                var factoryProductsGroups = FilterCollectionHelper.FilterClassesByInterface(classGroups, interfaceName);
 
-                var enumContent = FactoryEnumGenerator.GenerateEnum(group, factoryProductsGroups);
-                context.AddSource(
-                    $"{BaseNamesGenerator.GetClassName(group, GeneratorAttributeType.Factory, true, true)}Type.g.cs",
-                    SourceText.From(enumContent, Encoding.UTF8));
+                GenerateEnumFactory(context, group, factoryProductsGroups);
 
-                var interfaceContent = FactoryContentGenerator.GenerateInterface(group);
-                context.AddSource(
-                    $"{BaseNamesGenerator.GetInterfaceName(group, GeneratorAttributeType.Factory, true)}.g.cs",
-                    SourceText.From(interfaceContent, Encoding.UTF8));
+                GenerateInterfaceFactory(context, group);
 
-                var classContent = FactoryContentGenerator.GenerateClass(group, factoryProductsGroups);
-                context.AddSource(
-                    $"{BaseNamesGenerator.GetClassName(group, GeneratorAttributeType.Factory, true, true)}.g.cs",
-                    SourceText.From(classContent, Encoding.UTF8));
+                GenerateClassFactory(context, group, factoryProductsGroups);
             }
+        }
+
+        private void GenerateEnumFactory(
+            GeneratorExecutionContext context,
+            IGrouping<string, InterfaceDeclarationSyntax> group,
+            IEnumerable<IGrouping<string, ClassDeclarationSyntax>> factoryProductsGroups)
+        {
+            var enumContent = FactoryEnumGenerator.GenerateEnum(group, factoryProductsGroups);
+
+            context.AddSource(
+                $"{BaseNamesGenerator.GetClassName(group, GeneratorAttributeType.Factory, true, true)}Type.g.cs",
+                SourceText.From(enumContent, Encoding.UTF8));
+        }
+
+        private void GenerateInterfaceFactory(
+            GeneratorExecutionContext context,
+            IGrouping<string, InterfaceDeclarationSyntax> group)
+        {
+            var interfaceContent = FactoryContentGenerator.GenerateInterface(group);
+
+            context.AddSource(
+                $"{BaseNamesGenerator.GetInterfaceName(group, GeneratorAttributeType.Factory)}.g.cs",
+                SourceText.From(interfaceContent, Encoding.UTF8));
+        }
+
+        private void GenerateClassFactory(
+            GeneratorExecutionContext context,
+            IGrouping<string, InterfaceDeclarationSyntax> group,
+            IEnumerable<IGrouping<string, ClassDeclarationSyntax>> factoryProductsGroups)
+        {
+            var classContent = FactoryContentGenerator.GenerateClass(group, factoryProductsGroups);
+            context.AddSource(
+                $"{BaseNamesGenerator.GetClassName(group, GeneratorAttributeType.Factory)}.g.cs",
+                SourceText.From(classContent, Encoding.UTF8));
         }
 
         public void Initialize(GeneratorInitializationContext context)

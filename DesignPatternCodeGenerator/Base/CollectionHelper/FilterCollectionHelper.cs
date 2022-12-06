@@ -49,18 +49,18 @@ namespace DesignPatternCodeGenerator.Base.CollectionHelper
         }
 
 
-        internal static IEnumerable<IGrouping<string, TypeDeclarationSyntax>> FilterClassesByInterface(
-            IEnumerable<IGrouping<string, TypeDeclarationSyntax>> classGroup,
+        internal static IEnumerable<IGrouping<string, ClassDeclarationSyntax>> FilterClassesByInterface(
+            IEnumerable<IGrouping<string, ClassDeclarationSyntax>> classGroup,
             string interfaceName)
             => classGroup.SelectMany(x => x)
-                    .Where(y => y.FirstAncestorOrSelf<TypeDeclarationSyntax>().BaseList.Types.ToString().Equals(interfaceName))
+                    .Where(y => y.FirstAncestorOrSelf<ClassDeclarationSyntax>().BaseList.Types.ToString().Equals(interfaceName))
                     .GroupBy(z => z.Identifier.Text);
 
-        internal static IEnumerable<IGrouping<string, TypeDeclarationSyntax>> FilterClassesByInterface(
-            IEnumerable<IGrouping<string, TypeDeclarationSyntax>> classGroup,
+        internal static IEnumerable<IGrouping<string, ClassDeclarationSyntax>> FilterClassesByInterface(
+            IEnumerable<IGrouping<string, ClassDeclarationSyntax>> classGroup,
             IEnumerable<string> interfaceName)
         {
-            var ret = new List<IGrouping<string, TypeDeclarationSyntax>>();
+            var ret = new List<IGrouping<string, ClassDeclarationSyntax>>();
 
             interfaceName.ToList().ForEach(
                 x =>
