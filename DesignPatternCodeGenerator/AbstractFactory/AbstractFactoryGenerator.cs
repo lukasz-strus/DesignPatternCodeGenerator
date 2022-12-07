@@ -37,9 +37,9 @@ namespace DesignPatternCodeGenerator.AbstractFactory
             {
                 GenerateAbstractFactoryInterface(context, interfaceGroup);
 
-                var groupedClassGroups = GetFactoryClassGroups(interfaceGroup, classGroups);
+                var factoryClassGroups = GetFactoryClassGroups(interfaceGroup, classGroups);
 
-                foreach (var classGroup in groupedClassGroups)
+                foreach (var classGroup in factoryClassGroups)
                 {
                     GenerateFactoryClass(context, interfaceGroup, classGroup);
                 }
