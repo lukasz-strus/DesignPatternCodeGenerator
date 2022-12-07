@@ -13,7 +13,7 @@ namespace DesignPatternCodeGenerator.Tests.Base.CollectionHelper
         {
             var interfaceGroup = GeneratorTestsHelper.GetInterfaceGroups(inputSource);
 
-            var result = GroupCollectionHelper.GroupCollectionByAttributeValueText(interfaceGroup);
+            var result = interfaceGroup.GroupByAttribute();
 
             result.First().Key.Should().Be("Gear");
         }
@@ -24,7 +24,7 @@ namespace DesignPatternCodeGenerator.Tests.Base.CollectionHelper
         {
             var classGroup = GeneratorTestsHelper.GetClassGroups(inputSource);
 
-            var result = GroupCollectionHelper.GroupCollectionByAttributeValueText(classGroup);
+            var result = classGroup.GroupByAttribute();
 
             result.First().Key.Should().Be("Samsung");
         }
@@ -34,9 +34,9 @@ namespace DesignPatternCodeGenerator.Tests.Base.CollectionHelper
         internal void GroupByIdentifierText_ForValidInputs_ReturnGroupedCollection(string inputSource)
         {
             var interfaceGroup = GeneratorTestsHelper.GetInterfaceGroups(inputSource);
-            var groupByAttribute = GroupCollectionHelper.GroupCollectionByAttributeValueText(interfaceGroup);
+            var groupByAttribute = interfaceGroup.GroupByAttribute().First();
 
-            var result = GroupCollectionHelper.GroupByIdentifierText(groupByAttribute.First());
+            var result = groupByAttribute.GroupByIdentifier();
 
             result.First().Key.Should().Be("IMouse");
         }

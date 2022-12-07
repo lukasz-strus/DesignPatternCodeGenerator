@@ -15,11 +15,11 @@ namespace DesignPatternCodeGenerator.Tests.Facade
         {
             var methodGroups = GeneratorTestsHelper.GetMethodGroups(inputSource);
 
-            var methodGroupsByAttributeText = GroupCollectionHelper.GroupCollectionByAttributeValueText(methodGroups);
+            var result = FacadeContentFieldsGenerator.GenerateFileds(methodGroups.GroupByAttribute().First());
 
-            var result = FacadeContentFieldsGenerator.GenerateFileds(methodGroupsByAttributeText.First());
-
-            result.RemoveWhitespace().Should().Be(expectedSource.RemoveWhitespace());
+            result.RemoveWhitespace()
+                  .Should()
+                  .Be(expectedSource.RemoveWhitespace());
         }
     }
 }

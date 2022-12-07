@@ -3,8 +3,9 @@ using DesignPatternCodeGenerator.Base.CollectionHelper;
 using DesignPatternCodeGenerator.Base.Enums;
 using DesignPatternCodeGenerator.Base.Generators;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
-using System.Diagnostics;
+using System.Linq;
 using System.Text;
 
 namespace DesignPatternCodeGenerator.Facade
@@ -21,20 +22,27 @@ namespace DesignPatternCodeGenerator.Facade
                 context.CancellationToken,
                 facadeMethodAttribute);
 
-            var methodGroupsByAttributeText = GroupCollectionHelper.GroupCollectionByAttributeValueText(methodGroups);
+            methodGroups = methodGroups.GroupByAttribute();
 
-            foreach (var group in methodGroupsByAttributeText)
+            foreach (var methodGroup in methodGroups)
             {
-                var facadeContent = FacadeContentGenerator.GenerateClass(group);
-
-                context.AddSource($"{group.Key}Facade.g.cs", SourceText.From(facadeContent, Encoding.UTF8));
+                GenerateFacadeClass(context, methodGroup);
             }
+        }
 
+        private void GenerateFacadeClass(
+            GeneratorExecutionContext context,
+            IGrouping<string, MethodDeclarationSyntax> methodGroup)
+        {
+            var hintName = $"{methodGroup.Key}Facade.g.cs";
+
+            var facadeContent = FacadeContentGenerator.GenerateClass(methodGroup);
+
+            context.AddSource(hintName, SourceText.From(facadeContent, Encoding.UTF8));
         }
 
         public void Initialize(GeneratorInitializationContext context)
         {
-
         }
     }
 }

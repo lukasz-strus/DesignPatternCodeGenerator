@@ -24,7 +24,7 @@ namespace DesignPatternCodeGenerator.AbstractFactory
                 context.CancellationToken,
                 factoryAttribute);
 
-            var interfaceGroups = GroupCollectionHelper.GroupCollectionByAttributeValueText(mainInterfaceGroups);
+            var interfaceGroups = mainInterfaceGroups.GroupByAttribute();
 
             var factoryChildAttribute = AttributeTypeGenerator.SetGeneratorAttributeType(GeneratorAttributeType.AbstractFactoryClass);
 
@@ -52,7 +52,7 @@ namespace DesignPatternCodeGenerator.AbstractFactory
         {
             var hintName = $"{BaseNamesGenerator.GetInterfaceName(interfaceGroup, GeneratorAttributeType.Factory)}.g.cs";
 
-            var interfaceGroupsByIdentifier = GroupCollectionHelper.GroupByIdentifierText(interfaceGroup);
+            var interfaceGroupsByIdentifier = interfaceGroup.GroupByIdentifier();
 
             var mainInterfaceContent = AbstractFactoryContentGenerator.GenerateMainInterface(
                 interfaceGroup,
@@ -68,7 +68,7 @@ namespace DesignPatternCodeGenerator.AbstractFactory
             var interfaceNames = interfaceGroup.Select(x => x.Identifier.Text);
             var filtredClassGroups = FilterCollectionHelper.FilterClassesByInterface(classGroups, interfaceNames);
 
-            return GroupCollectionHelper.GroupCollectionByAttributeValueText(filtredClassGroups);
+            return filtredClassGroups.GroupByAttribute();
         }
 
         private void GenerateFactoryClass(

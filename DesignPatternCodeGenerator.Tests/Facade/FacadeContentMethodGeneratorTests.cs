@@ -15,9 +15,7 @@ namespace DesignPatternCodeGenerator.Tests.Facade
         {
             var methodGroups = GeneratorTestsHelper.GetMethodGroups(inputSource);
 
-            var methodGroupsByAttributeText = GroupCollectionHelper.GroupCollectionByAttributeValueText(methodGroups);
-
-            var result = FacadeContentMethodGenerator.GenerateMethod(methodGroupsByAttributeText.First());
+            var result = FacadeContentMethodGenerator.GenerateMethod(methodGroups.GroupByAttribute().First());
 
             result.RemoveWhitespace().Should().Be(expectedSource.RemoveWhitespace());
         }
