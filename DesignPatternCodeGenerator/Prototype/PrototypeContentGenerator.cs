@@ -1,8 +1,6 @@
-﻿using DesignPatternCodeGenerator.Base.Enums;
-using DesignPatternCodeGenerator.Base.Generators;
+﻿using DesignPatternCodeGenerator.Base.Generators;
 using DesignPatternCodeGenerator.Prototype.Compontents;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
