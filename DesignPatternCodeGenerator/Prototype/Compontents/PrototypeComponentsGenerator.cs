@@ -1,18 +1,22 @@
 ﻿using DesignPatternCodeGenerator.Base.CollectionHelper;
+using DesignPatternCodeGenerator.Base.Generators;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace DesignPatternCodeGenerator.Prototype
+namespace DesignPatternCodeGenerator.Prototype.Compontents
 {
-    internal static class PrototypeContentComponentsGenerator
+    internal static class PrototypeComponentsGenerator
     {
+        internal static string GenerateDeclaration(IGrouping<string, ClassDeclarationSyntax> group)
+            => $"{BaseNamesGenerator.GetAccesibility(group)} partial class {BaseNamesGenerator.GetClassName(group)}";
+
         internal static string GenerateDeepClone(
             IGrouping<string, ClassDeclarationSyntax> group,
             IEnumerable<IGrouping<string, ClassDeclarationSyntax>> allClassGroups)
             => $@"{GenerateMethodDeclaration(group, CopyType.Deep)}
         {{
-            {group.Key} clone = {GenerateShallowMethod(group)}
+            {BaseNamesGenerator.GetClassName(group)} clone = {GenerateShallowMethod(group)}
 
             {GenerateObjectFieldsClone(group, allClassGroups)}
 
@@ -33,14 +37,14 @@ namespace DesignPatternCodeGenerator.Prototype
         }
 
         private static string GenerateNewObject(
-            IEnumerable<IGrouping<string, ClassDeclarationSyntax>> allClassGroups, 
+            IEnumerable<IGrouping<string, ClassDeclarationSyntax>> allClassGroups,
             PropertyDeclarationSyntax property)
         {
             var typeName = property.Type.ToString();
             var classDeclaratios = allClassGroups.SelectMany(x => x);
 
             var classDeclaration = FilterCollectionHelper.FilterClassDeclarationsByTypes(classDeclaratios, typeName)
-                .FirstOrDefault();
+                                                         .FirstOrDefault();
 
             return $@"new {classDeclaration.Identifier.Text}()
             {{
@@ -65,9 +69,9 @@ namespace DesignPatternCodeGenerator.Prototype
         }}";
 
         private static string GenerateShallowMethod(IGrouping<string, ClassDeclarationSyntax> group)
-            => $"({group.Key})this.MemberwiseClone();";
+            => $"({BaseNamesGenerator.GetClassName(group)})this.MemberwiseClone();";
 
         private static string GenerateMethodDeclaration(IGrouping<string, ClassDeclarationSyntax> group, CopyType type)
-            => $"public {group.Key} {type}Copy()";
+            => $"public {BaseNamesGenerator.GetClassName(group)} {type}Copy()";
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace DesignPatternCodeGenerator.Prototype
+﻿namespace DesignPatternCodeGenerator.Prototype.Compontents
 {
     public enum CopyType
     {

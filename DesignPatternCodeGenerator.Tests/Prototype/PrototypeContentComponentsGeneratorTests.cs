@@ -1,4 +1,4 @@
-﻿using DesignPatternCodeGenerator.Prototype;
+﻿using DesignPatternCodeGenerator.Prototype.Compontents;
 using DesignPatternCodeGenerator.Tests.Factory.Data;
 using DesignPatternCodeGenerator.Tests.Helpers;
 using DesignPatternCodeGenerator.Tests.Prototype.Data;
@@ -15,7 +15,7 @@ public class PrototypeContentComponentsGeneratorTests
         var classGroup = GeneratorTestsHelper.GetClassGroup(inputSource);
         var allClassGroup = GeneratorTestsHelper.GetClassGroups(inputSource);
 
-        var result = PrototypeContentComponentsGenerator.GenerateDeepClone(classGroup, allClassGroup);
+        var result = PrototypeComponentsGenerator.GenerateDeepClone(classGroup, allClassGroup);
         
         result.RemoveWhitespace().Should().Be(methodSource.RemoveWhitespace());
     }
@@ -26,7 +26,7 @@ public class PrototypeContentComponentsGeneratorTests
     {
         var classGroup = GeneratorTestsHelper.GetClassGroup(inputSource);
 
-        var result = PrototypeContentComponentsGenerator.GenerateShallowClone(classGroup);
+        var result = PrototypeComponentsGenerator.GenerateShallowClone(classGroup);
 
         result.RemoveWhitespace().Should().Be(methodSource.RemoveWhitespace());
     }
