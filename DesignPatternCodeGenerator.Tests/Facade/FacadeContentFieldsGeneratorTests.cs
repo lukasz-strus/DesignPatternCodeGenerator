@@ -1,5 +1,5 @@
 ﻿using DesignPatternCodeGenerator.Base.CollectionHelper;
-using DesignPatternCodeGenerator.Facade;
+using DesignPatternCodeGenerator.Facade.Compontents;
 using DesignPatternCodeGenerator.Tests.Facade.Data;
 using DesignPatternCodeGenerator.Tests.Helpers;
 using FluentAssertions;
@@ -15,7 +15,7 @@ namespace DesignPatternCodeGenerator.Tests.Facade
         {
             var methodGroups = GeneratorTestsHelper.GetMethodGroups(inputSource);
 
-            var result = FacadeContentFieldsGenerator.GenerateFileds(methodGroups.GroupByAttribute().First());
+            var result = FacadeFieldsComponentsGenerator.GenerateFileds(methodGroups.GroupByAttribute().First());
 
             result.RemoveWhitespace()
                   .Should()
