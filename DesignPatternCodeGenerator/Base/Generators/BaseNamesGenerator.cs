@@ -28,7 +28,7 @@ namespace DesignPatternCodeGenerator.Base.Generators
                     .OfType<UsingDirectiveSyntax>()
                     .Select(x => x.Name.ToString());
 
-        internal static string GetClassName(IGrouping<string, ClassDeclarationSyntax> group) 
+        internal static string GetClassName(IGrouping<string, ClassDeclarationSyntax> group)
             => group.Key;
 
         internal static string GetClassName(IGrouping<string, MethodDeclarationSyntax> group)
@@ -51,7 +51,5 @@ namespace DesignPatternCodeGenerator.Base.Generators
 
         internal static string GetInterfaceName(IGrouping<string, ClassDeclarationSyntax> group, GeneratorAttributeType generatorType)
             => (group.Key.StartsWith("I") ? group.Key : group.Key.Insert(0, "I")) + generatorType.ToString();
-
     }
-
 }
