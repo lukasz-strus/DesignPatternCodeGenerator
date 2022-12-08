@@ -1,5 +1,4 @@
 ﻿using DesignPatternCodeGenerator.Factory;
-using DesignPatternCodeGenerator.Tests.Facade.Data;
 using DesignPatternCodeGenerator.Tests.Factory.Data;
 using DesignPatternCodeGenerator.Tests.Helpers;
 using FluentAssertions;

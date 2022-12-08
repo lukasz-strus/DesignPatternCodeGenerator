@@ -19,19 +19,6 @@ public class BaseCodeGeneratorTests
         result.Should().Be(expected);
     }
 
-    [Theory]
-    [InlineData(FACTORY_COMPILATION_SOURCE, CodeType.Interface, INTERFACE_DECLARATION)]
-    [InlineData(FACTORY_COMPILATION_SOURCE, CodeType.Class, CLASS_DECLARATION)]
-    [InlineData(FACTORY_COMPILATION_SOURCE, CodeType.Enum, ENUM_DECLARATION)]
-    public void GenerateDeclaration_ForValidInputs_ReturnsCorrectString(string source, CodeType codeType, string expected)
-    {
-        var interfaceGroup = GeneratorTestsHelper.GetInterfaceGroup(source);
-
-        var result = BaseCodeGenerator.GenerateDeclaration(interfaceGroup, codeType, true);
-
-        result.Should().Be(expected);
-    }
-
     private const string FACTORY_COMPILATION_SOURCE =
     @"using System;
 

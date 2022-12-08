@@ -1,7 +1,6 @@
-﻿using DesignPatternCodeGenerator.Base.Enums;
-using DesignPatternCodeGenerator.Base.Generators;
+﻿using DesignPatternCodeGenerator.Base.Generators;
+using DesignPatternCodeGenerator.Prototype.Compontents;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -15,11 +14,11 @@ namespace DesignPatternCodeGenerator.Prototype
             => BaseCodeGenerator.GenerateUsingsAndNamespace(group) +
 $@"
 {{
-    {BaseCodeGenerator.GenerateDeclaration(group, CodeType.Class, false, true)}
+    {PrototypeComponentsGenerator.GenerateDeclaration(group)}
     {{
-        {PrototypeContentComponentsGenerator.GenerateShallowClone(group)}
+        {PrototypeComponentsGenerator.GenerateShallowClone(group)}
 
-        {PrototypeContentComponentsGenerator.GenerateDeepClone(group, allClassGroups)}
+        {PrototypeComponentsGenerator.GenerateDeepClone(group, allClassGroups)}
     }}
 }}
 ";

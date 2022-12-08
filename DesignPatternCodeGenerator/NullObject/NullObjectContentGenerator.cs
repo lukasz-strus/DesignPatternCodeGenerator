@@ -1,4 +1,5 @@
 ﻿using DesignPatternCodeGenerator.Base.Generators;
+using DesignPatternCodeGenerator.NullObject.Compontents;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Linq;
 
@@ -11,13 +12,15 @@ namespace DesignPatternCodeGenerator.NullObject
         => BaseCodeGenerator.GenerateUsingsAndNamespace(group) +
 $@"
 {{
-    public class {group.Key.Substring(1)}NullObject : {group.Key}
+    {NullObjectComponentsGenerator.GenerateDeclaration(group)}
     {{
-	    {NullObjectContentComponentGenerator.GenerateProperties(group)}
+	    {NullObjectComponentsGenerator.GenerateProperties(group)}
 
-        {NullObjectContentComponentGenerator.GenerateMethods(group)}
+        {NullObjectComponentsGenerator.GenerateMethods(group)}
     }}
 }}";
+
+
 
     }
 }

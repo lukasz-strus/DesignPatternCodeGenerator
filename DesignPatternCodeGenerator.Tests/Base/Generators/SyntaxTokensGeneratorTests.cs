@@ -11,20 +11,6 @@ public class SyntaxTokensGeneratorTests
     [Theory]
     [InlineData(TEST_INTERFACE, GeneratorAttributeType.Factory)]
     [InlineData(TEST_INTERFACE, GeneratorAttributeType.Builder)]
-    internal void GenerateSyntaxTokens_ForValidInputs_ReturnsCorrectClassName(
-        string inputSource, 
-        GeneratorAttributeType generatorAttributeType)
-    {
-        var group = GeneratorTestsHelper.GetInterfaceGroup(inputSource);
-
-        var result = BaseNamesGenerator.GetClassName(group, generatorAttributeType, true, true);
-
-        result.Should().Be("Test" + generatorAttributeType.ToString());
-    }
-
-    [Theory]
-    [InlineData(TEST_INTERFACE, GeneratorAttributeType.Factory)]
-    [InlineData(TEST_INTERFACE, GeneratorAttributeType.Builder)]
     internal void GenerateSyntaxTokens_ForValidInputs_ReturnsCorrectInterfaceName(
         string inputSource, 
         GeneratorAttributeType generatorAttributeType)

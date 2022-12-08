@@ -15,9 +15,7 @@ public class FacadeContentGeneratorTests
     {
         var methodGroups = GeneratorTestsHelper.GetMethodGroups(inputSource);
 
-        var methodGroupsByAttributeText = GroupCollectionHelper.GroupCollectionByAttributeValueText(methodGroups);
-
-        var result = FacadeContentGenerator.GenerateClass(methodGroupsByAttributeText.First());
+        var result = FacadeContentGenerator.GenerateClass(methodGroups.GroupByAttribute().First());
 
         result.RemoveWhitespace().Should().Be(expectedSource.RemoveWhitespace());
     }

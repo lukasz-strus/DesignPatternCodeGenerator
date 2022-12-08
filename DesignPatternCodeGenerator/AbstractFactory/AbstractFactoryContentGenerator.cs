@@ -1,4 +1,5 @@
-﻿using DesignPatternCodeGenerator.Base.Enums;
+﻿using DesignPatternCodeGenerator.AbstractFactory.Compontents;
+using DesignPatternCodeGenerator.Base.Enums;
 using DesignPatternCodeGenerator.Base.Generators;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Collections.Generic;
@@ -9,26 +10,26 @@ namespace DesignPatternCodeGenerator.AbstractFactory
     internal class AbstractFactoryContentGenerator
     {
         internal static string GenerateMainInterface(
-            IGrouping<string, TypeDeclarationSyntax> mainInterfaceGroup,
-            IEnumerable<IGrouping<string, TypeDeclarationSyntax>> groups)
-            => BaseCodeGenerator.GenerateUsingsAndNamespace(groups.First()) +
+            IGrouping<string, InterfaceDeclarationSyntax> mainInterfaceGroup,
+            IEnumerable<IGrouping<string, InterfaceDeclarationSyntax>> interfaceGroups)
+            => BaseCodeGenerator.GenerateUsingsAndNamespace(interfaceGroups.First()) +
 $@"
 {{
-    {BaseCodeGenerator.GenerateDeclaration(mainInterfaceGroup, CodeType.Interface, true, false, true, GeneratorAttributeType.Factory)}
+    {AbstractFactoryInterfaceComponentsGenerator.GenerateDeclaration(mainInterfaceGroup)}
     {{
-	    {AbstractFactoryContentComponentGenerator.GenerateCreateMethodInterface(groups)}
+	    {AbstractFactoryInterfaceComponentsGenerator.GenerateCreateMethods(interfaceGroups)}
     }}
 }}";
 
         internal static string GenerateFactoryClass(
-            IGrouping<string, TypeDeclarationSyntax> mainInterfaceGroup,
-            IGrouping<string, TypeDeclarationSyntax> group)
+            IGrouping<string, InterfaceDeclarationSyntax> mainInterfaceGroup,
+            IGrouping<string, ClassDeclarationSyntax> group)
             => BaseCodeGenerator.GenerateUsingsAndNamespace(mainInterfaceGroup, group) +
 $@"
 {{
-    {AbstractFactoryContentComponentGenerator.GenerateClassDeclaration(mainInterfaceGroup, group)}
+    {AbstractFactoryClassComponentsGenerator.GenerateDeclaration(mainInterfaceGroup, group)}
     {{
-        {AbstractFactoryContentComponentGenerator.GenerateCreateMethods(group)}
+        {AbstractFactoryClassComponentsGenerator.GenerateCreateMethods(group)}
     }}
 }}";
     }

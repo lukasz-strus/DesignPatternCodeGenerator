@@ -3,7 +3,9 @@ using DesignPatternCodeGenerator.Base.CollectionHelper;
 using DesignPatternCodeGenerator.Base.Enums;
 using DesignPatternCodeGenerator.Base.Generators;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
@@ -16,54 +18,75 @@ namespace DesignPatternCodeGenerator.AbstractFactory
         {
 
             var factoryAttribute = AttributeTypeGenerator.SetGeneratorAttributeType(GeneratorAttributeType.AbstractFactory);
-            var factoryChildAttribute = AttributeTypeGenerator.SetGeneratorAttributeType(GeneratorAttributeType.AbstractFactoryClass);
 
             var mainInterfaceGroups = DeclarationsSyntaxGenerator.GetInterfaceGroups(
                 context.Compilation,
                 context.CancellationToken,
                 factoryAttribute);
 
-            var groupedMainInterfaceGroups = GroupCollectionHelper.GroupCollectionByAttributeValueText(mainInterfaceGroups);
+            var interfaceGroups = mainInterfaceGroups.GroupByAttribute();
+
+            var factoryChildAttribute = AttributeTypeGenerator.SetGeneratorAttributeType(GeneratorAttributeType.AbstractFactoryClass);
 
             var classGroups = DeclarationsSyntaxGenerator.GetClassGroups(
                 context.Compilation,
                 context.CancellationToken,
                 factoryChildAttribute);
 
-            foreach (var mainInterfaceGroup in groupedMainInterfaceGroups)
+            foreach (var interfaceGroup in interfaceGroups)
             {
-                var interfaceGroups = GroupCollectionHelper.GroupByIdentifierText(mainInterfaceGroup);
+                GenerateAbstractFactoryInterface(context, interfaceGroup);
 
-                var mainInterfaceContent = AbstractFactoryContentGenerator.GenerateMainInterface(
-                    mainInterfaceGroup,
-                    interfaceGroups);
+                var factoryClassGroups = GetFactoryClassGroups(interfaceGroup, classGroups);
 
-                context.AddSource(
-                    $"{BaseNamesGenerator.GetInterfaceName(mainInterfaceGroup, GeneratorAttributeType.Factory)}.g.cs",
-                    SourceText.From(mainInterfaceContent, Encoding.UTF8));
-
-                var filtredClassGroups = FilterCollectionHelper.FilterClassesByInterface(
-                    classGroups,
-                    mainInterfaceGroup.Select(x => x.Identifier.Text));
-
-                var groupedClassGroups = GroupCollectionHelper.GroupCollectionByAttributeValueText(filtredClassGroups);
-
-                foreach (var classGroup in groupedClassGroups)
+                foreach (var classGroup in factoryClassGroups)
                 {
-                    var factoryClassContent = AbstractFactoryContentGenerator.GenerateFactoryClass(
-                            mainInterfaceGroup,
-                            classGroup);
-
-                    context.AddSource(
-                        $"{classGroup.Key}Factory.g.cs",
-                        SourceText.From(factoryClassContent, Encoding.UTF8));
+                    GenerateFactoryClass(context, interfaceGroup, classGroup);
                 }
             }
         }
 
+        private void GenerateAbstractFactoryInterface(
+            GeneratorExecutionContext context,
+            IGrouping<string, InterfaceDeclarationSyntax> interfaceGroup)
+        {
+            var hintName = $"{BaseNamesGenerator.GetInterfaceName(interfaceGroup, GeneratorAttributeType.Factory)}.g.cs";
+
+            var interfaceGroupsByIdentifier = interfaceGroup.GroupByIdentifier();
+
+            var mainInterfaceContent = AbstractFactoryContentGenerator.GenerateMainInterface(
+                interfaceGroup,
+                interfaceGroupsByIdentifier);
+
+            context.AddSource(hintName, SourceText.From(mainInterfaceContent, Encoding.UTF8));
+        }
+
+        private IEnumerable<IGrouping<string, ClassDeclarationSyntax>> GetFactoryClassGroups(
+            IGrouping<string, InterfaceDeclarationSyntax> interfaceGroup,
+            IEnumerable<IGrouping<string, ClassDeclarationSyntax>> classGroups)
+        {
+            var interfaceNames = interfaceGroup.Select(x => x.Identifier.Text);
+            var filtredClassGroups = FilterCollectionHelper.FilterClassesByInterface(classGroups, interfaceNames);
+
+            return filtredClassGroups.GroupByAttribute();
+        }
+
+        private void GenerateFactoryClass(
+            GeneratorExecutionContext context,
+            IGrouping<string, InterfaceDeclarationSyntax> interfaceGroup,
+            IGrouping<string, ClassDeclarationSyntax> classGroup)
+        {
+            var hintName = $"{BaseNamesGenerator.GetClassName(classGroup, GeneratorAttributeType.Factory)}.g.cs";
+
+            var factoryClassContent = AbstractFactoryContentGenerator.GenerateFactoryClass(
+                interfaceGroup,
+                classGroup);
+
+            context.AddSource(hintName, SourceText.From(factoryClassContent, Encoding.UTF8));
+        }
+
         public void Initialize(GeneratorInitializationContext context)
         {
-
         }
     }
 }

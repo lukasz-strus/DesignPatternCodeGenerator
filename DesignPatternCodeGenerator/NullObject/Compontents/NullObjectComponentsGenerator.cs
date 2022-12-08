@@ -1,19 +1,26 @@
-﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
+﻿using DesignPatternCodeGenerator.Base.Enums;
+using DesignPatternCodeGenerator.Base.Generators;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace DesignPatternCodeGenerator.NullObject
+namespace DesignPatternCodeGenerator.NullObject.Compontents
 {
-    public static class NullObjectContentComponentGenerator
+    public static class NullObjectComponentsGenerator
     {
+        internal static string GenerateDeclaration(IGrouping<string, InterfaceDeclarationSyntax> group)
+            => $"{BaseNamesGenerator.GetAccesibility(group)} class {BaseNamesGenerator.GetClassName(group, GeneratorAttributeType.NullObject)} : "
+            + $"{BaseNamesGenerator.GetInterfaceName(group)}";
+
         internal static string GenerateMethods(IGrouping<string, InterfaceDeclarationSyntax> group)
         {
             var voidMethods = GetMethods(group, IsVoidMethod);
             var notVoidMethods = GetMethods(group, IsNotVoidMethod);
 
-            return string.Join("\n\t\t", voidMethods.Select(GenerateVoidMethod)) + "\n\t\t" +
-                string.Join("\n\t\t", notVoidMethods.Select(GenerateNotVoidMethod));
+            return string.Join("\n\t\t", voidMethods.Select(GenerateVoidMethod))
+                + "\n\t\t"
+                + string.Join("\n\t\t", notVoidMethods.Select(GenerateNotVoidMethod));
         }
 
         private static string GenerateVoidMethod(MethodDeclarationSyntax method)

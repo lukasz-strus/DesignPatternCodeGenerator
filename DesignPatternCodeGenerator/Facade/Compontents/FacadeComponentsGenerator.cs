@@ -1,12 +1,13 @@
-﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
+﻿using DesignPatternCodeGenerator.Base.Generators;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Linq;
 
-namespace DesignPatternCodeGenerator.Facade
+namespace DesignPatternCodeGenerator.Facade.Compontents
 {
-    internal static class FacadeContentComponentGenerator
+    internal static class FacadeComponentsGenerator
     {
         internal static string GenerateClassDeclaration(IGrouping<string, MethodDeclarationSyntax> group)
-            => $"public class {group.Key}Facade";
+            => $"{BaseNamesGenerator.GetAccesibility(group)} class {BaseNamesGenerator.GetClassName(group)}Facade";
 
         internal static string GetClassName(ClassDeclarationSyntax classDeclaration)
             => classDeclaration.Identifier.Text;

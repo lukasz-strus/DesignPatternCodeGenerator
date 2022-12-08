@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
+﻿using DesignPatternCodeGenerator.Base.Generators;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Linq;
 
 namespace DesignPatternCodeGenerator.Factory.Compontents
@@ -14,8 +15,8 @@ namespace DesignPatternCodeGenerator.Factory.Compontents
             var parameters = $"{string.Join(", ", properties.Where(IsNotDependency).Select(CreateParameter))}";
 
             return parameters == ""
-                ? $"public {interfaceName} Create({factoryType})"
-                : $"public {interfaceName} Create({factoryType},{parameters})";
+                ? $"{BaseNamesGenerator.GetAccesibility(interfaceSyntax)} {interfaceName} Create({factoryType})"
+                : $"{BaseNamesGenerator.GetAccesibility(interfaceSyntax)} {interfaceName} Create({factoryType},{parameters})";
         }
 
         private static string CreateParameter(PropertyDeclarationSyntax propertySyntax)
