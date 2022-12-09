@@ -32,6 +32,18 @@ public class CompilationSources
         yield return new object[] { _inputUISource, _identifierUIClass };
     }
 
+    public static IEnumerable<object[]> GetSampleDataToFilterClassByInterface()
+    {
+        yield return new object[] { _inputSource, _identifierGearInterface, _identifierGearClass };
+        yield return new object[] { _inputSource, _identifierUIInterface, _identifierUIClass };
+    }
+
+    public static IEnumerable<object[]> GetSampleDataToFilterClassByInterfaces()
+    {
+        yield return new object[] { _inputSource, _gearInterfaces, _identifierGearClass };
+        yield return new object[] { _inputSource, _uiInterfaces, _identifierUIClass };
+    }
+
     private static readonly string _identifierGearClass = "SamsungMouse";
 
     private static readonly string _identifierUIClass = "WindowsTextBox";
@@ -51,6 +63,10 @@ public class CompilationSources
     private static readonly string _attributeGearMethod = "Computer";
 
     private static readonly string _attributeUIMethod = "UI";
+
+    private static readonly List<string> _gearInterfaces = new() { "IMouse", "IMonitor" };
+
+    private static readonly List<string> _uiInterfaces = new() { "ITextBox", "IButton" };
 
     private static readonly string _inputGearSource =
         @"using DesignPatternCodeGenerator.Attributes.AbstractFactory;
