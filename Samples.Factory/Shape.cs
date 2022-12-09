@@ -59,10 +59,10 @@ namespace Samples.Factory
 
 
     [FactoryProduct]
-    public class Kwadrat : IShape
+    public class Square : IShape
     {
 
-        public Kwadrat(int x, int y, int radius)
+        public Square(int x, int y, int radius)
         {
             X = x;
             Y = y;
@@ -75,7 +75,7 @@ namespace Samples.Factory
 
         public void Display()
         {
-            Console.WriteLine($"Display Kwadrat with: X = {X}, Y = {Y}, Radius = {Radius}");
+            Console.WriteLine($"Display Square with: X = {X}, Y = {Y}, Radius = {Radius}");
         }
     }
 }

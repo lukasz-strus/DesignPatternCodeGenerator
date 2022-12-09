@@ -1,5 +1,4 @@
 ﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -7,8 +6,8 @@ namespace DesignPatternCodeGenerator.Base.CollectionHelper
 {
     internal static class FilterCollectionHelper
     {
-        internal static IEnumerable<ClassDeclarationSyntax> FilterClassDeclarationsByTypes(
-            IEnumerable<ClassDeclarationSyntax> classDeclarations,
+        internal static IEnumerable<ClassDeclarationSyntax> FilterByTypes(
+            this IEnumerable<ClassDeclarationSyntax> classDeclarations,
             string typeName)
             => classDeclarations.Where(y => IsClassType(y, typeName));
 
@@ -19,8 +18,8 @@ namespace DesignPatternCodeGenerator.Base.CollectionHelper
             return classSyntax.Identifier.Text.Contains(nullableType);
         }
 
-        internal static IEnumerable<PropertyDeclarationSyntax> FilterPropertyByTypes(
-            IEnumerable<PropertyDeclarationSyntax> classGroup,
+        internal static IEnumerable<PropertyDeclarationSyntax> FilterByTypes(
+            this IEnumerable<PropertyDeclarationSyntax> classGroup,
             string typeName)
             => classGroup.Where(y => IsPropertyType(y, typeName));
 
@@ -33,8 +32,8 @@ namespace DesignPatternCodeGenerator.Base.CollectionHelper
             return nullableType.Contains(typeName);
         }
 
-        internal static IEnumerable<PropertyDeclarationSyntax> FilterPropertyByTypes(
-            IEnumerable<PropertyDeclarationSyntax> classGroup,
+        internal static IEnumerable<PropertyDeclarationSyntax> FilterByTypes(
+            this IEnumerable<PropertyDeclarationSyntax> classGroup,
             IEnumerable<string> type)
         {
             var ret = new List<PropertyDeclarationSyntax>();
@@ -42,22 +41,21 @@ namespace DesignPatternCodeGenerator.Base.CollectionHelper
             type.ToList().ForEach(
                 x =>
                 {
-                    ret.AddRange(FilterPropertyByTypes(classGroup, x));
+                    ret.AddRange(classGroup.FilterByTypes(x));
                 });
 
             return ret;
         }
 
-
-        internal static IEnumerable<IGrouping<string, ClassDeclarationSyntax>> FilterClassesByInterface(
-            IEnumerable<IGrouping<string, ClassDeclarationSyntax>> classGroup,
+        internal static IEnumerable<IGrouping<string, ClassDeclarationSyntax>> FilterByInterface(
+            this IEnumerable<IGrouping<string, ClassDeclarationSyntax>> classGroup,
             string interfaceName)
             => classGroup.SelectMany(x => x)
                     .Where(y => y.FirstAncestorOrSelf<ClassDeclarationSyntax>().BaseList.Types.ToString().Equals(interfaceName))
                     .GroupBy(z => z.Identifier.Text);
 
-        internal static IEnumerable<IGrouping<string, ClassDeclarationSyntax>> FilterClassesByInterface(
-            IEnumerable<IGrouping<string, ClassDeclarationSyntax>> classGroup,
+        internal static IEnumerable<IGrouping<string, ClassDeclarationSyntax>> FilterByInterface(
+            this IEnumerable<IGrouping<string, ClassDeclarationSyntax>> classGroup,
             IEnumerable<string> interfaceName)
         {
             var ret = new List<IGrouping<string, ClassDeclarationSyntax>>();
@@ -65,17 +63,10 @@ namespace DesignPatternCodeGenerator.Base.CollectionHelper
             interfaceName.ToList().ForEach(
                 x =>
                 {
-                    ret.AddRange(FilterClassesByInterface(classGroup, x));
+                    ret.AddRange(classGroup.FilterByInterface(x));
                 });
 
             return ret.Distinct();
         }
-
-        internal static IEnumerable<IGrouping<string, TypeDeclarationSyntax>> FilterClassesByAttributeTextValue(
-            IEnumerable<IGrouping<string, TypeDeclarationSyntax>> classGroup,
-            string attributeTextValue)
-            => classGroup.SelectMany(x => x)
-                    .Where(y => y.AttributeLists.First().Attributes.First().ArgumentList.Arguments.First().Expression.GetFirstToken().ValueText.Equals(attributeTextValue))
-                    .GroupBy(z => z.Identifier.Text);
     }
 }

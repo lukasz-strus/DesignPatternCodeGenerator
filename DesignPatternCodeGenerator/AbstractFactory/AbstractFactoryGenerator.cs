@@ -66,7 +66,7 @@ namespace DesignPatternCodeGenerator.AbstractFactory
             IEnumerable<IGrouping<string, ClassDeclarationSyntax>> classGroups)
         {
             var interfaceNames = interfaceGroup.Select(x => x.Identifier.Text);
-            var filtredClassGroups = FilterCollectionHelper.FilterClassesByInterface(classGroups, interfaceNames);
+            var filtredClassGroups = classGroups.FilterByInterface(interfaceNames);
 
             return filtredClassGroups.GroupByAttribute();
         }

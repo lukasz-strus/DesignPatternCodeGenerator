@@ -2,6 +2,7 @@
 
 namespace DesignPatternCodeGenerator.Analyzers
 {
+    //TODO add analyzers
     public class DesingPatternDiagnosticsDescriptors
     {
         public static readonly DiagnosticDescriptor ClassMustImplementFactoryInterface

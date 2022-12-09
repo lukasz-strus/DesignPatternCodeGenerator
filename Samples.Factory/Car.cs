@@ -38,4 +38,17 @@ partial class Audi : ICar
     }
 }
 
+[FactoryProduct]
+partial class Mercedes : ICar
+{
+    public string Name { get; set; }
+    public int HorsePower { get; set; }
+
+    public Mercedes(string name, int horsePower)
+    {
+        Name = name;
+        HorsePower = horsePower;
+    }
+}
+
 
