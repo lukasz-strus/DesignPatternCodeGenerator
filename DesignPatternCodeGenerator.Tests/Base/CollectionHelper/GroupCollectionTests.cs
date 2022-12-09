@@ -1,4 +1,5 @@
 ﻿using DesignPatternCodeGenerator.Base.CollectionHelper;
+using DesignPatternCodeGenerator.Tests.Base.CollectionHelper.Data;
 using DesignPatternCodeGenerator.Tests.Helpers;
 using FluentAssertions;
 using Xunit;
@@ -8,172 +9,72 @@ namespace DesignPatternCodeGenerator.Tests.Base.CollectionHelper
     public class GroupCollectionTests
     {
         [Theory]
-        [InlineData(INPUT_SOURCE)]
-        internal void GroupByAttributeValueText_ForValidInputs_ReturnGroupedInterfaceCollection(string inputSource)
+        [MemberData(nameof(CompilationSources.GetSampleDataToGroupInterfaceByAttribute), MemberType = typeof(CompilationSources))]
+        internal void GroupByAttribute_ForValidInputs_ReturnGroupedInterfaceCollection(string inputSource, string outputGroupKey)
         {
             var interfaceGroup = GeneratorTestsHelper.GetInterfaceGroups(inputSource);
 
             var result = interfaceGroup.GroupByAttribute();
 
-            result.First().Key.Should().Be("Gear");
+            result.First().Key
+                  .Should()
+                  .Be(outputGroupKey);
         }
 
         [Theory]
-        [InlineData(INPUT_SOURCE)]
-        internal void GroupByAttributeValueText_ForValidInputs_ReturnGroupedClassCollection(string inputSource)
+        [MemberData(nameof(CompilationSources.GetSampleDataToGroupClassByAttribute), MemberType = typeof(CompilationSources))]
+        internal void GroupByAttribute_ForValidInputs_ReturnGroupedClassCollection(string inputSource, string outputGroupKey)
         {
             var classGroup = GeneratorTestsHelper.GetClassGroups(inputSource);
 
             var result = classGroup.GroupByAttribute();
 
-            result.First().Key.Should().Be("Samsung");
+            result.First().Key
+                  .Should()
+                  .Be(outputGroupKey);
         }
 
         [Theory]
-        [InlineData(INPUT_SOURCE)]
-        internal void GroupByIdentifierText_ForValidInputs_ReturnGroupedCollection(string inputSource)
+        [MemberData(nameof(CompilationSources.GetSampleDataToGroupMehtodByAttribute), MemberType = typeof(CompilationSources))]
+        internal void GroupByAttribute_ForValidInputs_ReturnGroupedMethodCollection(string inputSource, string outputGroupKey)
+        {
+            var methodGroups = GeneratorTestsHelper.GetMethodGroups(inputSource);
+
+            var result = methodGroups.GroupByAttribute();
+
+            result.First().Key
+                  .Should()
+                  .Be(outputGroupKey);
+        }
+
+        [Theory]
+        [MemberData(nameof(CompilationSources.GetSampleDataToGroupInterfaceByIdentifier), MemberType = typeof(CompilationSources))]
+        internal void GroupByIdentifier_ForValidInputs_ReturnGroupedInterfaceCollection(string inputSource, string outputGroupKey)
         {
             var interfaceGroup = GeneratorTestsHelper.GetInterfaceGroups(inputSource);
+
             var groupByAttribute = interfaceGroup.GroupByAttribute().First();
 
             var result = groupByAttribute.GroupByIdentifier();
 
-            result.First().Key.Should().Be("IMouse");
+            result.First().Key
+                  .Should()
+                  .Be(outputGroupKey);
         }
 
-        private const string INPUT_SOURCE = @"using DesignPatternCodeGenerator.Attributes.AbstractFactory;
-using System;
-
-namespace Test.Test
-{
-    [AbstractFactory(""Gear"")]
-    public interface IMouse
-    {
-        void Click();
-    }
-
-    [AbstractFactoryChild(""Samsung"")]
-    public class SamsungMouse : IMouse
-    {
-        public void Click()
+        [Theory]
+        [MemberData(nameof(CompilationSources.GetSampleDataToGroupClassByIdentifier), MemberType = typeof(CompilationSources))]
+        internal void GroupByIdentifier_ForValidInputs_ReturnGroupedClassCollection(string inputSource, string outputGroupKey)
         {
-            Console.WriteLine(""Click Samsung"");
+            var classGroup = GeneratorTestsHelper.GetClassGroups(inputSource);
+
+            var groupByAttribute = classGroup.GroupByAttribute().First();
+
+            var result = groupByAttribute.GroupByIdentifier();
+
+            result.First().Key
+                  .Should()
+                  .Be(outputGroupKey);
         }
-    }
-
-    [AbstractFactoryChild(""Benq"")]
-    public class BenqMouse : IMouse
-    {
-        public void Click()
-        {
-            Console.WriteLine(""Click Benq"");
-        }
-    }
-
-    [AbstractFactory(""Gear"")]
-    public interface IMonitor
-    {
-        void On();
-        void Off();
-    }
-
-    [AbstractFactoryChild(""Samsung"")]
-    public class SamsungMonitor : IMonitor
-    {
-        public void On()
-        {
-            Console.WriteLine(""On Samsung monitor"");
-        }
-
-        public void Off()
-        {
-            Console.WriteLine(""Off Samsung monitor"");
-        }
-    }
-
-    [AbstractFactoryChild(""Benq"")]
-    public class BenqMonitor : IMonitor
-    {
-        public void On()
-        {
-            Console.WriteLine(""On Benq monitor"");
-        }
-
-        public void Off()
-        {
-            Console.WriteLine(""Off Benq monitor"");
-        }
-    }
-
-    [AbstractFactory(""UIElement"")]
-    public interface ITextBox
-    {
-        void Render();
-        void HandleInput();
-    }
-
-    [AbstractFactoryChild(""Windows"")]
-    public class WindowsTextBox : ITextBox
-    {
-        public void HandleInput()
-        {
-            Console.WriteLine(""Handle windows text input"");
-        }
-
-        public void Render()
-        {
-            Console.WriteLine(""Render windows textbox"");
-        }
-    }
-
-    [AbstractFactoryChild(""Mac"")]
-    public class MacTextBox : ITextBox
-    {
-        public void HandleInput()
-        {
-            Console.WriteLine(""Handle mac text input"");
-        }
-
-        public void Render()
-        {
-            Console.WriteLine(""Render mac textbox"");
-        }
-    }
-
-    [AbstractFactory(""UIElement"")]
-    public interface IButton
-    {
-        void Render();
-        void HandleClick();
-    }
-
-    [AbstractFactoryChild(""Windows"")]
-    public class WindowsButton : IButton
-    {
-        public void HandleClick()
-        {
-            Console.WriteLine(""Handle windows click event"");
-        }
-
-        public void Render()
-        {
-            Console.WriteLine(""Render windows button"");
-        }
-    }
-
-    [AbstractFactoryChild(""Mac"")]
-    public class MacButton : IButton
-    {
-        public void HandleClick()
-        {
-            Console.WriteLine(""Handle mac click event"");
-        }
-
-        public void Render()
-        {
-            Console.WriteLine(""Render mac button"");
-        }
-    }
-}";
     }
 }

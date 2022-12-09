@@ -33,13 +33,13 @@ namespace DesignPatternCodeGenerator.Factory
             foreach (var group in interfaceGroups)
             {
                 var interfaceName = BaseNamesGenerator.GetInterfaceName(group);
-                var factoryProductsGroups = FilterCollectionHelper.FilterClassesByInterface(classGroups, interfaceName);
+                var groupedClassGroups = classGroups.FilterByInterface(interfaceName);
 
-                GenerateEnumFactory(context, group, factoryProductsGroups);
+                GenerateEnumFactory(context, group, groupedClassGroups);
 
                 GenerateInterfaceFactory(context, group);
 
-                GenerateClassFactory(context, group, factoryProductsGroups);
+                GenerateClassFactory(context, group, groupedClassGroups);
             }
         }
 

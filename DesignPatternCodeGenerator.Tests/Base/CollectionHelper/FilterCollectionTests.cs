@@ -19,25 +19,11 @@ namespace DesignPatternCodeGenerator.Tests.Base.CollectionHelper
             var classGroups = GeneratorTestsHelper.GetClassGroups(compilationSource);
             var expectedClassGroups = GeneratorTestsHelper.GetClassGroups(expectedSource);
 
-            var result = FilterCollectionHelper.FilterClassesByInterface(classGroups, interfaceName);
+            var result = classGroups.FilterByInterface(interfaceName);
 
             result.Select(x => x.Key)
                   .Should()
                   .Equal(expectedClassGroups.Select(x => x.Key));
-        }
-
-        [Theory]
-        [InlineData(ABSTRACT_FACTORY_SOURCE, ATTRIBUTE_TEXT_VALUE, CLASSNAME)]
-        internal void FilterClassesByAttributeTextValue_ForValidInput_ReturnFiltredCollection(
-            string compilationSource,
-            string attributeTextValue,
-            string className)
-        {
-            var classGroups = GeneratorTestsHelper.GetClassGroups(compilationSource);
-
-            var result = FilterCollectionHelper.FilterClassesByAttributeTextValue(classGroups, attributeTextValue);
-
-            result.Select(x => x.Key).Should().Equal(className);
         }
 
         private const string FACTORY_COMPILATION_SOURCE =

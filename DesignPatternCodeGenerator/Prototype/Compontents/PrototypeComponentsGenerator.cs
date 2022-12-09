@@ -27,13 +27,14 @@ namespace DesignPatternCodeGenerator.Prototype.Compontents
             IGrouping<string, ClassDeclarationSyntax> group,
             IEnumerable<IGrouping<string, ClassDeclarationSyntax>> allClassGroups)
         {
-            var properties = group.SelectMany(g => g.Members).OfType<PropertyDeclarationSyntax>().Distinct();
-
             var typesName = allClassGroups.SelectMany(x => x).Select(y => y.Identifier.Text);
 
-            var filtredProperties = FilterCollectionHelper.FilterPropertyByTypes(properties, typesName);
+            var properties = group.SelectMany(g => g.Members)
+                                  .OfType<PropertyDeclarationSyntax>()
+                                  .Distinct()
+                                  .FilterByTypes(typesName);
 
-            return $"{string.Join("\n\n\t\t\t", filtredProperties.Select(p => $"clone.{p.Identifier.Text} = {GenerateNewObject(allClassGroups, p)}"))}";
+            return $"{string.Join("\n\n\t\t\t", properties.Select(p => $"clone.{p.Identifier.Text} = {GenerateNewObject(allClassGroups, p)}"))}";
         }
 
         private static string GenerateNewObject(
@@ -43,8 +44,8 @@ namespace DesignPatternCodeGenerator.Prototype.Compontents
             var typeName = property.Type.ToString();
             var classDeclaratios = allClassGroups.SelectMany(x => x);
 
-            var classDeclaration = FilterCollectionHelper.FilterClassDeclarationsByTypes(classDeclaratios, typeName)
-                                                         .FirstOrDefault();
+            var classDeclaration = classDeclaratios.FilterByTypes(typeName)
+                                                   .FirstOrDefault();
 
             return $@"new {classDeclaration.Identifier.Text}()
             {{

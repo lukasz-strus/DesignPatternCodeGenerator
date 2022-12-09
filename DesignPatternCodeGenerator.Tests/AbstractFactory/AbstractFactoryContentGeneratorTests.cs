@@ -31,7 +31,7 @@ public class AbstractFactoryContentGeneratorTests
         var interfaceGroup = mainInterfaceGroup.GroupByIdentifier();
 
         var classGroups = GeneratorTestsHelper.GetClassGroups(inputSource);
-        var filtredClassGroups = FilterCollectionHelper.FilterClassesByInterface(classGroups, interfaceGroup.First().Key);
+        var filtredClassGroups = classGroups.FilterByInterface(interfaceGroup.First().Key);
 
         var result = AbstractFactoryContentGenerator.GenerateFactoryClass(mainInterfaceGroup, filtredClassGroups.First());
 
