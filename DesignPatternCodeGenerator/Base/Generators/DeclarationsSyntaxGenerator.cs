@@ -54,18 +54,15 @@ namespace DesignPatternCodeGenerator.Base.Generators
             CancellationToken token, 
             Type attributeType)
         {
-            return (await Task.WhenAll(compilation.SyntaxTrees.Select(x => SetMethodDeclarationSyntax(x, compilation, token, attributeType))))
+            return (await Task.WhenAll(compilation.SyntaxTrees.Select(x => SetMethodDeclarationSyntax(x, token, attributeType))))
                 .SelectMany(x => x);
         }
 
         private static async Task<IEnumerable<MethodDeclarationSyntax>> SetMethodDeclarationSyntax(
             SyntaxTree tree, 
-            Compilation compilation, 
             CancellationToken token, 
             Type attributeType)
         {
-            var semanticModel = compilation.GetSemanticModel(tree);
-
             var methods = (await tree.GetRootAsync(token))
                 .DescendantNodes()
                 .OfType<MethodDeclarationSyntax>()

@@ -8,7 +8,7 @@ using System.Linq;
 namespace DesignPatternCodeGenerator.Analyzers
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public class PrototypeAnalyzer : DiagnosticAnalyzer
+    public class PrototypePartialAnalyzer : DiagnosticAnalyzer
     {
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get; }
             = ImmutableArray.Create(DesingPatternDiagnosticsDescriptors.PrototypeMustBePartial);
@@ -17,7 +17,6 @@ namespace DesignPatternCodeGenerator.Analyzers
         {
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
             context.EnableConcurrentExecution();
-
             context.RegisterSyntaxNodeAction(AnalyzeNamedType, SyntaxKind.ClassDeclaration);
         }
 
@@ -27,22 +26,22 @@ namespace DesignPatternCodeGenerator.Analyzers
             var declaredSymbol = context.SemanticModel.GetDeclaredSymbol(classDeclaration);
             var attributes = classDeclaration.AttributeLists.ToString();
 
-            if (!IsPartial(classDeclaration) && IsSingleton(attributes))
-            {
-                var error = GetError(classDeclaration, declaredSymbol);
-
-                context.ReportDiagnostic(error);
-            }
+            if (IsPartial(classDeclaration) || !IsPrototype(attributes))            
+                return;
+            
+            var error = GetError(classDeclaration, declaredSymbol);
+            context.ReportDiagnostic(error);
         }
 
         private static bool IsPartial(ClassDeclarationSyntax classDeclarationSyntax)
             => classDeclarationSyntax.Modifiers.Any(SyntaxKind.PartialKeyword);
 
-        private static bool IsSingleton(string attributes) => attributes.Contains("Prototype");
+        private static bool IsPrototype(string attributes) => attributes.Contains("Prototype");
 
         private static Diagnostic GetError(ClassDeclarationSyntax classDeclaration, INamedTypeSymbol symbol)
-            => Diagnostic.Create(DesingPatternDiagnosticsDescriptors.PrototypeMustBePartial,
-                      classDeclaration.Identifier.GetLocation(),
-                      symbol.Name);
+            => Diagnostic.Create(
+                DesingPatternDiagnosticsDescriptors.PrototypeMustBePartial,
+                classDeclaration.Identifier.GetLocation(),
+                symbol.Name);
     }
 }

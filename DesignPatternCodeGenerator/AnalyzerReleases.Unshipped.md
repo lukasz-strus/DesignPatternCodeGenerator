@@ -8,3 +8,4 @@ DES0001 | DesingPatternAnalyzer | Error | DesingPatternDiagnosticsDescriptors
 DES0002 | DesingPatternAnalyzer | Error | DesingPatternDiagnosticsDescriptors
 DES0003 | DesingPatternAnalyzer | Error | DesingPatternDiagnosticsDescriptors
 DES0004 | DesingPatternAnalyzer | Error | DesingPatternDiagnosticsDescriptors
+DES0005 | DesingPatternAnalyzer | Error | DesingPatternDiagnosticsDescriptors

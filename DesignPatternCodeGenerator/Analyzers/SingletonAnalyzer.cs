@@ -17,7 +17,6 @@ namespace DesignPatternCodeGenerator.Analyzers
         {
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
             context.EnableConcurrentExecution();
-
             context.RegisterSyntaxNodeAction(AnalyzeNamedType, SyntaxKind.ClassDeclaration);
         }
 
@@ -27,12 +26,11 @@ namespace DesignPatternCodeGenerator.Analyzers
             var declaredSymbol = context.SemanticModel.GetDeclaredSymbol(classDeclaration);
             var attributes = classDeclaration.AttributeLists.ToString();
 
-            if (!IsPartial(classDeclaration) && IsSingleton(attributes))
-            {
-                var error = GetError(classDeclaration, declaredSymbol);
-
-                context.ReportDiagnostic(error);
-            }
+            if (IsPartial(classDeclaration) || !IsSingleton(attributes))            
+                return;
+            
+            var error = GetError(classDeclaration, declaredSymbol);
+            context.ReportDiagnostic(error);
         }
 
         private static bool IsPartial(ClassDeclarationSyntax classDeclarationSyntax)
@@ -41,8 +39,9 @@ namespace DesignPatternCodeGenerator.Analyzers
         private static bool IsSingleton(string attributes) => attributes.Contains("Singleton");
 
         private static Diagnostic GetError(ClassDeclarationSyntax classDeclaration, INamedTypeSymbol symbol)
-            => Diagnostic.Create(DesingPatternDiagnosticsDescriptors.SingletonMustBePartial,
-                      classDeclaration.Identifier.GetLocation(),
-                      symbol.Name);
+            => Diagnostic.Create(
+                DesingPatternDiagnosticsDescriptors.SingletonMustBePartial,
+                classDeclaration.Identifier.GetLocation(),
+                symbol.Name);
     }
 }
