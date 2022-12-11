@@ -16,7 +16,6 @@ namespace DesignPatternCodeGenerator.Analyzers
         {
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
             context.EnableConcurrentExecution();
-
             context.RegisterSyntaxNodeAction(CheckClassForInterfaces, SyntaxKind.ClassDeclaration);
         }
 
@@ -26,12 +25,13 @@ namespace DesignPatternCodeGenerator.Analyzers
             var declaredSymbol = context.SemanticModel.GetDeclaredSymbol(classDeclaration);
             var attributes = classDeclaration.AttributeLists.ToString();
 
-            if (IsNullBaseList(classDeclaration.BaseList) && IsAbstractFactoryChild(attributes))
-            {
-                var error = GetError(classDeclaration, declaredSymbol);
+            if (!IsNullBaseList(classDeclaration.BaseList) || !IsAbstractFactoryChild(attributes))            
+                return;
+            
 
-                context.ReportDiagnostic(error);
-            }
+            var error = GetError(classDeclaration, declaredSymbol);
+
+            context.ReportDiagnostic(error);
         }
 
         private static bool IsAbstractFactoryChild(string attributes) => attributes.Contains("AbstractFactoryClass");
@@ -40,8 +40,8 @@ namespace DesignPatternCodeGenerator.Analyzers
 
         private static Diagnostic GetError(ClassDeclarationSyntax classDeclaration, INamedTypeSymbol symbol)
             => Diagnostic.Create(
-                    DesingPatternDiagnosticsDescriptors.ClassMustImplementAbstractFactoryInterface,
-                    classDeclaration.Identifier.GetLocation(),
-                    symbol.Name);
+                DesingPatternDiagnosticsDescriptors.ClassMustImplementAbstractFactoryInterface,
+                classDeclaration.Identifier.GetLocation(),
+                symbol.Name);
     }
 }

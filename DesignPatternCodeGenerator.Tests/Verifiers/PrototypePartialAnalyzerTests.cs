@@ -2,14 +2,14 @@
 using DesignPatternCodeGenerator.Attributes.Prototype;
 using Xunit;
 using Verifier = DesignPatternCodeGenerator.Tests.Verifiers.AnalyzerVerifier<
-   DesignPatternCodeGenerator.Analyzers.PrototypeAnalyzer>;
+   DesignPatternCodeGenerator.Analyzers.PrototypePartialAnalyzer>;
 
 namespace DesignPatternCodeGenerator.Tests.Verifiers;
 
-public class PrototypeAnalyzerTests
+public class PrototypePartialAnalyzerTests
 {
     [Fact]
-    public async Task Analyzer_ForFactoryChildClassWithoutInterface_ShouldThrowError()
+    public async Task Analyzer_ForNoPartialPrototypClass_ShouldThrowError()
     {
         var input =
 @"using DesignPatternCodeGenerator.Attributes.Prototype;

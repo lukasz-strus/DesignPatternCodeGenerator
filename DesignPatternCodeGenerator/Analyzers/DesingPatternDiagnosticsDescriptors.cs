@@ -2,7 +2,6 @@
 
 namespace DesignPatternCodeGenerator.Analyzers
 {
-    //TODO add analyzers
     public class DesingPatternDiagnosticsDescriptors
     {
         public static readonly DiagnosticDescriptor ClassMustImplementFactoryInterface
@@ -37,6 +36,15 @@ namespace DesignPatternCodeGenerator.Analyzers
                "DES0004",
                "Prototype class must be partial",
                "The prototype class '{0}' must be partial",
+               "DesingPatternAnalyzer",
+               DiagnosticSeverity.Error,
+               true);
+
+        public static readonly DiagnosticDescriptor ClassMustHaveParameterlessConstructor
+            = new DiagnosticDescriptor(
+               "DES0005",
+               "No parameterless constructor",
+               "The type of '{0}' must have parameterless constructor",
                "DesingPatternAnalyzer",
                DiagnosticSeverity.Error,
                true);

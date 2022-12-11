@@ -26,12 +26,12 @@ namespace DesignPatternCodeGenerator.Analyzers
             var declaredSymbol = context.SemanticModel.GetDeclaredSymbol(classDeclaration);
             var attributes = classDeclaration.AttributeLists.ToString();
 
-            if (IsNullBaseList(classDeclaration.BaseList) && IsFactoryChild(attributes))
-            {
-                var error = GetError(classDeclaration, declaredSymbol);
+            if (!IsNullBaseList(classDeclaration.BaseList) || !IsFactoryChild(attributes))
+                return;
+            
+            var error = GetError(classDeclaration, declaredSymbol);
 
-                context.ReportDiagnostic(error);
-            }
+            context.ReportDiagnostic(error);
         }
 
         private static bool IsFactoryChild(string attributes) => attributes.Contains("FactoryProduct");
@@ -40,8 +40,8 @@ namespace DesignPatternCodeGenerator.Analyzers
 
         private static Diagnostic GetError(ClassDeclarationSyntax classDeclaration, INamedTypeSymbol symbol)
             => Diagnostic.Create(
-                    DesingPatternDiagnosticsDescriptors.ClassMustImplementFactoryInterface,
-                    classDeclaration.Identifier.GetLocation(),
-                    symbol.Name);
+                DesingPatternDiagnosticsDescriptors.ClassMustImplementFactoryInterface,
+                classDeclaration.Identifier.GetLocation(),
+                symbol.Name);
     }
 }

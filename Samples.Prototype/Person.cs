@@ -30,6 +30,15 @@ public partial class Person2
 
 public class Address
 {
+    public Address(string? houseNumber, string? street, string? city)
+    {
+        HouseNumber = houseNumber;
+        Street = street;
+        City = city;
+    }
+
+    public Address() { }
+
     public string? HouseNumber { get; set; }
     public string? Street { get; set; }
     public string? City { get; set; }
