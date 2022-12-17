@@ -1,4 +1,5 @@
 ﻿using DesignPatternCodeGenerator.Attributes.AbstractFactory;
+using DesignPatternCodeGenerator.Attributes.ContainerIoC;
 using DesignPatternCodeGenerator.Attributes.Facade;
 using DesignPatternCodeGenerator.Attributes.Factory;
 using DesignPatternCodeGenerator.Attributes.NullObject;
@@ -35,6 +36,8 @@ namespace DesignPatternCodeGenerator.Attributes
                     return typeof(FacadeMainParameterAttribute);
                 case GeneratorAttributeType.NullObject:
                     return typeof(NullObjectAttribute);
+                case GeneratorAttributeType.Container:
+                    return typeof(ContainerAttribute);
                 default:
                     throw new Exception($"Type {generatorType} is not handled");
             }

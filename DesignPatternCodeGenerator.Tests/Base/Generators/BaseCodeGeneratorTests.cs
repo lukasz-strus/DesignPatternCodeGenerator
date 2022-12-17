@@ -31,4 +31,17 @@ public class BaseCodeGeneratorTests
               .Be(expected.RemoveWhitespace());
     }
 
+    [Theory]
+    [MemberData(nameof(BaseCompilationSources.GetSampleDataContainerUsingsAndNamespace), MemberType = typeof(BaseCompilationSources))]
+    public void GenerateContainerUsingsAndNamespace_ForValidInputs_ReturnsCorrectString(string source, string expected)
+    {
+        var interfaceGroup = GeneratorTestsHelper.GetClassGroup(source);
+
+        var result = BaseCodeGenerator.GenerateContainerUsingsAndNamespace(interfaceGroup);
+
+        result.RemoveWhitespace()
+              .Should()
+              .Be(expected.RemoveWhitespace());
+    }
+
 }
