@@ -13,23 +13,23 @@ namespace DesignPatternCodeGenerator.ContainerIOC.Components
         internal static string GenerateDeclaration(IGrouping<string, ClassDeclarationSyntax> group)
             => $"{BaseNamesGenerator.GetAccesibility(group)} static class {GetContainerName(group)}";
 
-        internal static string GenerateMethod(IGrouping<string, ClassDeclarationSyntax> group, GeneratorExecutionContext context)
+        internal static string GenerateMethod(IGrouping<string, ClassDeclarationSyntax> group, Compilation compilation)
             => $@"
         {GetMethodName(group)}
         {{
             host.ConfigureServices(services =>
             {{
-                {GenerateRegister(group, context)}
+                {GenerateRegister(group, compilation)}
             }});
             
             return host;
         }}";
 
-        private static string GenerateRegister(IGrouping<string, ClassDeclarationSyntax> group, GeneratorExecutionContext context)
-            => $"{string.Join("\n\t\t\t\t", group.Select(x=>GenerateAddRegisters(x, context)))}";
+        private static string GenerateRegister(IGrouping<string, ClassDeclarationSyntax> group, Compilation compilation)
+            => $"{string.Join("\n\t\t\t\t", group.Select(x=>GenerateAddRegisters(x, compilation)))}";
 
-        private static string GenerateAddRegisters(ClassDeclarationSyntax syntax, GeneratorExecutionContext context)
-             => $"{string.Join("\n\t\t\t\t", GetAllClassInterfaces(syntax, context).Select(x => GenerateAddRegister(syntax, x)))}";
+        private static string GenerateAddRegisters(ClassDeclarationSyntax syntax, Compilation compilation)
+             => $"{string.Join("\n\t\t\t\t", GetAllClassInterfaces(syntax, compilation).Select(x => GenerateAddRegister(syntax, x)))}";
 
         private static string GenerateAddRegister(ClassDeclarationSyntax syntax, string interfaceName)
             => $"services.Add{GetObjectLife(syntax)}<{interfaceName}, {syntax.Identifier.Text}>();";
@@ -42,11 +42,11 @@ namespace DesignPatternCodeGenerator.ContainerIOC.Components
 
         private static IEnumerable<string> GetAllClassInterfaces(
             ClassDeclarationSyntax syntax,
-            GeneratorExecutionContext context)
+            Compilation compilation)
         {
             var classDeclaration = syntax;
 
-            var semanticModel = context.Compilation.GetSemanticModel(classDeclaration.SyntaxTree);
+            var semanticModel = compilation.GetSemanticModel(classDeclaration.SyntaxTree);
 
             var interfaces = semanticModel.GetDeclaredSymbol(classDeclaration).AllInterfaces;
 

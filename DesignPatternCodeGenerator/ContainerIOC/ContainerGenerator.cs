@@ -5,7 +5,6 @@ using DesignPatternCodeGenerator.Base.Generators;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
-using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
@@ -36,7 +35,7 @@ namespace DesignPatternCodeGenerator.ContainerIOC
             IGrouping<string, ClassDeclarationSyntax> group)
         {
             var hintName = $"{BaseNamesGenerator.GetClassName(group)}HostBuildersExtension.g.cs";
-            var classContent = ContainerContentGenerator.GenerateClass(group, context);
+            var classContent = ContainerContentGenerator.GenerateClass(group, context.Compilation);
 
             context.AddSource(hintName, SourceText.From(classContent, Encoding.UTF8));
         }
