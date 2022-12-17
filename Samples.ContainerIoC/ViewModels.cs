@@ -26,8 +26,8 @@ public class MainViewModel : IViewModel1, IViewModel3, IViewModel4, IDisposable
     }
 }
 
-[Container("AddViewModels", ObjectLifeTime.Transient, new string[] { "IViewModel4" })]
-public class ViewModel : IViewModel1, IViewModel3, IViewModel4
+[Container("AddViewModels", ObjectLifeTime.Transient)]
+public class ViewModel : IViewModel1
 {
 }
 
