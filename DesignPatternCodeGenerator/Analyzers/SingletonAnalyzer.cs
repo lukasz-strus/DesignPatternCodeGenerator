@@ -36,7 +36,7 @@ namespace DesignPatternCodeGenerator.Analyzers
         private static bool IsPartial(ClassDeclarationSyntax classDeclarationSyntax)
             => classDeclarationSyntax.Modifiers.Any(SyntaxKind.PartialKeyword);
 
-        private static bool IsSingleton(string attributes) => attributes.Contains("Singleton");
+        private static bool IsSingleton(string attributes) => attributes.Contains("Singleton") && !attributes.Contains("ObjectLifeTime.Singleton");
 
         private static Diagnostic GetError(ClassDeclarationSyntax classDeclaration, INamedTypeSymbol symbol)
             => Diagnostic.Create(

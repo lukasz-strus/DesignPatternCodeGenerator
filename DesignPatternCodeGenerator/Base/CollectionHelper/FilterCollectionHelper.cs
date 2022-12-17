@@ -9,9 +9,9 @@ namespace DesignPatternCodeGenerator.Base.CollectionHelper
         internal static IEnumerable<ClassDeclarationSyntax> FilterByTypes(
             this IEnumerable<ClassDeclarationSyntax> classDeclarations,
             string typeName)
-            => classDeclarations.Where(y => IsClassType(y, typeName));
+            => classDeclarations.Where(y => y.IsClassType(typeName));
 
-        private static bool IsClassType(ClassDeclarationSyntax classSyntax, string typeName)
+        private static bool IsClassType(this ClassDeclarationSyntax classSyntax, string typeName)
         {
             var nullableType = typeName.EndsWith("?") ? typeName.Remove(typeName.Length - 1) : typeName;
 
@@ -21,9 +21,9 @@ namespace DesignPatternCodeGenerator.Base.CollectionHelper
         internal static IEnumerable<PropertyDeclarationSyntax> FilterByTypes(
             this IEnumerable<PropertyDeclarationSyntax> classGroup,
             string typeName)
-            => classGroup.Where(y => IsPropertyType(y, typeName));
+            => classGroup.Where(y => y.IsPropertyType(typeName));
 
-        private static bool IsPropertyType(PropertyDeclarationSyntax property, string typeName)
+        private static bool IsPropertyType(this PropertyDeclarationSyntax property, string typeName)
         {
             var propertyType = property.Type.ToString();
 
