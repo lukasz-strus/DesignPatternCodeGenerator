@@ -19,17 +19,17 @@ namespace DesignPatternCodeGenerator.ContainerIOC.Components
         {{
             host.ConfigureServices(services =>
             {{
-                {GenerateRegister(group, GetAllClassInterfaces(group, context))}
+                {GenerateRegister(group, context)}
             }});
             
             return host;
         }}";
 
-        private static string GenerateRegister(IGrouping<string, ClassDeclarationSyntax> group, IEnumerable<string> interfaces)
-            => $"{string.Join("\n\t\t\t\t", group.Select(x => GenerateAddRegisters(x, interfaces)))}";
+        private static string GenerateRegister(IGrouping<string, ClassDeclarationSyntax> group, GeneratorExecutionContext context)
+            => $"{string.Join("\n\t\t\t\t", group.Select(x=>GenerateAddRegisters(x, context)))}";
 
-        private static string GenerateAddRegisters(ClassDeclarationSyntax syntax, IEnumerable<string> interfaces)
-             => $"{string.Join("\n\t\t\t\t", interfaces.Select(x => GenerateAddRegister(syntax, x)))}";
+        private static string GenerateAddRegisters(ClassDeclarationSyntax syntax, GeneratorExecutionContext context)
+             => $"{string.Join("\n\t\t\t\t", GetAllClassInterfaces(syntax, context).Select(x => GenerateAddRegister(syntax, x)))}";
 
         private static string GenerateAddRegister(ClassDeclarationSyntax syntax, string interfaceName)
             => $"services.Add{GetObjectLife(syntax)}<{interfaceName}, {syntax.Identifier.Text}>();";
@@ -41,10 +41,10 @@ namespace DesignPatternCodeGenerator.ContainerIOC.Components
             => $"{BaseNamesGenerator.GetClassName(group)}HostBuildersExtension";
 
         private static IEnumerable<string> GetAllClassInterfaces(
-            IGrouping<string, ClassDeclarationSyntax> group,
+            ClassDeclarationSyntax syntax,
             GeneratorExecutionContext context)
         {
-            var classDeclaration = group.FirstOrDefault();
+            var classDeclaration = syntax;
 
             var semanticModel = context.Compilation.GetSemanticModel(classDeclaration.SyntaxTree);
 
@@ -54,12 +54,12 @@ namespace DesignPatternCodeGenerator.ContainerIOC.Components
                                           .Where(RemoveSystemInterfaces)
                                           .Select(GetInterfaceName);
 
-            return allInterfaces.Except(GetExcludedInterfaces(group));
+            return allInterfaces.Except(GetExcludedInterfaces(syntax));
         }
 
-        private static IEnumerable<string> GetExcludedInterfaces(IGrouping<string, ClassDeclarationSyntax> group)
+        private static IEnumerable<string> GetExcludedInterfaces(ClassDeclarationSyntax syntax)
         {
-            var argument = GetAttributeArgument(group.First(), typeof(ArrayCreationExpressionSyntax));
+            var argument = GetAttributeArgument(syntax, typeof(ArrayCreationExpressionSyntax));
 
             var arrayExpression = (ArrayCreationExpressionSyntax)argument.Expression;
 
