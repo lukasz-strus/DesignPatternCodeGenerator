@@ -54,12 +54,20 @@ namespace DesignPatternCodeGenerator.ContainerIOC.Components
                                           .Where(RemoveSystemInterfaces)
                                           .Select(GetInterfaceName);
 
-            return allInterfaces.Except(GetExcludedInterfaces(syntax));
+            var excludedInterface = GetExcludedInterfaces(syntax);
+
+            if (excludedInterface == null)
+                return allInterfaces;
+
+            return allInterfaces.Except(excludedInterface);
         }
 
         private static IEnumerable<string> GetExcludedInterfaces(ClassDeclarationSyntax syntax)
         {
             var argument = GetAttributeArgument(syntax, typeof(ArrayCreationExpressionSyntax));
+
+            if (argument == null)
+                return null;
 
             var arrayExpression = (ArrayCreationExpressionSyntax)argument.Expression;
 
@@ -83,7 +91,7 @@ namespace DesignPatternCodeGenerator.ContainerIOC.Components
                     .First().Attributes
                     .First().ArgumentList.Arguments
                     .Where(x => x.Expression.GetType() == type)
-                    .First();
+                    .FirstOrDefault();
 
         private static bool RemoveSystemInterfaces(string fullName)
             => !fullName.Contains("System.");
