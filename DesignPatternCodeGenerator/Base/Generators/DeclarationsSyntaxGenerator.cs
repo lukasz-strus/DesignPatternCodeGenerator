@@ -1,4 +1,6 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using DesignPatternCodeGenerator.Attributes;
+using DesignPatternCodeGenerator.Base.Enums;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System;
 using System.Collections.Generic;
@@ -100,6 +102,11 @@ namespace DesignPatternCodeGenerator.Base.Generators
                 .OfType<ClassDeclarationSyntax>()
                 .Where(x => x.AttributeLists.Any());
 
+            if (IsContainerAttribute(attributeType))
+            {
+                return classes.Where(x => x.AttributeLists.Any(y => y.Attributes.Any(z => z.Name.ToString().Contains("Container"))));
+            }
+
             return classes.Where(x => x.AttributeLists.Any(y => y.Attributes.Any(z => semanticModel.GetTypeInfo(z).Type.Name == attributeType.Name)));
         }
 
@@ -136,5 +143,8 @@ namespace DesignPatternCodeGenerator.Base.Generators
 
             return interfaces.Where(x => x.AttributeLists.Any(y => y.Attributes.Any(z => semanticModel.GetTypeInfo(z).Type.Name == attributeType.Name)));
         }
+
+        private static bool IsContainerAttribute(Type attributeType) 
+            => attributeType == AttributeTypeGenerator.SetGeneratorAttributeType(GeneratorAttributeType.Container);
     }
 }
