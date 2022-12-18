@@ -1,4 +1,7 @@
-﻿using DesignPatternCodeGenerator.ContainerIOC;
+﻿using DesignPatternCodeGenerator.Attributes.ContainerIoC;
+using DesignPatternCodeGenerator.Base.Generators;
+using DesignPatternCodeGenerator.Base.CollectionHelper;
+using DesignPatternCodeGenerator.ContainerIOC;
 using DesignPatternCodeGenerator.Tests.ContainerIOC.Data;
 using DesignPatternCodeGenerator.Tests.Helpers;
 using FluentAssertions;
@@ -7,20 +10,21 @@ namespace DesignPatternCodeGenerator.Tests.ContainerIOC;
 
 public class ContainerContentGeneratorTests
 {
-    /*
-     TODO Add ContainerContentGeneratorTests
-
     [Theory]
     [MemberData(nameof(ContainerCompilationSources.GetSampleDataToClassTests), MemberType = typeof(ContainerCompilationSources))]
     internal void GenerateClass_ForValidInputs_ReturnInterface(string inputSource, string expectedSource)
     {
-        var classGroup = GeneratorTestsHelper.GetClassGroup(inputSource);
         var compilation = GeneratorTestsHelper.CreateCompilation(inputSource);
+        var source = new CancellationTokenSource();
+        var token = source.Token;
 
-        var result = ContainerContentGenerator.GenerateClass(classGroup, compilation);
+        var classGroups = DeclarationsSyntaxGenerator.GetClassGroups(compilation, token, typeof(ContainerAttribute));
+        classGroups = classGroups.GroupByAttribute();
+
+        var result = ContainerContentGenerator.GenerateClass(classGroups.First(), compilation);
 
         result.RemoveWhitespace().Should().Be(expectedSource.RemoveWhitespace());
     }
 
-    */
+
 }

@@ -44,11 +44,9 @@ namespace DesignPatternCodeGenerator.ContainerIOC.Components
             ClassDeclarationSyntax syntax,
             Compilation compilation)
         {
-            var classDeclaration = syntax;
+            var semanticModel = compilation.GetSemanticModel(syntax.SyntaxTree);
 
-            var semanticModel = compilation.GetSemanticModel(classDeclaration.SyntaxTree);
-
-            var interfaces = semanticModel.GetDeclaredSymbol(classDeclaration).AllInterfaces;
+            var interfaces = semanticModel.GetDeclaredSymbol(syntax).AllInterfaces;
 
             var allInterfaces = interfaces.Select(x => x.ToString())
                                           .Where(RemoveSystemInterfaces)
