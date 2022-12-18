@@ -9,7 +9,7 @@ Edit your project and add the following, replacing the project path with the one
 	<ProjectReference Include="..\PathTo\DesignPatternCodeGenerator.csproj"
 					  OutputItemType="Analyzer"
 					  ReferenceOutputAssembly="true" />
-    <ProjectReference Include="..\PathTo\DesignPatternCodeGenerator.csproj" />
+        <ProjectReference Include="..\PathTo\DesignPatternCodeGenerator.csproj" />
   </ItemGroup>
 ```
 
