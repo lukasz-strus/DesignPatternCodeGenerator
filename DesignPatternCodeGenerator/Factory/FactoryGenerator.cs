@@ -16,14 +16,14 @@ namespace DesignPatternCodeGenerator.Factory
     {
         public void Execute(GeneratorExecutionContext context)
         {
-            var factoryAttribute = AttributeTypeGenerator.SetGeneratorAttributeType(GeneratorAttributeType.Factory);
+            var factoryAttribute = AttributeTypeGenerator.CreateGeneratorAttributeType(GeneratorAttributeType.Factory);
 
             var interfaceGroups = DeclarationsSyntaxGenerator.GetInterfaceGroups(
                 context.Compilation,
                 context.CancellationToken,
                 factoryAttribute);
 
-            var factoryChildAttribute = AttributeTypeGenerator.SetGeneratorAttributeType(GeneratorAttributeType.FactoryProduct);
+            var factoryChildAttribute = AttributeTypeGenerator.CreateGeneratorAttributeType(GeneratorAttributeType.FactoryProduct);
 
             var classGroups = DeclarationsSyntaxGenerator.GetClassGroups(
                 context.Compilation,

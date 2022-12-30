@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DesignPatternCodeGenerator.Attributes.ContainerIoC
+namespace DesignPatternCodeGenerator.Attributes.IoCContainer
 {
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
     public class ContainerAttribute : Attribute

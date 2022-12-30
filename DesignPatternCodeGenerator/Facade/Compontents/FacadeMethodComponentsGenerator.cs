@@ -8,6 +8,8 @@ namespace DesignPatternCodeGenerator.Facade.Compontents
 {
     public class FacadeMethodComponentsGenerator
     {
+        //TODO add generate parameterless methods
+
         internal static string GenerateMethod(IGrouping<string, MethodDeclarationSyntax> group)
             => $@"public void {BaseNamesGenerator.GetClassName(group)}({GenerateFacadeMethodParams(group)})
                 {{
@@ -26,8 +28,8 @@ namespace DesignPatternCodeGenerator.Facade.Compontents
         private static string GenerateDependencyMethod(
             IGrouping<string, MethodDeclarationSyntax> group,
             ref List<string> usedMethods)
-            => GenerateParameterMethods(group, IsNotVoidMethod, ref usedMethods) +
-            GenerateParameterMethods(group, IsVoidMethod, ref usedMethods);
+            => GenerateParameterMethods(group, IsNotVoidMethod, ref usedMethods) 
+            + GenerateParameterMethods(group, IsVoidMethod, ref usedMethods);
 
         private static string GenerateParameterMethods(
             IGrouping<string, MethodDeclarationSyntax> group,

@@ -15,7 +15,7 @@ namespace DesignPatternCodeGenerator.Prototype
     {
         public void Execute(GeneratorExecutionContext context)
         {
-            var prototypeAttribute = AttributeTypeGenerator.SetGeneratorAttributeType(GeneratorAttributeType.Prototype);
+            var prototypeAttribute = AttributeTypeGenerator.CreateGeneratorAttributeType(GeneratorAttributeType.Prototype);
 
             var classGroups = DeclarationsSyntaxGenerator.GetClassGroups(
                 context.Compilation,

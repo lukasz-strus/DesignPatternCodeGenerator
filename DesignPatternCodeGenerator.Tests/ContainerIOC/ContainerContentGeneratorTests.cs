@@ -1,7 +1,7 @@
-﻿using DesignPatternCodeGenerator.Attributes.ContainerIoC;
+﻿using DesignPatternCodeGenerator.Attributes.IoCContainer;
 using DesignPatternCodeGenerator.Base.Generators;
 using DesignPatternCodeGenerator.Base.CollectionHelper;
-using DesignPatternCodeGenerator.ContainerIOC;
+using DesignPatternCodeGenerator.IoCContainer;
 using DesignPatternCodeGenerator.Tests.ContainerIOC.Data;
 using DesignPatternCodeGenerator.Tests.Helpers;
 using FluentAssertions;

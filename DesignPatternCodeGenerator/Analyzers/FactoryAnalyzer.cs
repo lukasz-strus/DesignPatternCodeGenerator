@@ -9,6 +9,8 @@ namespace DesignPatternCodeGenerator.Analyzers
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class FactoryAnalyzer : DiagnosticAnalyzer
     {
+        //TODO pobrać listę interfejsów i sprawdzić czy któryś jest oznaczony atrybutem Factory
+        //TODO zmienić contains na przyrównanie typów
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get; }
             = ImmutableArray.Create(DesingPatternDiagnosticsDescriptors.ClassMustImplementFactoryInterface);
 
@@ -25,7 +27,7 @@ namespace DesignPatternCodeGenerator.Analyzers
             var declaredSymbol = context.SemanticModel.GetDeclaredSymbol(classDeclaration);
             var attributes = classDeclaration.AttributeLists.ToString();
 
-            if (!IsNullBaseList(classDeclaration.BaseList) || !IsFactoryChild(attributes))
+            if (!IsNullBaseList(classDeclaration.BaseList) || !IsFactoryProduct(attributes))
                 return;
             
             var error = GetError(classDeclaration, declaredSymbol);
@@ -33,7 +35,7 @@ namespace DesignPatternCodeGenerator.Analyzers
             context.ReportDiagnostic(error);
         }
 
-        private static bool IsFactoryChild(string attributes) => attributes.Contains("FactoryProduct");
+        private static bool IsFactoryProduct(string attributes) => attributes.Contains("FactoryProduct");
 
         private static bool IsNullBaseList(BaseListSyntax baseList) => baseList is null;
 

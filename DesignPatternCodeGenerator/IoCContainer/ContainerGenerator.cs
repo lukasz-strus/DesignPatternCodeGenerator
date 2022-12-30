@@ -8,14 +8,14 @@ using Microsoft.CodeAnalysis.Text;
 using System.Linq;
 using System.Text;
 
-namespace DesignPatternCodeGenerator.ContainerIOC
+namespace DesignPatternCodeGenerator.IoCContainer
 {
     [Generator]
     public class ContainerGenerator : ISourceGenerator
     {
         public void Execute(GeneratorExecutionContext context)
         {
-            var containerAttribute = AttributeTypeGenerator.SetGeneratorAttributeType(GeneratorAttributeType.Container);
+            var containerAttribute = AttributeTypeGenerator.CreateGeneratorAttributeType(GeneratorAttributeType.Container);
 
             var classGroups = DeclarationsSyntaxGenerator.GetClassGroups(
                 context.Compilation,

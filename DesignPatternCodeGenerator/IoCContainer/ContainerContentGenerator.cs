@@ -1,10 +1,10 @@
 ﻿using DesignPatternCodeGenerator.Base.Generators;
-using DesignPatternCodeGenerator.ContainerIOC.Components;
+using DesignPatternCodeGenerator.IoCContainer.Components;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Linq;
 
-namespace DesignPatternCodeGenerator.ContainerIOC
+namespace DesignPatternCodeGenerator.IoCContainer
 {
     internal static class ContainerContentGenerator
     {

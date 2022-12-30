@@ -13,7 +13,7 @@ public class AttributeTypeGeneratorTests
     [InlineData(GeneratorAttributeType.FactoryProduct, typeof(FactoryProductAttribute))]
     internal void SetGeneratorAttributeType_ForValidInputs_ReturnsType(GeneratorAttributeType generatorType, Type attributeType)
     {
-        var result = AttributeTypeGenerator.SetGeneratorAttributeType(generatorType);
+        var result = AttributeTypeGenerator.CreateGeneratorAttributeType(generatorType);
 
         result.Should().Be(attributeType);
     }
@@ -22,7 +22,7 @@ public class AttributeTypeGeneratorTests
     [InlineData(GeneratorAttributeType.Builder)]
     internal void SetGeneratorAttributeType_ForInvalidInputs_ReturnsType(GeneratorAttributeType generatorType)
     {
-        Action act = () => AttributeTypeGenerator.SetGeneratorAttributeType(generatorType);
+        Action act = () => AttributeTypeGenerator.CreateGeneratorAttributeType(generatorType);
 
         act.Should().Throw<Exception>().WithMessage($"Type {generatorType} is not handled");
     }

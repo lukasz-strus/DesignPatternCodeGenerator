@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace DesignPatternCodeGenerator.ContainerIOC.Components
+namespace DesignPatternCodeGenerator.IoCContainer.Components
 {
     internal static class ContainerClassComponentsGenerator
     {
@@ -29,7 +29,7 @@ namespace DesignPatternCodeGenerator.ContainerIOC.Components
             => $"{string.Join("\n\t\t\t\t", group.Select(x=>GenerateAddRegisters(x, compilation)))}";
 
         private static string GenerateAddRegisters(ClassDeclarationSyntax syntax, Compilation compilation)
-             => $"{string.Join("\n\t\t\t\t", GetAllClassInterfaces(syntax, compilation).Select(x => GenerateAddRegister(syntax, x)))}";
+             => $"{string.Join("\n\t\t\t\t", GetClassInterfaces(syntax, compilation).Select(x => GenerateAddRegister(syntax, x)))}";
 
         private static string GenerateAddRegister(ClassDeclarationSyntax syntax, string interfaceName)
             => $"services.Add{GetObjectLife(syntax)}<{interfaceName}, {syntax.Identifier.Text}>();";
@@ -40,24 +40,24 @@ namespace DesignPatternCodeGenerator.ContainerIOC.Components
         private static string GetContainerName(IGrouping<string, ClassDeclarationSyntax> group)
             => $"{BaseNamesGenerator.GetClassName(group)}HostBuildersExtension";
 
-        private static IEnumerable<string> GetAllClassInterfaces(
+        private static IEnumerable<string> GetClassInterfaces(
             ClassDeclarationSyntax syntax,
             Compilation compilation)
         {
             var semanticModel = compilation.GetSemanticModel(syntax.SyntaxTree);
 
-            var interfaces = semanticModel.GetDeclaredSymbol(syntax).AllInterfaces;
+            var allInterfaces = semanticModel.GetDeclaredSymbol(syntax).AllInterfaces;
 
-            var allInterfaces = interfaces.Select(x => x.ToString())
+            var interfaces = allInterfaces.Select(x => x.ToString())
                                           .Where(RemoveSystemInterfaces)
                                           .Select(GetInterfaceName);
 
             var excludedInterface = GetExcludedInterfaces(syntax);
 
             if (excludedInterface == null)
-                return allInterfaces;
+                return interfaces;
 
-            return allInterfaces.Except(excludedInterface);
+            return interfaces.Except(excludedInterface);
         }
 
         private static IEnumerable<string> GetExcludedInterfaces(ClassDeclarationSyntax syntax)
@@ -77,6 +77,8 @@ namespace DesignPatternCodeGenerator.ContainerIOC.Components
 
         private static string GetObjectLife(ClassDeclarationSyntax group)
         {
+            //TODO
+
             var argument = GetAttributeArgument(group, typeof(MemberAccessExpressionSyntax));
 
             var expresion = (MemberAccessExpressionSyntax)argument.Expression;

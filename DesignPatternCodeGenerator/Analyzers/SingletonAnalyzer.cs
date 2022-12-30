@@ -7,6 +7,7 @@ using System.Linq;
 
 namespace DesignPatternCodeGenerator.Analyzers
 {
+    //TODO zmienić contains na przyrównanie typów
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class SingletonAnalyzer : DiagnosticAnalyzer
     {

@@ -10,6 +10,7 @@ namespace DesignPatternCodeGenerator.Analyzers
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class PrototypePartialAnalyzer : DiagnosticAnalyzer
     {
+        //TODO zmienić contains na przyrównanie typów
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get; }
             = ImmutableArray.Create(DesingPatternDiagnosticsDescriptors.PrototypeMustBePartial);
 

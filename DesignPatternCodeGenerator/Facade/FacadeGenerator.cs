@@ -15,7 +15,7 @@ namespace DesignPatternCodeGenerator.Facade
     {
         public void Execute(GeneratorExecutionContext context)
         {
-            var facadeMethodAttribute = AttributeTypeGenerator.SetGeneratorAttributeType(GeneratorAttributeType.FacadeMethod);
+            var facadeMethodAttribute = AttributeTypeGenerator.CreateGeneratorAttributeType(GeneratorAttributeType.FacadeMethod);
 
             var methodGroups = DeclarationsSyntaxGenerator.GetMethodGroups(
                 context.Compilation,

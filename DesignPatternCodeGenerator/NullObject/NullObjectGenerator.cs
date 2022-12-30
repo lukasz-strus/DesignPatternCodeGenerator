@@ -14,7 +14,7 @@ namespace DesignPatternCodeGenerator.NullObject
     {
         public void Execute(GeneratorExecutionContext context)
         {
-            var nullObjectAttribute = AttributeTypeGenerator.SetGeneratorAttributeType(GeneratorAttributeType.NullObject);
+            var nullObjectAttribute = AttributeTypeGenerator.CreateGeneratorAttributeType(GeneratorAttributeType.NullObject);
 
             var interfaceGroups = DeclarationsSyntaxGenerator.GetInterfaceGroups(
                 context.Compilation,

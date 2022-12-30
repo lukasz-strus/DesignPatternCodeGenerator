@@ -21,7 +21,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Samples.Facade", "..\Sample
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Samples.NullObject", "..\Samples.NullObject\Samples.NullObject.csproj", "{E6CEC2DA-3A57-41ED-A005-69C9F5C9F895}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Samples.ContainerIoC", "..\Samples.ContainerIoC\Samples.ContainerIoC.csproj", "{C68D2A1A-ECD5-466F-8EF6-C226508A4FD1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Samples.IoCContainer", "..\Samples.ContainerIoC\Samples.IoCContainer.csproj", "{C68D2A1A-ECD5-466F-8EF6-C226508A4FD1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
