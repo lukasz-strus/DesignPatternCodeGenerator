@@ -1,4 +1,4 @@
-﻿using DesignPatternCodeGenerator.ContainerIOC;
+﻿using DesignPatternCodeGenerator.IoCContainer;
 using DesignPatternCodeGenerator.Tests.ContainerIOC.Data;
 using DesignPatternCodeGenerator.Tests.Helpers;
 using FluentAssertions;

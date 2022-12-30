@@ -5,7 +5,11 @@ namespace Samples.Prototype;
 [Prototype]
 public partial class Person
 {
-    public Person(string? name, string? lastName, Address? personAddress, Contacts? personContacts)
+    public Person(
+        string? name,
+        string? lastName,
+        Address? personAddress,
+        Contacts? personContacts)
     {
         Name = name;
         LastName = lastName;
@@ -19,18 +23,12 @@ public partial class Person
     public Contacts? PersonContacts { get; set; }
 }
 
-[Prototype]
-public partial class Person2
-{
-    public string? Name { get; set; }
-    public string? LastName { get; set; }
-    public Address? PersonAddress { get; set; }
-    public Contacts? PersonContacts { get; set; }
-}
-
 public class Address
 {
-    public Address(string? houseNumber, string? street, string? city)
+    public Address(
+        string? houseNumber,
+        string? street,
+        string? city)
     {
         HouseNumber = houseNumber;
         Street = street;

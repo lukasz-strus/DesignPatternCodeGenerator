@@ -1,6 +1,6 @@
-﻿using DesignPatternCodeGenerator.Attributes.ContainerIoC;
+﻿using DesignPatternCodeGenerator.Attributes.IoCContainer;
 
-namespace Samples.ContainerIoC;
+namespace Samples.IoCContainer;
 
 interface IViewModel1
 {
@@ -26,12 +26,12 @@ public class MainViewModel : IViewModel1, IViewModel3, IViewModel4, IDisposable
     }
 }
 
-[Container("AddViewModels", ObjectLifeTime.Transient)]
-public class ViewModel : IViewModel1
-{
-}
+//[Container("AddViewModels", ObjectLifeTime.Transient)]
+//public class ViewModel : IViewModel1
+//{
+//}
 
-[Container("AddViewModels", ObjectLifeTime.Scoped, new string[] { "IViewModel4", "IViewModel1" })]
-public class MainViewModelExtension : MainViewModel
-{
-}
+//[Container("AddViewModels", ObjectLifeTime.Scoped, new string[] { "IViewModel4", "IViewModel1" })]
+//public class MainViewModelExtension : MainViewModel
+//{
+//}

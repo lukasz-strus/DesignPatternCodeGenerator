@@ -1,5 +1,5 @@
 ﻿using DesignPatternCodeGenerator.Attributes.AbstractFactory;
-using DesignPatternCodeGenerator.Attributes.ContainerIoC;
+using DesignPatternCodeGenerator.Attributes.IoCContainer;
 using DesignPatternCodeGenerator.Attributes.Facade;
 using DesignPatternCodeGenerator.Attributes.Factory;
 using DesignPatternCodeGenerator.Attributes.NullObject;
@@ -12,7 +12,7 @@ namespace DesignPatternCodeGenerator.Attributes
 {
     internal static class AttributeTypeGenerator
     {
-        internal static Type SetGeneratorAttributeType(GeneratorAttributeType generatorType)
+        internal static Type CreateGeneratorAttributeType(GeneratorAttributeType generatorType)
         {
             switch (generatorType)
             {

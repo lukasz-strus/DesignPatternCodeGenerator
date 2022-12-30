@@ -42,10 +42,10 @@ namespace DesignPatternCodeGenerator.Prototype.Compontents
             PropertyDeclarationSyntax property)
         {
             var typeName = property.Type.ToString();
-            var classDeclaratios = allClassGroups.SelectMany(x => x);
+            var classDeclarations = allClassGroups.SelectMany(x => x);
 
-            var classDeclaration = classDeclaratios.FilterByTypes(typeName)
-                                                   .FirstOrDefault();
+            var classDeclaration = classDeclarations.FilterByTypes(typeName)
+                                                    .FirstOrDefault();
 
             return $@"new {classDeclaration.Identifier.Text}()
             {{

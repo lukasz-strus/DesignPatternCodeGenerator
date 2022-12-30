@@ -14,7 +14,7 @@ namespace DesignPatternCodeGenerator.Singleton
     {
         public void Execute(GeneratorExecutionContext context)
         {
-            var singletonAttribute = AttributeTypeGenerator.SetGeneratorAttributeType(GeneratorAttributeType.Singleton);
+            var singletonAttribute = AttributeTypeGenerator.CreateGeneratorAttributeType(GeneratorAttributeType.Singleton);
 
             var classGroups = DeclarationsSyntaxGenerator.GetClassGroups(
                 context.Compilation,

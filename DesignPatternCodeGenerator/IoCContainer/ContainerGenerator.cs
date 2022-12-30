@@ -5,18 +5,17 @@ using DesignPatternCodeGenerator.Base.Generators;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
-using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
-namespace DesignPatternCodeGenerator.ContainerIOC
+namespace DesignPatternCodeGenerator.IoCContainer
 {
     [Generator]
     public class ContainerGenerator : ISourceGenerator
     {
         public void Execute(GeneratorExecutionContext context)
         {
-            var containerAttribute = AttributeTypeGenerator.SetGeneratorAttributeType(GeneratorAttributeType.Container);
+            var containerAttribute = AttributeTypeGenerator.CreateGeneratorAttributeType(GeneratorAttributeType.Container);
 
             var classGroups = DeclarationsSyntaxGenerator.GetClassGroups(
                 context.Compilation,
@@ -36,7 +35,7 @@ namespace DesignPatternCodeGenerator.ContainerIOC
             IGrouping<string, ClassDeclarationSyntax> group)
         {
             var hintName = $"{BaseNamesGenerator.GetClassName(group)}HostBuildersExtension.g.cs";
-            var classContent = ContainerContentGenerator.GenerateClass(group, context);
+            var classContent = ContainerContentGenerator.GenerateClass(group, context.Compilation);
 
             context.AddSource(hintName, SourceText.From(classContent, Encoding.UTF8));
         }

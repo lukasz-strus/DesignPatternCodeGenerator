@@ -16,7 +16,7 @@ namespace DesignPatternCodeGenerator.Base.Generators
             Compilation compilation,
             CancellationToken token)
         {
-            var classes = SetClassDeclarations(compilation, token).Result;
+            var classes = CreateClassDeclarations(compilation, token).Result;
 
             return classes.GroupBy(x => x.Identifier.Text);
         }
@@ -26,7 +26,7 @@ namespace DesignPatternCodeGenerator.Base.Generators
             CancellationToken token,
             Type attributeType)
         {
-            var classes = SetClassDeclarations(compilation, token, attributeType).Result;
+            var classes = CreateClassDeclarations(compilation, token, attributeType).Result;
 
             return classes.GroupBy(x => x.Identifier.Text);
         }
@@ -36,7 +36,7 @@ namespace DesignPatternCodeGenerator.Base.Generators
             CancellationToken token,
             Type attributeType)
         {
-            var interfaces = SetInterfaceDeclarations(compilation, token, attributeType).Result;
+            var interfaces = CreateInterfaceDeclarations(compilation, token, attributeType).Result;
 
             return interfaces.GroupBy(x => x.Identifier.Text);
         }
@@ -46,21 +46,21 @@ namespace DesignPatternCodeGenerator.Base.Generators
             CancellationToken token, 
             Type attributeType)
         {
-            var methods = SetMethodDeclarations(compilation, token, attributeType).Result;
+            var methods = CreateMethodDeclarations(compilation, token, attributeType).Result;
 
             return methods.GroupBy(x => x.Identifier.Text);
         }
 
-        private static async Task<IEnumerable<MethodDeclarationSyntax>> SetMethodDeclarations(
+        private static async Task<IEnumerable<MethodDeclarationSyntax>> CreateMethodDeclarations(
             Compilation compilation, 
             CancellationToken token, 
             Type attributeType)
         {
-            return (await Task.WhenAll(compilation.SyntaxTrees.Select(x => SetMethodDeclarationSyntax(x, token, attributeType))))
+            return (await Task.WhenAll(compilation.SyntaxTrees.Select(x => CreateMethodDeclarationSyntax(x, token, attributeType))))
                 .SelectMany(x => x);
         }
 
-        private static async Task<IEnumerable<MethodDeclarationSyntax>> SetMethodDeclarationSyntax(
+        private static async Task<IEnumerable<MethodDeclarationSyntax>> CreateMethodDeclarationSyntax(
             SyntaxTree tree, 
             CancellationToken token, 
             Type attributeType)
@@ -73,23 +73,23 @@ namespace DesignPatternCodeGenerator.Base.Generators
             return methods.Where(x => x.AttributeLists.ToString().Contains(attributeType.Name.Replace("Attribute", "")));
         }
 
-        private static async Task<IEnumerable<ClassDeclarationSyntax>> SetClassDeclarations(
+        private static async Task<IEnumerable<ClassDeclarationSyntax>> CreateClassDeclarations(
             Compilation compilation, 
             CancellationToken token,
             Type attributeType)
         {
-            return (await Task.WhenAll(compilation.SyntaxTrees.Select(x => SetClassDeclarationSyntax(x, compilation, token, attributeType))))
+            return (await Task.WhenAll(compilation.SyntaxTrees.Select(x => CreateClassDeclarationSyntax(x, compilation, token, attributeType))))
                 .SelectMany(x => x);
         }
-        private static async Task<IEnumerable<ClassDeclarationSyntax>> SetClassDeclarations(
+        private static async Task<IEnumerable<ClassDeclarationSyntax>> CreateClassDeclarations(
             Compilation compilation,
             CancellationToken token)
         {
-            return (await Task.WhenAll(compilation.SyntaxTrees.Select(x => SetClassDeclarationSyntax(x, token))))
+            return (await Task.WhenAll(compilation.SyntaxTrees.Select(x => CreateClassDeclarationSyntax(x, token))))
                 .SelectMany(x => x);
         }
 
-        private static async Task<IEnumerable<ClassDeclarationSyntax>> SetClassDeclarationSyntax(
+        private static async Task<IEnumerable<ClassDeclarationSyntax>> CreateClassDeclarationSyntax(
             SyntaxTree tree,
             Compilation compilation,
             CancellationToken token,
@@ -110,7 +110,7 @@ namespace DesignPatternCodeGenerator.Base.Generators
             return classes.Where(x => x.AttributeLists.Any(y => y.Attributes.Any(z => semanticModel.GetTypeInfo(z).Type.Name == attributeType.Name)));
         }
 
-        private static async Task<IEnumerable<ClassDeclarationSyntax>> SetClassDeclarationSyntax(
+        private static async Task<IEnumerable<ClassDeclarationSyntax>> CreateClassDeclarationSyntax(
             SyntaxTree tree,
             CancellationToken token)
         {
@@ -119,16 +119,16 @@ namespace DesignPatternCodeGenerator.Base.Generators
                 .OfType<ClassDeclarationSyntax>();
         }
 
-        private static async Task<IEnumerable<InterfaceDeclarationSyntax>> SetInterfaceDeclarations(
+        private static async Task<IEnumerable<InterfaceDeclarationSyntax>> CreateInterfaceDeclarations(
             Compilation compilation,
             CancellationToken token,
             Type attributeType)
         {
-            return (await Task.WhenAll(compilation.SyntaxTrees.Select(x => SetInterfaceDeclarationSyntax(x, compilation, token, attributeType))))
+            return (await Task.WhenAll(compilation.SyntaxTrees.Select(x => CreateInterfaceDeclarationSyntax(x, compilation, token, attributeType))))
                 .SelectMany(x => x);
         }
 
-        private static async Task<IEnumerable<InterfaceDeclarationSyntax>> SetInterfaceDeclarationSyntax(
+        private static async Task<IEnumerable<InterfaceDeclarationSyntax>> CreateInterfaceDeclarationSyntax(
             SyntaxTree tree,
             Compilation compilation,
             CancellationToken token,
@@ -145,6 +145,6 @@ namespace DesignPatternCodeGenerator.Base.Generators
         }
 
         private static bool IsContainerAttribute(Type attributeType) 
-            => attributeType == AttributeTypeGenerator.SetGeneratorAttributeType(GeneratorAttributeType.Container);
+            => attributeType == AttributeTypeGenerator.CreateGeneratorAttributeType(GeneratorAttributeType.Container);
     }
 }

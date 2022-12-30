@@ -9,6 +9,8 @@ namespace DesignPatternCodeGenerator.Analyzers
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class AbstractFactoryAnalyzer : DiagnosticAnalyzer
     {
+        //TODO pobrać listę interfejsów i sprawdzić czy któryś jest oznaczony atrybutem AbstractFactory
+        //TODO zmienić contains na przyrównanie typów
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get; }
             = ImmutableArray.Create(DesingPatternDiagnosticsDescriptors.ClassMustImplementAbstractFactoryInterface);
 
@@ -25,7 +27,7 @@ namespace DesignPatternCodeGenerator.Analyzers
             var declaredSymbol = context.SemanticModel.GetDeclaredSymbol(classDeclaration);
             var attributes = classDeclaration.AttributeLists.ToString();
 
-            if (!IsNullBaseList(classDeclaration.BaseList) || !IsAbstractFactoryChild(attributes))            
+            if (!IsNullBaseList(classDeclaration.BaseList) || !IsAbstractFactoryProduct(attributes))            
                 return;
             
 
@@ -34,7 +36,7 @@ namespace DesignPatternCodeGenerator.Analyzers
             context.ReportDiagnostic(error);
         }
 
-        private static bool IsAbstractFactoryChild(string attributes) => attributes.Contains("AbstractFactoryClass");
+        private static bool IsAbstractFactoryProduct(string attributes) => attributes.Contains("AbstractFactoryClass");
 
         private static bool IsNullBaseList(BaseListSyntax baseList) => baseList is null;
 

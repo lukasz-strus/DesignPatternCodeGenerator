@@ -17,7 +17,7 @@ namespace DesignPatternCodeGenerator.AbstractFactory
         public void Execute(GeneratorExecutionContext context)
         {
 
-            var factoryAttribute = AttributeTypeGenerator.SetGeneratorAttributeType(GeneratorAttributeType.AbstractFactory);
+            var factoryAttribute = AttributeTypeGenerator.CreateGeneratorAttributeType(GeneratorAttributeType.AbstractFactory);
 
             var mainInterfaceGroups = DeclarationsSyntaxGenerator.GetInterfaceGroups(
                 context.Compilation,
@@ -26,7 +26,7 @@ namespace DesignPatternCodeGenerator.AbstractFactory
 
             var interfaceGroups = mainInterfaceGroups.GroupByAttribute();
 
-            var factoryChildAttribute = AttributeTypeGenerator.SetGeneratorAttributeType(GeneratorAttributeType.AbstractFactoryClass);
+            var factoryChildAttribute = AttributeTypeGenerator.CreateGeneratorAttributeType(GeneratorAttributeType.AbstractFactoryClass);
 
             var classGroups = DeclarationsSyntaxGenerator.GetClassGroups(
                 context.Compilation,
