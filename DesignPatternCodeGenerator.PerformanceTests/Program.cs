@@ -1,4 +1,4 @@
 ﻿using DesignPatternCodeGenerator.PerformanceTests;
 
-ClassGenerator.GenerateClasses(100);
+//ClassGenerator.GenerateClasses(5000);
 Console.WriteLine("");

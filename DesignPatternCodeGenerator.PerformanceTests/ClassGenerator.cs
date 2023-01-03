@@ -4,52 +4,68 @@
     {
         public static void GenerateClasses(int classCount)
         {
-            var classContent = $@"using DesignPatternCodeGenerator.Attributes.Factory;
+            var classContent = $@"using DesignPatternCodeGenerator.Attributes.IoCContainer;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace DesignPatternCodeGenerator.PerformanceTests;
+
+interface IViewModel1
+{{
+}}
+
+interface IViewModel2
+{{
+}}
+
+interface IViewModel3 : IViewModel2
+{{
+}}
+
+interface IViewModel4
+{{
+}}
 ";
+
+            var services = "";
 
             for (int i = 1; i <= classCount; i++)
             {
+                services += $@"
+            services.AddSingleton<IViewModel1, MainViewModel{i}>();
+            services.AddSingleton<IViewModel3, MainViewModel{i}>();
+            services.AddSingleton<IViewModel2, MainViewModel{i}>();
+";
+
                 var classDeclaration = $@"
-[Factory]
-public interface ICar{i}
+
+public class MainViewModel{i} : IViewModel1, IViewModel3, IViewModel4, IDisposable
 {{
-    [Parameter]
-    public string Name {{ get; set; }}        
-    public int HorsePower {{ get; set; }}
-
-}}
-
-[FactoryProduct]
-class Bmw{i} : ICar{i}
-{{
-    public string Name {{ get; set; }}
-    public int HorsePower {{ get; set; }}
-
-    public Bmw{i}(string name, int horsePower)
+    public void Dispose()
     {{
-        Name = name;
-        HorsePower = horsePower;
-    }}
-}}
-
-[FactoryProduct]
-partial class Audi{i} : ICar{i}
-{{
-    public string Name {{ get; set; }}
-    public int HorsePower {{ get; set; }}
-
-    public Audi{i}(string name, int horsePower)
-    {{
-        Name = name;
-        HorsePower = horsePower;
     }}
 }}
 
 ";
                 classContent += classDeclaration;
             }
+
+            var container = $@"
+public static class AddViewModelsHostBuildersExtension
+{{
+        
+    public static IHostBuilder AddViewModels(this IHostBuilder host)
+    {{
+        host.ConfigureServices(services =>
+        {{
+            {services}
+        }});
+            
+        return host;
+    }}
+}}";
+
+            classContent += container;
 
             var filepath = Directory.GetParent(Directory.GetCurrentDirectory())?.Parent?.Parent + @"\Classes.cs";
 
