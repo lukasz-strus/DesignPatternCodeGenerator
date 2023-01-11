@@ -13,7 +13,6 @@ namespace DesignPatternCodeGenerator.IoCContainer
     [Generator]
     public class ContainerGenerator : ISourceGenerator
     {
-        //TODO zmienić z IHostBuilder na IServiceCollection
         public void Execute(GeneratorExecutionContext context)
         {
             var containerAttribute = AttributeTypeGenerator.CreateGeneratorAttributeType(GeneratorAttributeType.Container);

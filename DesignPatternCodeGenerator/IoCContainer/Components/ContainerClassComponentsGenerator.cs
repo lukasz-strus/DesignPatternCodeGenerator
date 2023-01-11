@@ -74,8 +74,6 @@ namespace DesignPatternCodeGenerator.IoCContainer.Components
 
         private static string GetObjectLife(ClassDeclarationSyntax group)
         {
-            //TODO
-
             var argument = GetAttributeArgument(group, typeof(MemberAccessExpressionSyntax));
 
             var expresion = (MemberAccessExpressionSyntax)argument.Expression;
