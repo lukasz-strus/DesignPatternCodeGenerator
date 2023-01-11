@@ -17,12 +17,9 @@ namespace DesignPatternCodeGenerator.IoCContainer.Components
             => $@"
         {GetMethodName(group)}
         {{
-            host.ConfigureServices(services =>
-            {{
-                {GenerateRegister(group, compilation)}
-            }});
+            {GenerateRegister(group, compilation)}
             
-            return host;
+            return services;
         }}";
 
         private static string GenerateRegister(IGrouping<string, ClassDeclarationSyntax> group, Compilation compilation)
@@ -35,10 +32,10 @@ namespace DesignPatternCodeGenerator.IoCContainer.Components
             => $"services.Add{GetObjectLife(syntax)}<{interfaceName}, {syntax.Identifier.Text}>();";
 
         private static string GetMethodName(IGrouping<string, ClassDeclarationSyntax> group)
-            => $"{BaseNamesGenerator.GetAccesibility(group)} static IHostBuilder {BaseNamesGenerator.GetClassName(group)}(this IHostBuilder host)";
+            => $"{BaseNamesGenerator.GetAccesibility(group)} static IServiceCollection {BaseNamesGenerator.GetClassName(group)}(this IServiceCollection services)";
 
         private static string GetContainerName(IGrouping<string, ClassDeclarationSyntax> group)
-            => $"{BaseNamesGenerator.GetClassName(group)}HostBuildersExtension";
+            => $"{BaseNamesGenerator.GetClassName(group)}ServiceCollectionExtension";
 
         private static IEnumerable<string> GetClassInterfaces(
             ClassDeclarationSyntax syntax,
