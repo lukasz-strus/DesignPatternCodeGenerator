@@ -10,7 +10,6 @@ namespace DesignPatternCodeGenerator.Analyzers
     public class AbstractFactoryAnalyzer : DiagnosticAnalyzer
     {
         //TODO pobrać listę interfejsów i sprawdzić czy któryś jest oznaczony atrybutem AbstractFactory
-        //TODO zmienić contains na przyrównanie typów
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get; }
             = ImmutableArray.Create(DesingPatternDiagnosticsDescriptors.ClassMustImplementAbstractFactoryInterface);
 
