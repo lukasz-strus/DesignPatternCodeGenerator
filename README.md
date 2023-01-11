@@ -78,20 +78,17 @@ namespace Samples.ContainerIoC
 {
     public static class AddViewModelsHostBuildersExtension
     {
-    	public static IHostBuilder AddViewModels(this IHostBuilder host)
+        public static IServiceCollection AddViewModels(this IServiceCollection services)
         {
-	    host.ConfigureServices(services =>
-	    {
-	        services.AddSingleton<IViewModel1, MainViewModel>();
-		services.AddSingleton<IViewModel3, MainViewModel>();
-		services.AddSingleton<IViewModel2, MainViewModel>();
-		services.AddTransient<IViewModel1, ViewModel>();
-		services.AddScoped<IViewModel3, MainViewModelExtension>();
-		services.AddScoped<IViewModel2, MainViewModelExtension>();
-	    });
-	    
-	    return host;
-	}
+	    services.AddSingleton<IViewModel1, MainViewModel>();
+	    services.AddSingleton<IViewModel3, MainViewModel>();
+	    services.AddSingleton<IViewModel2, MainViewModel>();
+	    services.AddTransient<IViewModel1, ViewModel>();
+	    services.AddScoped<IViewModel3, MainViewModelExtension>();
+	    services.AddScoped<IViewModel2, MainViewModelExtension>();
+            
+            return services;
+        }
     }
 }
 ```
