@@ -2,25 +2,32 @@
 The library is used to generate the code of typical design patterns in C #, based on the capabilities of the .NET Compiler Platform SDK (Roslyn APIs).
 More information about Roslyn APIs: https://learn.microsoft.com/en-us/dotnet/csharp/roslyn-sdk/ 
 
-## How to start using the library?
-Edit your project and add the following, replacing the project path with the one from the .NET Standard project you created above:
-```xml
-  <ItemGroup>
-	<ProjectReference Include="..\PathTo\DesignPatternCodeGenerator.csproj"
-					  OutputItemType="Analyzer"
-					  ReferenceOutputAssembly="true" />
-        <ProjectReference Include="..\PathTo\DesignPatternCodeGenerator.csproj" />
-  </ItemGroup>
+## Instalation
+
+Install the [DesignPatternCodeGenerator NuGet Package](https://www.nuget.org/packages/DesignPatternCodeGenerator).
+
+### Package Manager Console
 ```
+Install-Package DesignPatternCodeGenerator
+```
+
+### .NET Core CLI
+
+```
+dotnet add package DesignPatternCodeGenerator
+```
+
+## Usage
 
 The generated files can be seen in the project tree: 
 
 Dependencies -> Analyzers -> 
 
 ![image](https://user-images.githubusercontent.com/61932823/202016757-a77d9caa-4e74-4714-8609-faaf1ae899f6.png)
-##
 
-## Container IoC
+## Examples
+
+### Container IoC
 The container IoC is genereted based on one attribute:
 - [Container("ContainerName", ObjectLifeTime, new string[] { "ExcludedInterface1", "ExcludedInterface2" })]
 
@@ -93,7 +100,7 @@ namespace Samples.ContainerIoC
 }
 ```
 
-## Facade
+### Facade
 The facade pattern is genereted based on three attributes:
 - [FacadeMethod("FacadeMethodName")] - this attribute should be applied to the method that is about to become a facade method,
 - [FacadeMainParameter("FacadeMethodParameter")] - this attribute should be applied to the facade method parameter,
@@ -183,11 +190,10 @@ namespace Samples.Facade
 }
 ```
 
-## Prototype
+### Prototype
 The prototype pattern is genereted based on one attribute:
 - [Prototype] - this attribute should be applied to the class that is about to become a prototype. The class must be a partial class.
 
-### Example:
 ```csharp
 using DesignPatternCodeGenerator.Attributes.Prototype;
 
@@ -253,12 +259,11 @@ namespace Samples.Prototype
 }
 ```
 
-## AbstractFactory
+### AbstractFactory
 The abstract factory pattern is generated based on two attributes:
 - [AbstractFactory("MainInterfaceName")] - this attribute should be appiled to interface,
 - [AbstractFactoryClass("FactoryClassName")] - this attribute should be appiled to class.
 
-### Example:
 ```csharp
 using DesignPatternCodeGenerator.Attributes.AbstractFactory;
 
@@ -399,13 +404,12 @@ namespace Samples.AbstractFactory
 ```
 
 
-## Factory
+### Factory
 The factory pattern is generated based on three attributes:
 - [Factory] - this attribute should be applied to the main interface,
 - [Parameter] - this attribute should be applied to the property that is to be provided when creating individual objects,
 - [FactoryChild] - this attribute should be applied to the class that implements the main interface.
 
-### Example:
 ```csharp
 using DesignPatternCodeGenerator.Attributes;
 using DesignPatternCodeGenerator.Attributes.Factory;
@@ -510,7 +514,7 @@ namespace Samples.Factory
 }
 ```
 
-## Null Object
+### Null Object
 The null object pattern is generated based on only one attribute:
 - [NullObject] - this attribute should be applied to the interface.
 
@@ -546,11 +550,10 @@ namespace Samples.NullObject
 }
 ```
 
-## Singleton
+### Singleton
 The singleton pattern is generated based on only one attribute:
 - [Singleton] - this attribute should be applied to the class that is about to become a singleton. The class must be a partial class.
 
-### Example
 ```csharp
 [Singleton]
 public partial class Configuration
