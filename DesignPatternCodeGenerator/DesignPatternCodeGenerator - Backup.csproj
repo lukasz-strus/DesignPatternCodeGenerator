@@ -1,40 +1,31 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-	<Title>$(AssemblyName)</Title>
-	<TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 	<IncludeBuildOutput>true</IncludeBuildOutput>
-	<VersionPrefix>1.0.4</VersionPrefix>
+	<VersionPrefix>4.2.0</VersionPrefix>
 	<Authors>Łukasz Strus</Authors>
     <RepositoryUrl>https://github.com/lukasz-strus/DesignPatternCodeGenerator</RepositoryUrl>
-	<PublishRepositoryUrl>true</PublishRepositoryUrl>
     <PackageTags>Roslyn;Generator;IoC;Container;Dessign Patterns;Singleton;Factory;AbstractFactory;Facade;Prototype;NullObject</PackageTags>
     <Description>Designing and implementation a library for generating code snippets in C # based on design patterns. The component will use roslyn compiler capabilities.</Description>
     <Copyright>Copyright (c) Łukasz Strus 2023</Copyright>
-	<PackageLicenseExpression>MIT</PackageLicenseExpression>
-	<PackageProjectUrl>https://github.com/lukasz-strus/DesignPatternCodeGenerator</PackageProjectUrl>
-	<NeutralLanguage>en</NeutralLanguage>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="bin\**" />
-    <EmbeddedResource Remove="bin\**" />
-    <None Remove="bin\**" />
-  </ItemGroup>
-
 	<ItemGroup>
-		<PackageReference Include="Microsoft.CodeAnalysis.Common" Version="4.4.0" />
-		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.4.0" />
+		<PackageReference Include="Microsoft.CodeAnalysis.Common" Version="4.0.0-6.final" />
+		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.0.0-6.final" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<InternalsVisibleTo Include="DesignPatternCodeGenerator.Tests" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <None Remove="bin\Debug\netstandard2.0\\DesignPatternCodeGenerator.dll" />
-	</ItemGroup>
+	<PropertyGroup>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+		<Version>$(VersionPrefix)1.0.2</Version>
+	</PropertyGroup>
 
 	<ItemGroup>
 		<None Include="$(OutputPath)\$(AssemblyName).dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
