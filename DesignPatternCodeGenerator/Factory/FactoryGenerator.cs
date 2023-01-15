@@ -14,6 +14,8 @@ namespace DesignPatternCodeGenerator.Factory
     [Generator]
     public class FactoryGenerator : ISourceGenerator
     {
+        // TODO dodać możliwość oznaczania interfejsów i rejestracji wszystkich klas, które implementują ten interfejs
+
         public void Execute(GeneratorExecutionContext context)
         {
             var factoryAttribute = AttributeTypeGenerator.CreateGeneratorAttributeType(GeneratorAttributeType.Factory);
