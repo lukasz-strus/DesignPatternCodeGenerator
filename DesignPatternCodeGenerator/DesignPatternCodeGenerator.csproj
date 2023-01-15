@@ -5,7 +5,7 @@
 	<TargetFramework>netstandard2.0</TargetFramework>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 	<IncludeBuildOutput>true</IncludeBuildOutput>
-	<VersionPrefix>1.0.3</VersionPrefix>
+	<VersionPrefix>1.0.4</VersionPrefix>
 	<Authors>Łukasz Strus</Authors>
     <RepositoryUrl>https://github.com/lukasz-strus/DesignPatternCodeGenerator</RepositoryUrl>
 	<PublishRepositoryUrl>true</PublishRepositoryUrl>

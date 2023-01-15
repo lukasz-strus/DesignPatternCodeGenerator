@@ -8,7 +8,7 @@ namespace DesignPatternCodeGenerator.Facade.Compontents
 {
     public class FacadeMethodComponentsGenerator
     {
-        //TODO add generate parameterless methods
+        //TODO dodać generowanie metod bez parametrów
 
         internal static string GenerateMethod(IGrouping<string, MethodDeclarationSyntax> group)
             => $@"public void {BaseNamesGenerator.GetClassName(group)}({GenerateFacadeMethodParams(group)})
