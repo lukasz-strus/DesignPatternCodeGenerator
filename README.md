@@ -408,7 +408,7 @@ namespace Samples.AbstractFactory
 The factory pattern is generated based on three attributes:
 - [Factory] - this attribute should be applied to the main interface,
 - [Parameter] - this attribute should be applied to the property that is to be provided when creating individual objects,
-- [FactoryChild] - this attribute should be applied to the class that implements the main interface.
+- [FactoryProduct] - this attribute should be applied to the class that implements the main interface.
 
 ```csharp
 using DesignPatternCodeGenerator.Attributes;
@@ -424,7 +424,7 @@ public interface ICar
 
 }
 
-[FactoryChild]
+[FactoryProduct]
 class Bmw : ICar
 {
     public string Name { get; set; }
@@ -437,7 +437,7 @@ class Bmw : ICar
     }
 }
 
-[FactoryChild]
+[FactoryProduct]
 partial class Audi : ICar
 {
     public string Name { get; set; }
